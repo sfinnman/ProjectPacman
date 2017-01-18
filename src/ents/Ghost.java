@@ -1,5 +1,6 @@
 package ents;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import gui.Drawable;
@@ -14,7 +15,7 @@ public class Ghost extends Dynamic implements Listener, Drawable {
 	}
 
 	@Override
-	public void draw(Graphics2D g2) {
+	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		
 	}

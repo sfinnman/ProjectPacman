@@ -11,7 +11,7 @@ public class Main extends JFrame{
 		add(new Frame());
 		setTitle("Pacman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(672, 864);
+        setSize(706, 920);
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
@@ -27,6 +27,13 @@ public class Main extends JFrame{
 				Map.loadMap();
 			}
 		};
+		Runnable gui = new Runnable(){
+			@Override
+			public void run() {
+				new Main();
+			}
+		};
 		game.run();
+		gui.run();
 	}
 }

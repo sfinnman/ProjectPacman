@@ -1,6 +1,6 @@
 package ents;
 
-import java.awt.Graphics2D;
+import java.awt.Graphics;
 
 import gui.Drawable;
 import utility.EventData;
@@ -14,7 +14,7 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 	}
 
 	@Override
-	public void draw(Graphics2D g2) {
+	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 
 	}

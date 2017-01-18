@@ -1,5 +1,6 @@
 package ents;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -12,11 +13,11 @@ public class Wall extends Static implements Drawable{
 	public Wall(int x, int y, BufferedImage img){
 		super(x, y);
 		this.img = img;
+		Drawable.register(this);
 	}
 
 	@Override
-	public void draw(Graphics2D g2) {
-		
-		
+	public void draw(Graphics g) {
+		Drawable.drawSqAt(x, y, img, g);
 	}
 }
