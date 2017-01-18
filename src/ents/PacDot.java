@@ -1,7 +1,7 @@
 package ents;
 
-import utility.Drawable;
 import utility.EventHandler;
+import gui.Drawable;
 import utility.EventData;
 import utility.Listener;
 
@@ -11,7 +11,7 @@ public class PacDot extends Static implements Drawable, Listener{
 	public PacDot(int x, int y){
 		super(x, y);
 		this.active = true;
-		EventHandler.subscribeEvent("PacMan_move", this);
+		EventHandler.subscribeEvent("pacman_move", this);
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class PacDot extends Static implements Drawable, Listener{
 
 	@Override
 	public void onRegister(String key, EventData data) {
-		if (key.equals("PacMan_move")) {
+		if (key.equals("pacman_move")) {
 			// Put logic here.
 		}
 	}

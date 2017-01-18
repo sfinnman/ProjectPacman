@@ -1,6 +1,6 @@
 package ents;
 
-import utility.Drawable;
+import gui.Drawable;
 import utility.EventData;
 import utility.Listener;
 
@@ -20,7 +20,8 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 	@Override
 	public void onRegister(String key, EventData data) {
 		switch(key){
-		case "key":
+		case "key_arrow":
+			
 			break;
 		case "ghost_move":
 			break;

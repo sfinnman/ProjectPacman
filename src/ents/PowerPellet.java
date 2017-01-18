@@ -1,7 +1,7 @@
 package ents;
 
 import utility.EventHandler;
-import utility.Drawable;
+import gui.Drawable;
 import utility.EventData;
 import utility.Listener;
 

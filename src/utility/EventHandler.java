@@ -1,9 +1,12 @@
 package utility;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class EventHandler {
 	private static Map<String, List<Listener>> events = new HashMap<>();
@@ -43,6 +46,26 @@ public class EventHandler {
 			hook.onRegister(key, data);
 		}
 		return true;
+	}
+	
+	public static void init(){
+		System.out.println("EventHandler initializing");
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new File("src/config/EventHandler.cfg"));
+			while (sc.hasNextLine()){
+				EventHandler.registerEvent(sc.nextLine());
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("EventHandler configuration file was not found! ");
+			e.printStackTrace();
+		} finally {
+			if (sc != null) {
+				sc.close();
+			}
+		}
+		System.out.println("EventHandler initialized!");
+		System.out.println(events);
 	}
 	
 }
