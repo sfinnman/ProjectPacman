@@ -1,16 +1,22 @@
 package ents;
 
 import utility.EventHandler;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 import gui.Drawable;
 import utility.EventData;
 import utility.Listener;
 
 public class PowerPellet extends Static implements Drawable, Listener{
 	private boolean active;
+	private final BufferedImage img;
 	
-	public PowerPellet(int x, int y){
+	public PowerPellet(int x, int y, BufferedImage img){
 		super(x, y);
 		this.active = true;
+		this.img = img;
 		EventHandler.subscribeEvent("pacman_move", this);
 	}
 	
@@ -26,8 +32,7 @@ public class PowerPellet extends Static implements Drawable, Listener{
 		
 	}
 	@Override
-	public void draw() {
-		//Draw background here...
+	public void draw(Graphics2D g2) {
 		if (active) {
 			//Draw pellet here...
 		}

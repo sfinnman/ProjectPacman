@@ -1,19 +1,21 @@
 package ents;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 import gui.Drawable;
 
 public class Wall extends Static implements Drawable{
 	//TODO: Make all different walls!
+	private final BufferedImage img;
 	
-	private final String texture;
-	
-	public Wall(int x, int y, String texture){
+	public Wall(int x, int y, BufferedImage img){
 		super(x, y);
-		this.texture = texture;
+		this.img = img;
 	}
 
 	@Override
-	public void draw() {
+	public void draw(Graphics2D g2) {
 		
 		
 	}

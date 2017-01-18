@@ -24,6 +24,7 @@ public class Main extends JFrame{
 			public void run() {
 				EventHandler.init();
 				ResourceLoader.init();
+				Map.loadMap();
 			}
 		};
 		game.run();
