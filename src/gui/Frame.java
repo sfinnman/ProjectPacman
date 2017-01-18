@@ -44,8 +44,6 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		DEBUG.print("Mouse clicked in screen! at coord: " + e.getX() + ", " + e.getY());
-		EventHandler.triggerEvent("mouse_clicked", new EventData(this, e.getX(), e.getY()));
 	}
 
 	@Override
@@ -58,6 +56,8 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		DEBUG.print("Mouse clicked in screen! at coord: " + e.getX() + ", " + e.getY());
+		EventHandler.triggerEvent("mouse_clicked", new EventData(this, e.getX(), e.getY()));
 	}
 
 	@Override

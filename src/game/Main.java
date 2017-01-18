@@ -22,12 +22,6 @@ public class Main extends JFrame{
 		DEBUG.ENABLED = true;
 		EventHandler.init();
 		ResourceLoader.init();
-		Runnable game = new Runnable(){
-			@Override
-			public void run() {
-				Map.loadMap();
-			}
-		};
 		Runnable gui = new Runnable(){
 			@Override
 			public void run() {

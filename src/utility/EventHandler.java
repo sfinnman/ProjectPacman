@@ -51,7 +51,6 @@ public class EventHandler {
 		}
 		List<Listener> hooks = events.get(key);
 		for (int i = 0; i<hooks.size(); i++){
-			if (i>=hooks.size()) break;
 			hooks.get(i).onRegister(key, data);
 		}
 		return true;

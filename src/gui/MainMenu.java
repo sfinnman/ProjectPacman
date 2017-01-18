@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.DEBUG;
+import game.Map;
 import utility.GameState;
 
 public class MainMenu{
@@ -13,6 +14,14 @@ public class MainMenu{
 			@Override
 			void doclick() {
 				DEBUG.print("Start Game!");
+				GameState.popMenu();
+				Runnable game = new Runnable(){
+					@Override
+					public void run() {
+						Map.loadMap();
+					}
+				};
+				game.run();
 			}
 		};
 		MenuItem highscore = new MenuItem("Highscore", 50, 225, Frame.WIDTH - 100, 50){

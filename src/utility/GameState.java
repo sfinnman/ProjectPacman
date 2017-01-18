@@ -41,7 +41,10 @@ public class GameState implements Listener {
 	public static void popMenu(){
 		currentMenu().free();
 		menu.pop();
-		menu.peek().reactivate();;
+		Menu lower = menu.peek();
+		if (lower != null) {
+			lower.reactivate();
+		}
 	}
 	
 	@Override
