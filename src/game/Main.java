@@ -3,6 +3,7 @@ package game;
 import javax.swing.JFrame;
 import gui.Frame;
 import utility.EventHandler;
+import utility.ResourceLoader;
 
 public class Main extends JFrame{
 	
@@ -22,6 +23,7 @@ public class Main extends JFrame{
 			@Override
 			public void run() {
 				EventHandler.init();
+				ResourceLoader.init();
 			}
 		};
 		game.run();
