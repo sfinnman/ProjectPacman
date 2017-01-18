@@ -2,8 +2,6 @@ package utility;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,8 +50,9 @@ public class EventHandler {
 			return false;
 		}
 		List<Listener> hooks = events.get(key);
-		for (Listener hook : hooks) {
-			hook.onRegister(key, data);
+		for (int i = 0; i<hooks.size(); i++){
+			if (i>=hooks.size()) break;
+			hooks.get(i).onRegister(key, data);
 		}
 		return true;
 	}
