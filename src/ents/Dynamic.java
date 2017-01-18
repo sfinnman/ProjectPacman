@@ -1,8 +1,7 @@
 package ents;
 
 abstract class Dynamic {
-	protected int hdgy;
-	protected int hdgx;
+	protected int hdg;
 	
 	protected double x;
 	protected double y;

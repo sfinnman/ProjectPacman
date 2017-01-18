@@ -1,10 +1,9 @@
 package ents;
 
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import gui.Drawable;
-import utility.EventData;
+import utility.EventHandler.EventData;
 import utility.Listener;
 
 public class Ghost extends Dynamic implements Listener, Drawable {

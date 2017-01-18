@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import gui.Drawable;
-import utility.EventData;
+import utility.EventHandler.EventData;
 import utility.Listener;
 
 public class PowerPellet extends Static implements Drawable, Listener{

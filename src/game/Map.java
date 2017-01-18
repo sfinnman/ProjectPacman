@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import ents.PacDot;
+import ents.PacMan;
 import ents.PowerPellet;
 import ents.Wall;
 import utility.ResourceLoader;
@@ -14,8 +15,10 @@ import utility.ResourceLoader;
 public class Map { //Class for lookup from Pacman and Ghosts!
 	private Map(){}
 	
+	public static List<Intersection> Intersections = new ArrayList<>();
+	
 	public static void loadMap(){
-		DEBUG.DEBUG_MSG("Loading map!");
+		DEBUG.print("Loading map!");
 		File map = new File("src/maps/default.txt");
 		Scanner sc = null;
 		try {
@@ -35,7 +38,16 @@ public class Map { //Class for lookup from Pacman and Ghosts!
 					}
 				}
 			}
-			
+			String[] tokens = sc.nextLine().split(";");
+			new PacMan(Double.valueOf(tokens[0]), Double.valueOf(tokens[1]), Integer.valueOf(tokens[2]));
+			tokens = sc.nextLine().split(";");
+			//Jail insert here.
+			String[] Intersections = sc.nextLine().replaceAll("[\\[\\]\\s]", "").split(",");
+			for (String Intersection : Intersections) {
+				tokens = Intersection.split(";");
+				Map.Intersections.add(new Intersection(Integer.valueOf(tokens[0]), Integer.valueOf(tokens[1]), Integer.valueOf(tokens[2])));
+			}
+			DEBUG.print(Map.Intersections.toString());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,8 +56,22 @@ public class Map { //Class for lookup from Pacman and Ghosts!
 				sc.close();
 			}
 		}
-		DEBUG.DEBUG_MSG("Map Loaded!");
+		DEBUG.print("Map Loaded!");
 	}
 	
-	//TODO: Maploader, Data structures for map elements to be used by pacman and ghosts.
+	private static class Intersection{
+		public final int x;
+		public final int y;
+		public final int z;
+		private Intersection(int x, int y, int z){
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+		
+		@Override
+		public String toString(){
+			return String.format("%d;%d;%d", x, y, z);
+		}
+	}
 }

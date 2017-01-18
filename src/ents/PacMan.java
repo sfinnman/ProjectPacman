@@ -3,20 +3,19 @@ package ents;
 import java.awt.Graphics;
 
 import gui.Drawable;
-import utility.EventData;
+import utility.EventHandler.EventData;
 import utility.Listener;
 
 public class PacMan extends Dynamic implements Drawable, Listener {
 
-	protected PacMan(double x, double y) {
+	public PacMan(double x, double y, int hdg) {
 		super(x, y);
-		
+		super.hdg = hdg;
 	}
 
 	@Override
 	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

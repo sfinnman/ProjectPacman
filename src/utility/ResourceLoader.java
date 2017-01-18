@@ -15,18 +15,18 @@ public class ResourceLoader {
 	private ResourceLoader(){}
 	
 	public static void init(){
-		DEBUG.DEBUG_MSG("ResourceLoader initializing!");
+		DEBUG.print("ResourceLoader initializing!");
 		final File location = new File("src/resources");
 		File[] resources = location.listFiles();
 		for (File image : resources) {
 			try {
 				images.put(image.getName().replace(".png", ""), ImageIO.read(image));
-				DEBUG.DEBUG_MSG(image.getName().replace(".png", ""));
+				DEBUG.print(image.getName().replace(".png", ""));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		DEBUG.DEBUG_MSG("ResourceLoader initialized!");
+		DEBUG.print("ResourceLoader initialized!");
 	}
 	
 	public static BufferedImage getImage(String file) {
