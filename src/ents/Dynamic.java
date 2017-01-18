@@ -1,14 +1,17 @@
 package ents;
 
-abstract class Dynamic {
+public abstract class Dynamic {
 	protected int hdg;
 	
 	protected double x;
 	protected double y;
 	
-	protected Dynamic(double x, double y) {
+	private final String name;
+	
+	protected Dynamic(double x, double y, String name) {
 		this.x = x;
 		this.y = y;
+		this.name = name;
 	}
 	
 	public int getx(){
@@ -18,5 +21,11 @@ abstract class Dynamic {
 	public int gety(){
 		return (int)y;
 	}
+	
+	@Override
+	public String toString(){
+		return String.format(name + " |%d, %d| ", (int)x, (int)y);
+	}
+	
 	
 }

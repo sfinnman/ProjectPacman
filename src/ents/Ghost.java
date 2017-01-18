@@ -6,10 +6,10 @@ import gui.Drawable;
 import utility.EventHandler.EventData;
 import utility.Listener;
 
-public class Ghost extends Dynamic implements Listener, Drawable {
+abstract class Ghost extends Dynamic implements Listener, Drawable {
 
-	protected Ghost(double x, double y) {
-		super(x, y);
+	protected Ghost(double x, double y, String name) {
+		super(x, y, name);
 		// TODO Auto-generated constructor stub
 	}
 

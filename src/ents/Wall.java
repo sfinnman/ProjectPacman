@@ -11,7 +11,7 @@ public class Wall extends Static implements Drawable{
 	private final BufferedImage img;
 	
 	public Wall(int x, int y, BufferedImage img){
-		super(x, y);
+		super(x, y, "wall");
 		this.img = img;
 		Drawable.register(this);
 	}

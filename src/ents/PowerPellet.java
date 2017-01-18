@@ -13,7 +13,7 @@ public class PowerPellet extends Static implements Drawable, Listener{
 	private final BufferedImage img;
 	
 	public PowerPellet(int x, int y, BufferedImage img){
-		super(x, y);
+		super(x, y, "powerpellet");
 		this.img = img;
 		EventHandler.subscribeEvent("pacman_move", this);
 		Drawable.register(this);

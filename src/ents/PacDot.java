@@ -13,7 +13,7 @@ public class PacDot extends Static implements Drawable, Listener{
 	private final BufferedImage img;
 
 	public PacDot(int x, int y, BufferedImage img){
-		super(x, y);
+		super(x, y, "PacDot");
 		this.img = img;
 		EventHandler.subscribeEvent("pacman_move", this);
 		Drawable.register(this);

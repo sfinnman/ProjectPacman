@@ -4,9 +4,9 @@ public class DEBUG {
 	
 	public static boolean ENABLED = false;
 	
-	public static void print(String str){
+	public static void print(Object str){
 		if (ENABLED) {
-			System.out.println(str);
+			System.out.println(str.toString());
 		}
 	}
 	

@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.DEBUG;
+
 public interface Drawable {
 	public static List<Drawable> library = new ArrayList<>();
 	public void draw(Graphics g);

@@ -3,6 +3,7 @@ package game;
 import javax.swing.JFrame;
 import gui.Frame;
 import utility.EventHandler;
+import utility.GameState;
 import utility.ResourceLoader;
 
 public class Main extends JFrame{
@@ -11,7 +12,7 @@ public class Main extends JFrame{
 		add(new Frame());
 		setTitle("Pacman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(706, 920);
+        setSize(Frame.WIDTH + 6, Frame.HEIGHT + 20);
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
@@ -19,11 +20,11 @@ public class Main extends JFrame{
 	
 	public static void main(String[] args) {
 		DEBUG.ENABLED = true;
+		EventHandler.init();
+		ResourceLoader.init();
 		Runnable game = new Runnable(){
 			@Override
 			public void run() {
-				EventHandler.init();
-				ResourceLoader.init();
 				Map.loadMap();
 			}
 		};
@@ -33,7 +34,7 @@ public class Main extends JFrame{
 				new Main();
 			}
 		};
-		game.run();
+		GameState.init();
 		gui.run();
 	}
 }

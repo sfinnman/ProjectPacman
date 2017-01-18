@@ -2,11 +2,17 @@ package utility;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
+
+import game.DEBUG;
 
 public class EventHandler {
 	private static Map<String, List<Listener>> events = new HashMap<>();
@@ -22,9 +28,12 @@ public class EventHandler {
 	}
 	
 	public static boolean subscribeEvent(String key, Listener listener){
+		DEBUG.print(listener.toString() + " trying to register as a Listener on " + key);
 		if (!events.containsKey(key)) {
+			DEBUG.print("events didnt contain key " + key);
 			return false;
 		}
+		DEBUG.print(listener.toString() + " registered as a Listener on " + key);
 		events.get(key).add(listener);
 		return true;
 	}
@@ -38,7 +47,8 @@ public class EventHandler {
 	}
 	
 	public static boolean triggerEvent(String key, EventData data){
-		if (events.containsKey(key)) {
+		DEBUG.print(key + " triggered!");
+		if (!events.containsKey(key)) {
 			return false;
 		}
 		List<Listener> hooks = events.get(key);
@@ -66,6 +76,13 @@ public class EventHandler {
 		}
 		System.out.println("EventHandler initialized!");
 		System.out.println(events);
+	}
+	
+	public static void free(Listener listener) {
+		Set<Entry<String, List<Listener>>> ES = events.entrySet();
+		for (Entry<String, List<Listener>> Entry : ES) {
+			Entry.getValue().remove(listener); //Frees all references to this object! Do not use this concurrently with loops!
+		}
 	}
 	
 	public static class EventData {

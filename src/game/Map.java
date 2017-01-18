@@ -39,6 +39,7 @@ public class Map { //Class for lookup from Pacman and Ghosts!
 				}
 			}
 			String[] tokens = sc.nextLine().split(";");
+			DEBUG.print(tokens[0]);
 			new PacMan(Double.valueOf(tokens[0]), Double.valueOf(tokens[1]), Integer.valueOf(tokens[2]));
 			tokens = sc.nextLine().split(";");
 			//Jail insert here.
