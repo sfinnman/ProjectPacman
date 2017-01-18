@@ -1,4 +1,4 @@
-package game.utility;
+package utility;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,7 +10,7 @@ public class EventHandler {
 	
 	private EventHandler(){};
 	
-	public static boolean initEvent(String key) {
+	public static boolean registerEvent(String key) {
 		if (events.containsKey(key)) {
 			return false;
 		}
@@ -18,21 +18,29 @@ public class EventHandler {
 		return true;
 	}
 	
-	public static boolean listenEvent(String key, Listener listener){
+	public static boolean subscribeEvent(String key, Listener listener){
 		if (!events.containsKey(key)) {
 			return false;
 		}
 		events.get(key).add(listener);
 		return true;
 	}
+
+	public static boolean unsubscribeEvent(String key, Listener listener){
+		if (!events.containsKey(key)) {
+			return false;
+		}
+		events.get(key).remove(listener);
+		return true;
+	}
 	
-	public static boolean triggerEvent(String key, Object src){
+	public static boolean triggerEvent(String key, EventData data){
 		if (events.containsKey(key)) {
 			return false;
 		}
 		List<Listener> hooks = events.get(key);
 		for (Listener hook : hooks) {
-			hook.onRegister(key, src);
+			hook.onRegister(key, data);
 		}
 		return true;
 	}
