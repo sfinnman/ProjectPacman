@@ -39,6 +39,7 @@ public abstract class Menu implements Drawable{
 	}
 	
 	public void reactivate(){
+		this.setDraw();
 		for (MenuItem item : items) {
 			item.subscribeEvents();
 		}
