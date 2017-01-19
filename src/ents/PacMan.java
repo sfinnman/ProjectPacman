@@ -26,10 +26,8 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		// Let pacman be 45 px large (He is fat)
 		int px = (int) (x * 25) - 10;
-		int py = (int) (y * 25) - 10; // Top right corner of percmuns current
-										// position!
+		int py = (int) (y * 25) - 10;
 		g2.setColor(Color.YELLOW);
 		g2.fillArc(px, py, 45, 45, 30, 300);
 	}
