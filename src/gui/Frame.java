@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import game.DEBUG;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
+import utility.Point;
 
 public class Frame extends JPanel implements MouseListener, KeyListener{
 	
@@ -33,7 +34,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 			}
 		};
 		t = new Timer();
-		t.schedule(task, 50, 50);
+		t.schedule(task, 25, 25);
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		DEBUG.print("Mouse clicked in screen! at coord: " + e.getX() + ", " + e.getY());
-		EventHandler.triggerEvent("mouse_clicked", new EventData(this, e.getX(), e.getY()));
+		EventHandler.triggerEvent("mouse_clicked", new EventData(this, new Point(e.getX(), e.getY())));
 	}
 
 	@Override
@@ -65,24 +66,24 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 	}
 
 	@Override
-	public void keyPressed(KeyEvent arg0) {
+	public void keyReleased(KeyEvent arg0) {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		switch(key){
 		case(KeyEvent.VK_UP):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, 8, 0));
+			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(8, 0)));
 		break;
 		case(KeyEvent.VK_RIGHT):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, 1, 0));
+			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(1, 0)));
 		break;
 		case(KeyEvent.VK_DOWN):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, 2, 0));
+			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(2, 0)));
 		break;
 		case(KeyEvent.VK_LEFT):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, 4, 0));
+			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(4, 0)));
 		break;
 		case(KeyEvent.VK_ESCAPE):
 			EventHandler.triggerEvent("esc", null);

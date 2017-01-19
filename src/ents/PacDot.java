@@ -8,12 +8,13 @@ import java.awt.image.BufferedImage;
 import gui.Drawable;
 import utility.EventHandler.EventData;
 import utility.Listener;
+import utility.Point;
 
 public class PacDot extends Static implements Drawable, Listener{
 	private final BufferedImage img;
 
-	public PacDot(int x, int y, BufferedImage img){
-		super(x, y, "PacDot");
+	public PacDot(Point p, BufferedImage img){
+		super(p, "PacDot");
 		this.img = img;
 		EventHandler.subscribeEvent("pacman_move", this);
 		Drawable.register(this);
@@ -21,16 +22,16 @@ public class PacDot extends Static implements Drawable, Listener{
 	
 	@Override
 	public void draw(Graphics g) {
-		Drawable.drawSqAt(x, y, img, g);
+		Drawable.drawSqAt(p, img, g);
 	}
 
 	@Override
 	public void onRegister(String key, EventData data) {
 		if (key.equals("pacman_move")) {
-			if (data.x == this.x && data.y == this.y) {
+			if (data.p.equals(this.p)) {
 				EventHandler.unsubscribeEvent("pacman_move", this);
 				Drawable.unregister(this);
-				EventHandler.triggerEvent("pacdot_eat", new EventData(this, x, y));
+				EventHandler.triggerEvent("pacdot_eat", new EventData(this, p));
 			}
 		}
 	}

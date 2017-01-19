@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.DEBUG;
-import game.Map;
+import game.Level;
 import utility.GameState;
 
 public class MainMenu{
@@ -18,7 +18,8 @@ public class MainMenu{
 				Runnable game = new Runnable(){
 					@Override
 					public void run() {
-						Map.loadMap();
+						Level.loadMap();
+						GameState.startThink();
 					}
 				};
 				game.run();

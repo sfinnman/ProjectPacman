@@ -1,19 +1,19 @@
 package ents;
 
+import utility.Point;
+
 public abstract class Static {
-	protected final int x;
-	protected final int y;
+	protected final Point p;
 	private final String name;
 	
-	protected Static(int x, int y, String name){
-		this.x = x;
-		this.y = y;
+	protected Static(Point p, String name){
+		this.p = p;
 		this.name = name;
 	}
 	
 	@Override
 	public String toString(){
-		return String.format(name + " |%d, %d| ", x, y);
+		return String.format(name + " |%d, %d| ", p.x, p.y);
 	}
 	
 }

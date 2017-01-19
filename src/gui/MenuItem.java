@@ -8,21 +8,18 @@ import java.awt.Graphics2D;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;
+import utility.Point;
 
 public abstract class MenuItem implements Listener, Drawable{
 	private final String text;
-	public final int x;
-	public final int y;
-	public final int sizex;
-	public final int sizey;
+	public final Point p;
+	public final Point size;
 	
 	
 	public MenuItem(String text, int x, int y, int sizex, int sizey){
 		this.text = text;
-		this.x = x;
-		this.y = y;
-		this.sizex = sizex;
-		this.sizey = sizey; 
+		this.p = new Point(x, y);
+		this.size = new Point(sizex, sizey);
 		subscribeEvents();
 	}
 	
@@ -38,9 +35,7 @@ public abstract class MenuItem implements Listener, Drawable{
 	
 	@Override
 	public void onRegister(String key, EventData data) {
-		int relx = data.x -x;
-		int rely = data.y -y;
-		if (relx>0 && relx<sizex && rely>0 && rely<sizey){
+		if (data.p.isInside(p, size)){
 			doclick();
 		}
 	}
@@ -52,7 +47,7 @@ public abstract class MenuItem implements Listener, Drawable{
 		FontMetrics fm = g2.getFontMetrics();
 		int twidth = fm.stringWidth(text);
 		int theight = fm.getHeight();
-		g2.drawString(text, x + sizex/2 - twidth/2 , y + sizey/2 + theight/2);
-		g2.drawRect(x, y, sizex, sizey);
+		g2.drawString(text, p.x + size.x/2 - twidth/2 , p.y + size.y/2 + theight/2);
+		g2.drawRect(p.x, p.y, size.x, size.y);
 	}
 }

@@ -1,21 +1,21 @@
 package game;
 
+import utility.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-
 import ents.PacDot;
 import ents.PacMan;
 import ents.PowerPellet;
 import ents.Wall;
 import utility.ResourceLoader;
 
-public class Map { //Class for lookup from Pacman and Ghosts!
-	private Map(){}
+public class Level { //Class for lookup from Pacman and Ghosts!
+	private Level(){}
 	
-	public static List<Intersection> Intersections = new ArrayList<>();
+	private static Map<Point, Integer> Intersections = new HashMap<>();
 	
 	public static void loadMap(){
 		DEBUG.print("Loading map!");
@@ -29,12 +29,13 @@ public class Map { //Class for lookup from Pacman and Ghosts!
 				for(int x = 0; x<line.length(); x++) {
 					char c = line.charAt(x);
 					String t = String.valueOf(c);
+					Point p = new Point(x, y);
 					if (c<121) {
-						new Wall(x, y, ResourceLoader.getImage(t));
+						new Wall(p, ResourceLoader.getImage(t));
 					} else if (c == 121) {
-						new PacDot(x, y, ResourceLoader.getImage(t));
+						new PacDot(p, ResourceLoader.getImage(t));
 					} else if (c == 122) {
-						new PowerPellet(x, y, ResourceLoader.getImage(t));
+						new PowerPellet(p, ResourceLoader.getImage(t));
 					}
 				}
 			}
@@ -46,9 +47,9 @@ public class Map { //Class for lookup from Pacman and Ghosts!
 			String[] Intersections = sc.nextLine().replaceAll("[\\[\\]\\s]", "").split(",");
 			for (String Intersection : Intersections) {
 				tokens = Intersection.split(";");
-				Map.Intersections.add(new Intersection(Integer.valueOf(tokens[0]), Integer.valueOf(tokens[1]), Integer.valueOf(tokens[2])));
+				Level.Intersections.put(new Point(Integer.valueOf(tokens[0]), Integer.valueOf(tokens[1])), Integer.valueOf(tokens[2]));
 			}
-			DEBUG.print(Map.Intersections.toString());
+			DEBUG.print(Level.Intersections.toString());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,22 +58,18 @@ public class Map { //Class for lookup from Pacman and Ghosts!
 				sc.close();
 			}
 		}
+		DEBUG.print(Intersections.containsKey(new Point(15, 26)));
 		DEBUG.print("Map Loaded!");
 	}
 	
-	private static class Intersection{
-		public final int x;
-		public final int y;
-		public final int z;
-		private Intersection(int x, int y, int z){
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-		
-		@Override
-		public String toString(){
-			return String.format("%d;%d;%d", x, y, z);
-		}
+
+	public static Integer getIntersection(Point p){
+		return Intersections.get(p);
 	}
+	
+	public static boolean hasIntersection(Point p){
+		DEBUG.print("performing hasInteraction at: " + p);
+		return Intersections.containsKey(p);
+	}
+	
 }

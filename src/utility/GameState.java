@@ -2,6 +2,8 @@ package utility;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import gui.MainMenu;
 import gui.Menu;
@@ -10,7 +12,7 @@ import utility.EventHandler.EventData;
 public class GameState implements Listener {
 	private static final GameState self = new GameState();
 
-	private static boolean game_think;
+	private static Timer game_think;
 	private static Deque<Menu> menu = new LinkedList<>();
 	private static long game_time;
 	private static int score;
@@ -22,10 +24,21 @@ public class GameState implements Listener {
 	public static void init() {
 		menu.push(MainMenu.instance());
 		menu.peek().setDraw();
+		game_think = new Timer();
 	}
 	
-	public static void toggleThink(){
-		game_think = !game_think;
+	public static void startThink(){
+		TimerTask task = new TimerTask(){
+			@Override
+			public void run() {
+				EventHandler.triggerEvent("game_think", null);
+			}
+		};
+		game_think.scheduleAtFixedRate(task, 10, 10);
+	}
+	
+	public static void stopThink(){
+		game_think.cancel();
 	}
 	
 	public static Menu currentMenu(){

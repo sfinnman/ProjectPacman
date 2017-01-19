@@ -10,10 +10,13 @@ import utility.EventHandler.EventData;
 import utility.Listener;
 
 public class PacMan extends Dynamic implements Drawable, Listener {
+	
+	private int nextmove;
 
 	public PacMan(double x, double y, int hdg) {
 		super(x, y, "Pacman");
 		super.hdg = hdg;
+		nextmove = hdg;
 		Drawable.register(this);
 		EventHandler.subscribeEvent("key_arrow", this);
 		EventHandler.subscribeEvent("ghost_move", this);
@@ -32,14 +35,14 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 	}
 	
 	private void onThink(){
-		
+		move(0.05);
 	}
 
 	@Override
 	public void onRegister(String key, EventData data) {
 		switch (key) {
 		case "key_arrow":
-
+				nextmove = data.p.x;
 			break;
 		case "ghost_move":
 			break;
@@ -48,6 +51,11 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 				onThink();
 			break;
 		}
+	}
+
+	@Override
+	protected int hdgDecide(int available) {
+		return nextmove;
 	}
 
 }

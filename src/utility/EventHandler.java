@@ -1,5 +1,6 @@
 package utility;
 
+import utility.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class EventHandler {
 	}
 	
 	public static boolean triggerEvent(String key, EventData data){
-		DEBUG.print(key + " triggered!");
+		if (!key.equals("game_think")) DEBUG.print(key + " triggered!");
 		if (!events.containsKey(key)) {
 			return false;
 		}
@@ -85,12 +86,10 @@ public class EventHandler {
 	
 	public static class EventData {
 		public final Object src; //worst case!
-		public final int x;
-		public final int y;
-		public EventData(Object src, int x, int y){
+		public final Point p;
+		public EventData(Object src, Point p){
 			this.src = src;
-			this.x = x;
-			this.y = y;
+			this.p = p;
 		}
 	}
 	
