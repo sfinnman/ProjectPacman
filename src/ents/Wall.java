@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import gui.Drawable;
+import utility.DrawHandler;
 import utility.Point;
 
 public class Wall extends Static implements Drawable{
@@ -14,11 +15,11 @@ public class Wall extends Static implements Drawable{
 	public Wall(Point p, BufferedImage img){
 		super(p, "wall");
 		this.img = img;
-		Drawable.register(this);
+		DrawHandler.register(this);
 	}
 
 	@Override
 	public void draw(Graphics g) {
-		Drawable.drawSqAt(p, img, g);
+		DrawHandler.drawSqAt(p, img, g);
 	}
 }

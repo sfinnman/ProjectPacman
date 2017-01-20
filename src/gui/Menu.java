@@ -3,6 +3,7 @@ package gui;
 import java.awt.Graphics;
 import java.util.List;
 
+import utility.DrawHandler;
 import utility.EventHandler;
 
 public abstract class Menu implements Drawable{
@@ -17,11 +18,11 @@ public abstract class Menu implements Drawable{
 	}
 	
 	public void setDraw(){
-		Drawable.register(this);
+		DrawHandler.register(this);
 	}
 	
 	public void removeDraw(){
-		Drawable.unregister(this);
+		DrawHandler.unregister(this);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package ents;
 
+import utility.DrawHandler;
 import utility.EventHandler;
 
 import java.awt.Graphics;
@@ -17,12 +18,12 @@ public class PacDot extends Static implements Drawable, Listener{
 		super(p, "PacDot");
 		this.img = img;
 		EventHandler.subscribeEvent("pacman_move", this);
-		Drawable.register(this);
+		DrawHandler.register(this);
 	}
 	
 	@Override
 	public void draw(Graphics g) {
-		Drawable.drawSqAt(p, img, g);
+		DrawHandler.drawSqAt(p, img, g);
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class PacDot extends Static implements Drawable, Listener{
 		if (key.equals("pacman_move")) {
 			if (data.p.equals(this.p)) {
 				EventHandler.unsubscribeEvent("pacman_move", this);
-				Drawable.unregister(this);
+				DrawHandler.unregister(this);
 				EventHandler.triggerEvent("pacdot_eat", new EventData(this, p));
 			}
 		}

@@ -15,9 +15,10 @@ import utility.ResourceLoader;
 public class Level { //Class for lookup from Pacman and Ghosts!
 	private Level(){}
 	
-	private static Map<Point, Integer> Intersections = new HashMap<>();
+	private static Map<Point, Integer> Intersections;
 	
 	public static void loadMap(){
+		Intersections = new HashMap<>();
 		DEBUG.print("Loading map!");
 		File map = new File("src/maps/default.txt");
 		Scanner sc = null;
@@ -58,7 +59,6 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 				sc.close();
 			}
 		}
-		DEBUG.print(Intersections.containsKey(new Point(15, 26)));
 		DEBUG.print("Map Loaded!");
 	}
 	
@@ -68,7 +68,6 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 	}
 	
 	public static boolean hasIntersection(Point p){
-		DEBUG.print("performing hasInteraction at: " + p);
 		return Intersections.containsKey(p);
 	}
 	

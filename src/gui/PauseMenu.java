@@ -3,25 +3,39 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.DEBUG;
+import game.Game;
+import game.Level;
+import utility.DrawHandler;
+import utility.EventHandler;
+import utility.GameState;
+
 public class PauseMenu {
 	
 	public static Menu instance(){
 		MenuItem resume = new MenuItem("Resume Game", 50, 100, 400, 50){
 			@Override
 			void doclick() {
-				//Start game clock, close menu etc.
+				GameState.startThink();
+				GameState.popMenu();
+				DrawHandler.popFrame();
 			}
 		};
 		MenuItem reset = new MenuItem("Reset Game", 50, 175, 400, 50){
 			@Override
 			void doclick() {
-				//Goto highscore Menu (Layer it on top in Gamestate)
+				GameState.popMenu();
+				Game.dropResources();
+				Level.loadMap();
+				GameState.startThink();
 			}
 		};
 		MenuItem main = new MenuItem("Main Menu", 50, 250, 400, 50) {
 			@Override
 			void doclick() {
-				//Reverse back to main menu
+				GameState.popMenu();
+				Game.dropResources();
+				GameState.pushMenu(MainMenu.instance());
 			}
 		};
 		List<MenuItem> items = new ArrayList<>();

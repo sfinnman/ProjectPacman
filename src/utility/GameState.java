@@ -5,13 +5,14 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import game.Game;
 import gui.MainMenu;
 import gui.Menu;
 import utility.EventHandler.EventData;
 
-public class GameState implements Listener {
-	private static final GameState self = new GameState();
+public class GameState {
 
+	private static Game game;
 	private static Timer game_think;
 	private static Deque<Menu> menu = new LinkedList<>();
 	private static long game_time;
@@ -24,10 +25,11 @@ public class GameState implements Listener {
 	public static void init() {
 		menu.push(MainMenu.instance());
 		menu.peek().setDraw();
-		game_think = new Timer();
 	}
 	
 	public static void startThink(){
+		game_think = new Timer();
+		game = new Game();
 		TimerTask task = new TimerTask(){
 			@Override
 			public void run() {
@@ -38,6 +40,7 @@ public class GameState implements Listener {
 	}
 	
 	public static void stopThink(){
+		game = null;
 		game_think.cancel();
 	}
 	
@@ -46,7 +49,9 @@ public class GameState implements Listener {
 	}
 	
 	public static void pushMenu(Menu menu){
-		currentMenu().free();
+		if (currentMenu() != null) {
+			currentMenu().free();
+		}
 		GameState.menu.push(menu);
 		menu.setDraw();
 	}
@@ -58,12 +63,6 @@ public class GameState implements Listener {
 		if (lower != null) {
 			lower.reactivate();
 		}
-	}
-	
-	@Override
-	public void onRegister(String key, EventData src) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -7,25 +7,19 @@ import game.DEBUG;
 import game.Level;
 import utility.GameState;
 
-public class MainMenu{
-	
-	public static Menu instance(){
-		MenuItem play = new MenuItem("Start Game", 50, 150, Frame.WIDTH - 100, 50){
+public class MainMenu {
+
+	public static Menu instance() {
+		MenuItem play = new MenuItem("Start Game", 50, 150, Frame.WIDTH - 100, 50) {
 			@Override
 			void doclick() {
 				DEBUG.print("Start Game!");
 				GameState.popMenu();
-				Runnable game = new Runnable(){
-					@Override
-					public void run() {
-						Level.loadMap();
-						GameState.startThink();
-					}
-				};
-				game.run();
+				Level.loadMap();
+				GameState.startThink();
 			}
 		};
-		MenuItem highscore = new MenuItem("Highscore", 50, 225, Frame.WIDTH - 100, 50){
+		MenuItem highscore = new MenuItem("Highscore", 50, 225, Frame.WIDTH - 100, 50) {
 			@Override
 			void doclick() {
 				DEBUG.print("Highscore!");
@@ -43,7 +37,8 @@ public class MainMenu{
 		items.add(play);
 		items.add(highscore);
 		items.add(exit);
-		return new Menu(items){};
+		return new Menu(items) {
+		};
 	}
 
 }

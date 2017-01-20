@@ -14,7 +14,7 @@ import java.util.Set;
 import game.DEBUG;
 
 public class EventHandler {
-	private static Map<String, List<Listener>> events = new HashMap<>();
+	private static Map<String, List<Listener>> events;
 	
 	private EventHandler(){};
 	
@@ -59,6 +59,7 @@ public class EventHandler {
 	
 	public static void init(){
 		System.out.println("EventHandler initializing");
+		events = new HashMap<>();
 		Scanner sc = null;
 		try {
 			sc = new Scanner(new File("src/config/EventHandler.cfg"));

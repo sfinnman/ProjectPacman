@@ -12,6 +12,7 @@ import java.util.TimerTask;
 import javax.swing.JPanel;
 
 import game.DEBUG;
+import utility.DrawHandler;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Point;
@@ -40,7 +41,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Drawable.drawAll(g);
+		DrawHandler.drawAll(g);
 	}
 
 	@Override

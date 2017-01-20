@@ -2,6 +2,7 @@ package game;
 
 import javax.swing.JFrame;
 import gui.Frame;
+import utility.DrawHandler;
 import utility.EventHandler;
 import utility.GameState;
 import utility.ResourceLoader;
@@ -22,13 +23,8 @@ public class Main extends JFrame{
 		DEBUG.ENABLED = true;
 		EventHandler.init();
 		ResourceLoader.init();
-		Runnable gui = new Runnable(){
-			@Override
-			public void run() {
-				new Main();
-			}
-		};
+		DrawHandler.init();
 		GameState.init();
-		gui.run();
+		new Main();
 	}
 }

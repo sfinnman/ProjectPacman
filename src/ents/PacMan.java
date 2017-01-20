@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import gui.Drawable;
+import utility.DrawHandler;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;
@@ -17,7 +18,7 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 		super(x, y, "Pacman");
 		super.hdg = hdg;
 		nextmove = hdg;
-		Drawable.register(this);
+		DrawHandler.register(this);
 		EventHandler.subscribeEvent("key_arrow", this);
 		EventHandler.subscribeEvent("ghost_move", this);
 		EventHandler.subscribeEvent("game_think", this);
@@ -41,6 +42,9 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 		switch (key) {
 		case "key_arrow":
 				nextmove = data.p.x;
+				if (nextmove == (hdg<<2)%15){
+					hdg = data.p.x;
+				}
 			break;
 		case "ghost_move":
 			break;

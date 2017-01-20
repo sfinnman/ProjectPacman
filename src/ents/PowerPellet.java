@@ -1,5 +1,6 @@
 package ents;
 
+import utility.DrawHandler;
 import utility.EventHandler;
 
 import java.awt.Graphics;
@@ -17,7 +18,7 @@ public class PowerPellet extends Static implements Drawable, Listener{
 		super(p, "powerpellet");
 		this.img = img;
 		EventHandler.subscribeEvent("pacman_move", this);
-		Drawable.register(this);
+		DrawHandler.register(this);
 	}
 	
 	@Override
@@ -25,14 +26,14 @@ public class PowerPellet extends Static implements Drawable, Listener{
 		if (key.equals("pacman_move")) {
 			if (p.equals(data.p)) {
 				EventHandler.unsubscribeEvent("pacman_move", this);
-				Drawable.unregister(this);
+				DrawHandler.unregister(this);
 				EventHandler.triggerEvent("powerpellet_eat", new EventData(this, p));
 			}
 		}
 	}
 	@Override
 	public void draw(Graphics g) {
-		Drawable.drawSqAt(p, img, g);
+		DrawHandler.drawSqAt(p, img, g);
 	}
 	
 	
