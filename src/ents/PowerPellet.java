@@ -11,14 +11,11 @@ import utility.EventHandler.EventData;
 import utility.Listener;
 import utility.Point;
 
-public class PowerPellet extends Static implements Drawable, Listener{
-	private final BufferedImage img;
+public class PowerPellet extends Static implements Listener{
 	
 	public PowerPellet(Point p, BufferedImage img){
-		super(p, "powerpellet");
-		this.img = img;
+		super(p, "powerpellet", img);
 		EventHandler.subscribeEvent("pacman_move", this);
-		DrawHandler.register(this);
 	}
 	
 	@Override
@@ -30,11 +27,6 @@ public class PowerPellet extends Static implements Drawable, Listener{
 				EventHandler.triggerEvent("powerpellet_eat", new EventData(this, p));
 			}
 		}
-	}
-	@Override
-	public void draw(Graphics g) {
-		DrawHandler.drawSqAt(p, img, g);
-	}
-	
+	}	
 	
 }

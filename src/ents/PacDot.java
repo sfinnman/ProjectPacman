@@ -12,18 +12,10 @@ import utility.Listener;
 import utility.Point;
 
 public class PacDot extends Static implements Drawable, Listener{
-	private final BufferedImage img;
 
 	public PacDot(Point p, BufferedImage img){
-		super(p, "PacDot");
-		this.img = img;
+		super(p, "PacDot", img);
 		EventHandler.subscribeEvent("pacman_move", this);
-		DrawHandler.register(this);
-	}
-	
-	@Override
-	public void draw(Graphics g) {
-		DrawHandler.drawSqAt(p, img, g);
 	}
 
 	@Override
