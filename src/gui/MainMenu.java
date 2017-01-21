@@ -10,7 +10,7 @@ import utility.GameState;
 public class MainMenu {
 
 	public static Menu instance() {
-		MenuItem play = new MenuItem("Start Game", 50, 150, Frame.WIDTH - 100, 50) {
+		MenuItem play = new MenuItem("Start Game", 50, 150, Frame.WIDTH - 100, 50, true) {
 			@Override
 			void doclick() {
 				DEBUG.print("Start Game!");
@@ -19,14 +19,14 @@ public class MainMenu {
 				GameState.startThink();
 			}
 		};
-		MenuItem highscore = new MenuItem("Highscore", 50, 225, Frame.WIDTH - 100, 50) {
+		MenuItem highscore = new MenuItem("Highscore", 50, 225, Frame.WIDTH - 100, 50, true) {
 			@Override
 			void doclick() {
 				DEBUG.print("Highscore!");
 				GameState.pushMenu(Highscore.instance());
 			}
 		};
-		MenuItem exit = new MenuItem("Exit Game", 50, 300, Frame.WIDTH - 100, 50) {
+		MenuItem exit = new MenuItem("Exit Game", 50, 300, Frame.WIDTH - 100, 50, true) {
 			@Override
 			void doclick() {
 				DEBUG.print("Start Game!");

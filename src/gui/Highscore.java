@@ -12,7 +12,7 @@ import utility.GameState;
 public class Highscore{
 
 	public static Menu instance(){
-		MenuItem back = new MenuItem("Back", 50, 100, 400, 50){
+		MenuItem back = new MenuItem("Back", 50, 100, Frame.WIDTH - 100, 50, true){
 			@Override
 			void doclick() {
 				GameState.popMenu();
@@ -23,7 +23,7 @@ public class Highscore{
 		try {
 			Scanner sc = new Scanner(f);
 			for (int i = 0; i<10 && sc.hasNextLine(); i++){
-				scores.add(new MenuItem(sc.nextLine(), 50, 175 + i*75, 400, 50){
+				scores.add(new MenuItem(sc.nextLine(), 50, 175 + i*75, Frame.WIDTH - 100, 50, false){
 					@Override
 					void doclick() {
 					}

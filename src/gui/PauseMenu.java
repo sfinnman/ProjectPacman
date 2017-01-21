@@ -13,7 +13,7 @@ import utility.GameState;
 public class PauseMenu {
 	
 	public static Menu instance(){
-		MenuItem resume = new MenuItem("Resume Game", 50, 100, 400, 50){
+		MenuItem resume = new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 50, true){
 			@Override
 			void doclick() {
 				GameState.startThink();
@@ -21,7 +21,7 @@ public class PauseMenu {
 				DrawHandler.popFrame();
 			}
 		};
-		MenuItem reset = new MenuItem("Reset Game", 50, 175, 400, 50){
+		MenuItem reset = new MenuItem("Reset Game", 50, 175, Frame.WIDTH - 100, 50, true){
 			@Override
 			void doclick() {
 				GameState.popMenu();
@@ -30,7 +30,7 @@ public class PauseMenu {
 				GameState.startThink();
 			}
 		};
-		MenuItem main = new MenuItem("Main Menu", 50, 250, 400, 50) {
+		MenuItem main = new MenuItem("Main Menu", 50, 250, Frame.WIDTH - 100, 50, true) {
 			@Override
 			void doclick() {
 				GameState.popMenu();

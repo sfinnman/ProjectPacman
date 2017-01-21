@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +18,7 @@ import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Point;
 
-public class Frame extends JPanel implements MouseListener, KeyListener{
+public class Frame extends JPanel implements MouseListener, KeyListener, MouseMotionListener{
 	
 	public static final int HEIGHT = 900;
 	public static final int WIDTH = 700;
@@ -28,6 +29,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 		setBackground(Color.BLACK);
 		addMouseListener(this);
 		addKeyListener(this);
+		addMouseMotionListener(this);
 		TimerTask task = new TimerTask(){
 			@Override
 			public void run() {
@@ -94,6 +96,15 @@ public class Frame extends JPanel implements MouseListener, KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		EventHandler.triggerEvent("mouse_moved", new EventData(this, new Point(e.getX(), e.getY())));
 	}
 
 }
