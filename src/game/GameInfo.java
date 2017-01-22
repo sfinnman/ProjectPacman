@@ -1,4 +1,11 @@
-package utility;
+package game;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import utility.DPoint;
+import utility.EventHandler;
+import utility.Point;
 
 public class GameInfo{
 	
@@ -13,6 +20,7 @@ public class GameInfo{
 	private static int score;
 	private static int dots;
 	private static int level;
+	private static Timer game_think;
 	
 	public static void init(Point pacman, Point blinky, DPoint jail_entrance, int dots){
 		GameInfo.pacman_pos = pacman;
@@ -23,6 +31,22 @@ public class GameInfo{
 		GameInfo.score = 0;
 		GameInfo.pacman_lives = 3;
 		GameInfo.level = 0;
+	}
+	
+	public static void thinkTick(){
+		GameInfo.game_think = new Timer();
+		TimerTask task = new TimerTask(){
+			@Override
+			public void run() {
+				EventHandler.triggerEvent("game_think", null);
+			}
+		};
+		new EscListener();
+		game_think.scheduleAtFixedRate(task, 10, 10);
+	}
+
+	protected static void stopThink(){
+		game_think.cancel();
 	}
 	
 	public static void setBlinkyPos(Point p){

@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import utility.Drawable;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;

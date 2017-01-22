@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import game.GameInfo;
 import utility.DPoint;
-import utility.GameInfo;
 import utility.Point;
 
 public class Pinky extends Ghost{

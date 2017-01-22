@@ -1,15 +1,15 @@
 package game;
 
 import utility.EventHandler.EventData;
-import utility.GameState;
+import gui.MenuStack;
 import gui.PauseMenu;
 import utility.DrawHandler;
 import utility.EventHandler;
 import utility.Listener;
 
-public class Game implements Listener {
+public class EscListener implements Listener {
 	
-	public Game(){
+	public EscListener(){
 		EventHandler.subscribeEvent("esc", this);
 	}
 	
@@ -17,13 +17,8 @@ public class Game implements Listener {
 	public void onRegister(String key, EventData src) {
 		EventHandler.unsubscribeEvent("esc", this);
 		DrawHandler.pushFrame();
-		GameState.pushMenu(PauseMenu.instance());
-		GameState.stopThink();
-	}
-	
-	public static void dropResources(){
-		DrawHandler.init();
-		EventHandler.init();
+		GameInfo.stopThink();
+		MenuStack.pushMenu(PauseMenu.instance());
 	}
 
 }

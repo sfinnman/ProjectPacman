@@ -3,8 +3,8 @@ package ents;
 import java.awt.image.BufferedImage;
 
 import utility.DrawHandler;
+import utility.Drawable;
 import utility.EventHandler;
-import gui.Drawable;
 import utility.EventHandler.EventData;
 import utility.Listener;
 import utility.Point;

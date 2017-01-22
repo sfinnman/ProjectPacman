@@ -7,8 +7,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-import gui.Drawable;
-
 public class DrawHandler {
 	public static Deque<List<Drawable>> frames;
 	public static List<Drawable> library;

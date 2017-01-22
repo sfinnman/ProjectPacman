@@ -4,12 +4,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import game.DEBUG;
-import gui.Drawable;
+import game.GameInfo;
 import utility.DPoint;
 import utility.DrawHandler;
+import utility.Drawable;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
-import utility.GameInfo;
 import utility.Listener;
 import utility.Point;
 

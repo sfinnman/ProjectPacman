@@ -3,8 +3,8 @@ package ents;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import gui.Drawable;
 import utility.DrawHandler;
+import utility.Drawable;
 import utility.Point;
 
 public abstract class Static implements Drawable{

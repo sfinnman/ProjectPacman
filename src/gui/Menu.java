@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.util.List;
 
 import utility.DrawHandler;
+import utility.Drawable;
 import utility.EventHandler;
 
 public abstract class Menu implements Drawable{

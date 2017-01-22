@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.DEBUG;
-import utility.GameState;
 
 public class Highscore{
 
@@ -15,7 +14,7 @@ public class Highscore{
 		MenuItem back = new MenuItem("Back", 50, 100, Frame.WIDTH - 100, 50, true){
 			@Override
 			void doclick() {
-				GameState.popMenu();
+				MenuStack.popMenu();
 			}
 		};
 		File f = new File("src/highscores/list.txt");

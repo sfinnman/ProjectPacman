@@ -2,9 +2,9 @@ package game;
 
 import javax.swing.JFrame;
 import gui.Frame;
+import gui.MenuStack;
 import utility.DrawHandler;
 import utility.EventHandler;
-import utility.GameState;
 import utility.ResourceLoader;
 
 public class Main extends JFrame{
@@ -29,7 +29,7 @@ public class Main extends JFrame{
 		EventHandler.init();
 		ResourceLoader.init();
 		DrawHandler.init();
-		GameState.init();
+		MenuStack.init();
 		new Main();
 	}
 }

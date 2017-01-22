@@ -1,7 +1,6 @@
 package game;
 
 import utility.DPoint;
-import utility.GameInfo;
 import utility.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
