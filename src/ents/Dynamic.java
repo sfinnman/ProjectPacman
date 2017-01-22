@@ -1,6 +1,5 @@
 package ents;
 
-import game.DEBUG;
 import game.Level;
 import utility.EventHandler;
 import utility.Point;
@@ -26,30 +25,27 @@ public abstract class Dynamic {
 		return (int) (y + 0.5);
 	}
 	
-	private void move(double len) {
+	protected void move(double len) {
 		int x = (hdg & 1) - ((hdg & 4) >> 2);
 		int y = ((hdg & 2) >> 1) - ((hdg & 8) >> 3);
 		this.x = (this.x + x * len + 28)%28;
 		this.y = (this.y + y * len + 36)%36;
 	}
 	
-	private boolean midPointCrossed(double xold, double yold){
+	protected boolean borderCrossed(double xold, double yold){
 		return getx() != (int) (xold + 0.5) || gety() != (int) (yold + 0.5);
 	}
 	
-	private void onMove(){
-		EventHandler.triggerEvent(name+"_move", new EventData(this, new Point(getx(), gety())));
+	protected void onMove(){
 	}
 	
-	private boolean crossedIntersection(double xold, double yold){
-		Point p = new Point(this.getx(), this.gety());
-		boolean exists = Level.hasIntersection(p);
+	protected boolean midCrossed(double xold, double yold){
 		boolean x = (int)xold != (int)this.x;
 		boolean y = (int) yold != (int) this.y;
-		return (x || y || hdg == 0) && exists;
+		return (x || y || hdg == 0);
 	}
 	
-	private void decideHdg(){
+	protected void decideHdg(){
 		int hdgsel = Level.getIntersection(new Point(x, y));
 		int hdgwant = hdgDecide(hdgsel);
 		if ((hdgwant&hdgsel)>0){
@@ -62,19 +58,29 @@ public abstract class Dynamic {
 	public void go(double len) {
 		double xold = this.x;
 		double yold = this.y;
-		this.move(len);
-		if (this.midPointCrossed(xold, yold)) {
-			this.onMove();
+		move(len);
+		if (borderCrossed(xold, yold)) {
+			EventHandler.triggerEvent(name+"_move", new EventData(this, new Point(getx(), gety())));
+			this.x = Math.round(this.x*2)/2.0;
+			this.y = Math.round(this.y*2)/2.0;
+			double nlen = len - Math.abs(this.x - xold + this.y - yold);
+			onMove();
+			move(nlen);
 		}
-		if (crossedIntersection(xold, yold)) {
-			double nlen = Math.abs(this.x - this.getx() + this.y - this.gety());
-			this.x = this.getx();
-			this.y = this.gety();
-			decideHdg();
-			this.move(nlen);
+		if (midCrossed(xold, yold)) {
+			onMidCrossed();
+			if (Level.hasIntersection(new Point(this.getx(), this.gety()))) {
+				double nlen = Math.abs(this.x - this.getx() + this.y - this.gety());
+				this.x = this.getx();
+				this.y = this.gety();
+				decideHdg();
+				this.move(nlen);
+			}
 		}
 	}
 
+	abstract protected void onMidCrossed();
+	
 	abstract protected int hdgDecide(int hdgsel);
 
 	@Override

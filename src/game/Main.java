@@ -9,6 +9,11 @@ import utility.ResourceLoader;
 
 public class Main extends JFrame{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Main(){
 		add(new Frame());
 		setTitle("Pacman");

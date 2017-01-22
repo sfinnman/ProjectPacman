@@ -20,6 +20,10 @@ import utility.Point;
 
 public class Frame extends JPanel implements MouseListener, KeyListener, MouseMotionListener{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final int HEIGHT = 900;
 	public static final int WIDTH = 700;
 	private Timer t;

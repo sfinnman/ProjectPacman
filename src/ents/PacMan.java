@@ -68,4 +68,10 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 		return nextmove;
 	}
 
+	@Override
+	protected void onMidCrossed() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

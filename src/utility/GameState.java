@@ -8,7 +8,6 @@ import java.util.TimerTask;
 import game.Game;
 import gui.MainMenu;
 import gui.Menu;
-import utility.EventHandler.EventData;
 
 public class GameState {
 

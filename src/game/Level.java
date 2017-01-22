@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+
+import ents.GhostHouse;
 import ents.PacDot;
 import ents.PacMan;
 import ents.PowerPellet;
@@ -37,6 +39,8 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 						new PacDot(p, ResourceLoader.getImage(t));
 					} else if (c == 122) {
 						new PowerPellet(p, ResourceLoader.getImage(t));
+					} else if (c == 123) {
+						new GhostHouse(p, ResourceLoader.getImage(t));
 					}
 				}
 			}

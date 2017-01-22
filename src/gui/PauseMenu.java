@@ -3,17 +3,15 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.DEBUG;
 import game.Game;
 import game.Level;
 import utility.DrawHandler;
-import utility.EventHandler;
 import utility.GameState;
 
 public class PauseMenu {
-	
-	public static Menu instance(){
-		MenuItem resume = new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 50, true){
+
+	public static Menu instance() {
+		MenuItem resume = new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 50, true) {
 			@Override
 			void doclick() {
 				GameState.startThink();
@@ -21,7 +19,7 @@ public class PauseMenu {
 				DrawHandler.popFrame();
 			}
 		};
-		MenuItem reset = new MenuItem("Reset Game", 50, 175, Frame.WIDTH - 100, 50, true){
+		MenuItem reset = new MenuItem("Reset Game", 50, 175, Frame.WIDTH - 100, 50, true) {
 			@Override
 			void doclick() {
 				GameState.popMenu();
@@ -42,7 +40,8 @@ public class PauseMenu {
 		items.add(resume);
 		items.add(reset);
 		items.add(main);
-		return new Menu(items){};
+		return new Menu(items) {
+		};
 	}
 
 }

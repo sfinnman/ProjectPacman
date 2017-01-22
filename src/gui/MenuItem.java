@@ -54,12 +54,16 @@ public abstract class MenuItem implements Listener, Drawable{
 	@Override
 	public void draw(Graphics g) {
 		if (focus) {
-			if (alpha < 255) {
+			if (alpha < 235) {
 				alpha += 20;
+			} else {
+				alpha = 255;
 			}
 		} else {
-			if (alpha > 0) {
+			if (alpha > 20) {
 				alpha -= 20;
+			} else {
+				alpha = 0;
 			}
 		}
 		Graphics2D g2 = (Graphics2D) g;
