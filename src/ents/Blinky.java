@@ -4,18 +4,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import utility.DPoint;
+import utility.GameInfo;
+import utility.Point;
+
 public class Blinky extends Ghost{
 
-	protected Blinky(double x, double y, String name, GhostHouse house) {
-		super(x, y, name, house);
+	public Blinky(double x, double y) {
+		super(x, y, "blinky");
 		hdg = 4;
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	protected int hdgDecide(int hdgsel) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -27,13 +25,34 @@ public class Blinky extends Ghost{
 
 	@Override
 	protected void jailBreak() {
-				
+		hdgQueue1.offer(8);
+		hdgQueue1.offer(8);
+		hdgQueue1.offer(8);
+		hdgQueue1.offer(8);
+		hdgQueue1.offer(4);
 	}
 
 	@Override
 	protected void jail() {
-		// TODO Auto-generated method stub
-		
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(0);
+	}
+	
+	@Override
+	protected void crossedBorder(){
+		GameInfo.setBlinkyPos(new Point(this.getx(), this.gety()));
+	}
+
+	@Override
+	protected DPoint getTarget() {
+		if (GameInfo.isScatter()){
+			return new DPoint(22, 0);
+		} else {
+			return GameInfo.pacmanPos();
+		}
 	}
 
 }

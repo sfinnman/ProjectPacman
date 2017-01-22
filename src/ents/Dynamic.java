@@ -1,5 +1,6 @@
 package ents;
 
+import game.DEBUG;
 import game.Level;
 import utility.EventHandler;
 import utility.Point;
@@ -9,7 +10,7 @@ public abstract class Dynamic {
 	protected int hdg;
 	protected double x;
 	protected double y;
-	private final String name;
+	protected final String name;
 
 	protected Dynamic(double x, double y, String name) {
 		this.x = x;
@@ -36,7 +37,10 @@ public abstract class Dynamic {
 		return getx() != (int) (xold + 0.5) || gety() != (int) (yold + 0.5);
 	}
 	
-	protected void onMove(){
+	protected void onBorder(){
+	}
+	
+	protected void crossedBorder(){
 	}
 	
 	protected boolean midCrossed(double xold, double yold){
@@ -60,11 +64,11 @@ public abstract class Dynamic {
 		double yold = this.y;
 		move(len);
 		if (borderCrossed(xold, yold)) {
-			EventHandler.triggerEvent(name+"_move", new EventData(this, new Point(getx(), gety())));
+			crossedBorder();
 			this.x = Math.round(this.x*2)/2.0;
 			this.y = Math.round(this.y*2)/2.0;
 			double nlen = len - Math.abs(this.x - xold + this.y - yold);
-			onMove();
+			onBorder();
 			move(nlen);
 		}
 		if (midCrossed(xold, yold)) {
@@ -82,7 +86,7 @@ public abstract class Dynamic {
 	abstract protected void onMidCrossed();
 	
 	abstract protected int hdgDecide(int hdgsel);
-
+	
 	@Override
 	public String toString() {
 		return String.format(name + " |%d, %d| ", this.getx(), this.gety());

@@ -8,8 +8,10 @@ import gui.Drawable;
 import gui.Frame;
 import utility.DrawHandler;
 import utility.EventHandler;
+import utility.GameInfo;
 import utility.EventHandler.EventData;
 import utility.Listener;
+import utility.Point;
 
 public class PacMan extends Dynamic implements Drawable, Listener {
 	
@@ -62,6 +64,13 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 			break;
 		}
 	}
+	
+	@Override
+	protected void crossedBorder(){
+		EventHandler.triggerEvent("pacman_move", new EventData(this, new Point(getx(), gety())));
+		GameInfo.setPacmanPos(new Point(this.getx(), this.gety()));
+		GameInfo.setPacmanHdg(hdg);
+	}
 
 	@Override
 	protected int hdgDecide(int available) {
@@ -70,8 +79,6 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 
 	@Override
 	protected void onMidCrossed() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

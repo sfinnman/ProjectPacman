@@ -4,17 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import utility.DPoint;
+import utility.GameInfo;
+import utility.Point;
+
 public class Pinky extends Ghost{
 	
-	protected Pinky(double x, double y, String name, GhostHouse house) {
-		super(x, y, name, house);
+	public Pinky(double x, double y) {
+		super(x, y, "pinky");
 		this.jailBreak();
-	}
-
-	@Override
-	protected int hdgDecide(int hdgsel) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -35,8 +33,22 @@ public class Pinky extends Ghost{
 
 	@Override
 	protected void jail() {
-		// TODO Auto-generated method stub
-		
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(2);
+		hdgQueue1.offer(0);
+	}
+
+	@Override
+	protected DPoint getTarget() {
+		if (GameInfo.isScatter()){
+			return new DPoint(2, 0);
+		} else {
+			Point hdg = GameInfo.calcHdg(GameInfo.pacmanHdg());
+			DPoint pacpos = GameInfo.pacmanPos();
+			return new DPoint(pacpos.x + hdg.x*4, pacpos.y + hdg.y*4);
+		}
 	}
 
 }

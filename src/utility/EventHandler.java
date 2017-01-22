@@ -46,7 +46,7 @@ public class EventHandler {
 	}
 	
 	public static boolean triggerEvent(String key, EventData data){
-		if (!key.equals("game_think") && !key.equals("mouse_moved")) DEBUG.print(key + " triggered!");
+		//if (!key.equals("game_think") && !key.equals("mouse_moved")) DEBUG.print(key + " triggered!");
 		if (!events.containsKey(key)) {
 			return false;
 		}

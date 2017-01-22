@@ -4,19 +4,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import utility.DPoint;
+import utility.GameInfo;
+
 public class Clyde extends Ghost{
 
-	protected Clyde(double x, double y, String name, GhostHouse house) {
-		super(x, y, name, house);
+	public Clyde(double x, double y) {
+		super(x, y, "clyde");
 		jailBreak();
 	}
 	
-	@Override
-	protected int hdgDecide(int hdgsel) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
@@ -40,7 +37,26 @@ public class Clyde extends Ghost{
 
 	@Override
 	protected void jail() {
-		// TODO Auto-generated method stub
+		hdgQueue1.offer(2);
+		hdgQueue2.offer(2);
+		hdgQueue1.offer(2);
+		hdgQueue2.offer(2);
+		hdgQueue1.offer(1);
+		hdgQueue2.offer(1);
+		hdgQueue1.offer(1);
+		hdgQueue1.offer(1);
+		hdgQueue1.offer(1);
+		hdgQueue1.offer(0);
+	}
+
+	@Override
+	protected DPoint getTarget() {
+		DPoint pacpos = GameInfo.pacmanPos();
+		if (!GameInfo.isScatter() && pacpos.distance(new DPoint(this.x + 0.5, this.y + 0.5))>8){
+			return pacpos;
+		} else {
+			return new DPoint(0, 35);
+		}
 		
 	}
 
