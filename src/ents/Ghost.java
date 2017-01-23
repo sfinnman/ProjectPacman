@@ -31,6 +31,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		EventHandler.subscribeEvent("game_think", this);
 		EventHandler.subscribeEvent("powerpellet_eat", this);
 		EventHandler.subscribeEvent("pacman_move", this);
+		EventHandler.subscribeEvent("scatter", this);
 	}
 
 	abstract protected void jailBreak();
@@ -60,6 +61,8 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		if (key.equals("game_think")) {
 			go(speed*0.95*((frightened)?0.7:1));
 			
+		} else if (key.equals("scatter")){
+			hdg = (hdg<<2)%15;
 		} else if (key.equals("powerpellet_eat")) {
 			hdg = (hdg<<2)%15;
 			speed *= 0.7;

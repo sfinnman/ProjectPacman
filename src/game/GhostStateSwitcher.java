@@ -1,37 +1,37 @@
 package game;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GhostStateSwitcher {
-	private static Timer timer;
+import utility.EventHandler;
+import utility.EventHandler.EventData;
+import utility.Listener;
+
+public class GhostStateSwitcher implements Listener{
+	private List<Integer> times;
+	private int liveTime;
 	
-	private GhostStateSwitcher(){
+	public GhostStateSwitcher(){
+		liveTime = 0;
+		times = new ArrayList<>();
+		times.add(700); //Spread
+		times.add(2700); //Chase
+		times.add(3400); //Spread
+		times.add(5400); //Chase
+		times.add(5800); //Spread
+		times.add(Integer.MAX_VALUE);
+		EventHandler.subscribeEvent("game_think", this);
 	}
 	
-	public static void go(){
-		if (timer != null)
-			timer.cancel();
-		timer = new Timer();
-		Queue<Long> times = new LinkedList<>();
-		times.add(new Long(7000));
-		times.add(new Long(25000));
-		times.add(new Long(7000));
-		times.add(new Long(25000));
-		times.add(new Long(5000));
-		times.add(new Long(25000));
-		times.add(new Long(100));
-		TimerTask scatter = new TimerTask(){
-			@Override
-			public void run() {
-				GameInfo.scatter();
-				if (!times.isEmpty())
-					timer.schedule(this, times.poll());
-			}
-		};
-		timer.schedule(scatter, times.poll());
+	
+
+	@Override
+	public void onRegister(String key, EventData src) {
+		liveTime++;
+		if (times.get(0) - liveTime == 0) {
+			times.remove(0);
+			GameInfo.scatter();
+		}
 	}
 	
 	

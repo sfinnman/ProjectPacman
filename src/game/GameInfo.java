@@ -27,6 +27,7 @@ public class GameInfo{
 	public static void init(Point pacman, Point blinky, DPoint jail_entrance, int dots){
 		GameInfo.pacman_pos = pacman;
 		GameInfo.pacman_hdg = 1;
+		GameInfo.ghost_scatter= true;
 		GameInfo.blinky = blinky;
 		GameInfo.jail_entrance = jail_entrance;
 		GameInfo.dots = dots;
@@ -34,7 +35,7 @@ public class GameInfo{
 		GameInfo.score = 0;
 		GameInfo.pacman_lives = 3;
 		GameInfo.level = 0;
-		
+		new GhostStateSwitcher();		
 	}
 	
 	public static void thinkTick(long delay){
@@ -66,7 +67,8 @@ public class GameInfo{
 	}
 	
 	public static void scatter(){
-		EventHandler.triggerEvent("scatter", null);
+		if (!ghost_scatter)
+			EventHandler.triggerEvent("scatter", null);
 		ghost_scatter = !ghost_scatter;
 	}
 	
