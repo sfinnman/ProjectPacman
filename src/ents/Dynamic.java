@@ -8,8 +8,6 @@ import game.Level;
 import utility.Point;
 
 public abstract class Dynamic {
-	protected static boolean frightened;
-	
 	protected int hdg;
 	protected double x;
 	protected double y;
@@ -99,19 +97,6 @@ public abstract class Dynamic {
 	@Override
 	public String toString() {
 		return String.format(name + " |%d, %d| ", this.getx(), this.gety());
-	}
-
-	public static void setFrightened(){
-		Dynamic.frightened = true;
-		TimerTask task = new TimerTask(){
-			@Override
-			public void run() {
-				Dynamic.frightened = false;
-				
-			}
-		};
-		Timer timer = new Timer();
-		timer.schedule(task, 7000);
 	}
 	
 }

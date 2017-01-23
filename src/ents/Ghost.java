@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import game.GameInfo;
 import utility.DPoint;
@@ -28,6 +30,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		DrawHandler.register(this);
 		EventHandler.subscribeEvent("game_think", this);
 		EventHandler.subscribeEvent("powerpellet_eat", this);
+		EventHandler.subscribeEvent("pacman_move", this);
 	}
 
 	abstract protected void jailBreak();
@@ -38,6 +41,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 	protected void onBorder() {
 		super.onBorder();
 		if (dead && new DPoint(this.x, this.y).equals(GameInfo.jailPos())) {
+			hdg = 2;
 			jail();
 		}
 		if (!hdgQueue2.isEmpty()) {
@@ -59,6 +63,11 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		} else if (key.equals("powerpellet_eat")) {
 			hdg = (hdg<<2)%15;
 			speed *= 0.7;
+			setFrightened();
+		} else if (key.equals("pacman_move") && data.p.equals(new Point(this.getx(), this.gety()))) {
+			if (frightened) {
+				this.kill();
+			}
 		}
 	}
 
@@ -72,10 +81,10 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 	@Override
 	protected int hdgDecide(int hdgsel) {
 		hdgsel -= (hdg << 2) % 15;
-		if (Dynamic.frightened) {
+		if (frightened) {
 			return randomHdg(hdgsel);
 		}
-		DPoint target = getTarget();
+		DPoint target = (dead)?GameInfo.jailPos():getTarget();
 		double dist = 255;
 		double compare = 0;
 		int hdg = 0;
@@ -93,6 +102,11 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		return hdg;
 	}
 	
+	protected void kill(){
+		dead = true;
+		frightened = false;
+	}
+	
 	private int randomHdg(int hdgsel){
 		Random r = new Random();
 		List<Integer> list= new ArrayList<>();
@@ -103,5 +117,18 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 	}
 	
 	abstract protected DPoint getTarget();
+	
+	private void setFrightened(){
+		frightened = true;
+		TimerTask task = new TimerTask(){
+			@Override
+			public void run() {
+				frightened = false;
+				
+			}
+		};
+		Timer timer = new Timer();
+		timer.schedule(task, 7000);
+	}
 
 }

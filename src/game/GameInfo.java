@@ -34,6 +34,7 @@ public class GameInfo{
 		GameInfo.score = 0;
 		GameInfo.pacman_lives = 3;
 		GameInfo.level = 0;
+		
 	}
 	
 	public static void thinkTick(long delay){
@@ -62,6 +63,11 @@ public class GameInfo{
 
 	public static void setPacmanHdg(int hdg){
 		pacman_hdg = hdg;
+	}
+	
+	public static void scatter(){
+		EventHandler.triggerEvent("scatter", null);
+		ghost_scatter = !ghost_scatter;
 	}
 	
 	public static void addScore(int score){

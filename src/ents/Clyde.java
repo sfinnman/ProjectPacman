@@ -23,7 +23,7 @@ public class Clyde extends Ghost{
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(Color.ORANGE);
+		g2.setColor((frightened)?Color.BLUE:Color.ORANGE);
 		g2.fillOval((int)(this.x*25), (int)(this.y*25), 25, 25);
 	}
 
@@ -43,16 +43,15 @@ public class Clyde extends Ghost{
 
 	@Override
 	protected void jail() {
+		hdgQueue2.offer(2);
+		hdgQueue2.offer(2);
 		hdgQueue1.offer(2);
 		hdgQueue2.offer(2);
 		hdgQueue1.offer(2);
 		hdgQueue2.offer(2);
 		hdgQueue1.offer(1);
 		hdgQueue2.offer(1);
-		hdgQueue1.offer(1);
-		hdgQueue1.offer(1);
-		hdgQueue1.offer(1);
-		hdgQueue1.offer(0);
+		hdgQueue2.offer(0);
 	}
 
 	@Override

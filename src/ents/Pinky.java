@@ -18,7 +18,7 @@ public class Pinky extends Ghost{
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor(Color.PINK);
+		g2.setColor((frightened)?Color.BLUE:Color.PINK);
 		g2.fillOval((int)(this.x*25), (int)(this.y*25), 25, 25);
 	}
 
@@ -33,8 +33,6 @@ public class Pinky extends Ghost{
 
 	@Override
 	protected void jail() {
-		hdgQueue1.offer(2);
-		hdgQueue1.offer(2);
 		hdgQueue1.offer(2);
 		hdgQueue1.offer(2);
 		hdgQueue1.offer(0);
