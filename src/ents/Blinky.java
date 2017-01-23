@@ -24,18 +24,25 @@ public class Blinky extends Ghost{
 
 	@Override
 	protected void jailBreak() {
-		hdgQueue1.offer(8);
-		hdgQueue1.offer(8);
-		hdgQueue1.offer(8);
-		hdgQueue1.offer(8);
-		hdgQueue1.offer(4);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(4);
 	}
 
 	@Override
 	protected void jail() {
-		hdgQueue1.offer(2);
-		hdgQueue1.offer(2);
-		hdgQueue1.offer(0);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(0);
 	}
 	
 	@Override

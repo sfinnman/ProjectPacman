@@ -21,8 +21,7 @@ import utility.Listener;
 abstract class Ghost extends Dynamic implements Listener, Drawable {
 	protected boolean frightened;
 	protected boolean dead;
-	protected Queue<Integer> hdgQueue1 = new LinkedList<>();
-	protected Queue<Integer> hdgQueue2 = new LinkedList<>();
+	protected Queue<Integer> hdgQueue = new LinkedList<>();
 
 	protected Ghost(double x, double y, String name) {
 		super(x, y, name);
@@ -45,8 +44,12 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 			hdg = 2;
 			jail();
 		}
-		if (!hdgQueue2.isEmpty()) {
-			hdg = hdgQueue2.poll();
+		if (!hdgQueue.isEmpty()) {
+			hdg = hdgQueue.poll();
+			if (hdgQueue.isEmpty() && dead) {
+				dead = false;
+				jailBreak();
+			}
 		}
 	}
 	
@@ -61,10 +64,11 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		if (key.equals("game_think")) {
 			go(speed*0.95*((frightened)?0.7:1));
 			
-		} else if (key.equals("scatter")){
+		} else if (key.equals("scatter") && hdgQueue.isEmpty()){
 			hdg = (hdg<<2)%15;
 		} else if (key.equals("powerpellet_eat")) {
-			hdg = (hdg<<2)%15;
+			if (hdgQueue.isEmpty())
+				hdg = (hdg<<2)%15;
 			speed *= 0.7;
 			setFrightened();
 		} else if (key.equals("pacman_move") && data.p.equals(new Point(this.getx(), this.gety()))) {
@@ -76,8 +80,12 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 
 	@Override
 	protected void onMidCrossed() {
-		if (!hdgQueue1.isEmpty()) {
-			hdg = hdgQueue1.poll();
+		if (!hdgQueue.isEmpty()) {
+			hdg = hdgQueue.poll();
+			if (hdgQueue.isEmpty() && dead) {
+				dead = false;
+				jailBreak();
+			}
 		}
 	}
 	

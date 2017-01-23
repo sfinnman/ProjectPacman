@@ -29,30 +29,34 @@ public class Inky extends Ghost{
 
 	@Override
 	protected void jailBreak() {
-		hdgQueue1.offer(1);
-		hdgQueue2.offer(1);
-		hdgQueue1.offer(1);
-		hdgQueue1.offer(1);
-		hdgQueue2.offer(8);
-		hdgQueue1.offer(8);
-		hdgQueue1.offer(8);
-		hdgQueue1.offer(8);
-		hdgQueue1.offer(4);
+		hdgQueue.offer(1);
+		hdgQueue.offer(1);
+		hdgQueue.offer(1);
+		hdgQueue.offer(1);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(8);
+		hdgQueue.offer(4);
 		
 	}
 
 	@Override
 	protected void jail() {
-		hdgQueue2.offer(2);
-		hdgQueue2.offer(2);
-		hdgQueue1.offer(2);
-		hdgQueue2.offer(2);
-		hdgQueue1.offer(2);
-		hdgQueue2.offer(2);
-		hdgQueue1.offer(4);
-		hdgQueue2.offer(4);
-		hdgQueue2.offer(4);
-		hdgQueue2.offer(0);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(2);
+		hdgQueue.offer(4);
+		hdgQueue.offer(4);
+		hdgQueue.offer(4);
+		hdgQueue.offer(4);
+		hdgQueue.offer(0);
 	}
 
 	@Override
