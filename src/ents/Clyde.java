@@ -6,12 +6,19 @@ import java.awt.Graphics2D;
 
 import game.GameInfo;
 import utility.DPoint;
+import utility.EventHandler;
+import utility.EventHandler.EventData;
 
 public class Clyde extends Ghost{
+	
+	int release;
 
 	public Clyde(double x, double y) {
 		super(x, y, "clyde");
-		jailBreak();
+		hdg = 0;
+		speed = 0.02;
+		release = 50;
+		EventHandler.subscribeEvent("pacdot_eat", this);
 	}
 	
 	@Override
@@ -58,6 +65,15 @@ public class Clyde extends Ghost{
 			return new DPoint(0, 35);
 		}
 		
+	}
+	
+	@Override
+	public void onRegister(String key, EventData data){
+		super.onRegister(key, data);
+		if (key.equals("pacdot_eat") && GameInfo.getEaten()>release){
+			jailBreak();
+			EventHandler.unsubscribeEvent("pacdot_eat", this);
+		}
 	}
 
 }

@@ -16,7 +16,7 @@ public class MainMenu {
 				DEBUG.print("Start Game!");
 				MenuStack.popMenu();
 				Level.loadMap();
-				GameInfo.thinkTick();
+				GameInfo.thinkTick(3000);
 			}
 		};
 		MenuItem highscore = new MenuItem("Highscore", 50, 225, Frame.WIDTH - 100, 50, true) {

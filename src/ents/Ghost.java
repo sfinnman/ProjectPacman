@@ -3,7 +3,6 @@ package ents;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import game.DEBUG;
 import game.GameInfo;
 import utility.DPoint;
 import utility.DrawHandler;
@@ -11,7 +10,6 @@ import utility.Drawable;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;
-import utility.Point;
 
 abstract class Ghost extends Dynamic implements Listener, Drawable {
 	protected double speed;
@@ -23,7 +21,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 	protected Ghost(double x, double y, String name) {
 		super(x, y, name);
 		DrawHandler.register(this);
-		this.speed = 0.05;
+		this.speed = 0.02;
 		EventHandler.subscribeEvent("game_think", this);
 	}
 
@@ -46,6 +44,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 	public void onRegister(String key, EventData data) {
 		if (key.equals("game_think")) {
 			go(speed);
+			
 		}
 	}
 
@@ -53,6 +52,8 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 	protected void onMidCrossed() {
 		if (!hdgQueue1.isEmpty()) {
 			hdg = hdgQueue1.poll();
+		} else {
+			speed = 0.05;
 		}
 	}
 

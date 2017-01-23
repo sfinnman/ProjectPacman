@@ -19,6 +19,7 @@ public class GameInfo{
 	private static int pacman_lives;
 	private static int score;
 	private static int dots;
+	private static int eaten;
 	private static int level;
 	private static Timer game_think;
 	
@@ -28,12 +29,13 @@ public class GameInfo{
 		GameInfo.blinky = blinky;
 		GameInfo.jail_entrance = jail_entrance;
 		GameInfo.dots = dots;
+		GameInfo.eaten = 0;
 		GameInfo.score = 0;
 		GameInfo.pacman_lives = 3;
 		GameInfo.level = 0;
 	}
 	
-	public static void thinkTick(){
+	public static void thinkTick(long delay){
 		GameInfo.game_think = new Timer();
 		TimerTask task = new TimerTask(){
 			@Override
@@ -41,8 +43,8 @@ public class GameInfo{
 				EventHandler.triggerEvent("game_think", null);
 			}
 		};
-		new EscListener();
-		game_think.scheduleAtFixedRate(task, 10, 10);
+		new GameListener();
+		game_think.scheduleAtFixedRate(task, delay, 10);
 	}
 
 	protected static void stopThink(){
@@ -59,6 +61,10 @@ public class GameInfo{
 
 	public static void setPacmanHdg(int hdg){
 		pacman_hdg = hdg;
+	}
+	
+	public static void pacmanEat(){
+		eaten++;
 	}
 	
 	public static DPoint pacmanPos(){
@@ -83,6 +89,10 @@ public class GameInfo{
 	
 	public static int getScore(){
 		return score;
+	}
+	
+	public static int getEaten(){
+		return eaten;
 	}
 	
 	public static Point calcHdg(int hdg) {

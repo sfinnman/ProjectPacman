@@ -1,10 +1,7 @@
 package ents;
 
-import game.DEBUG;
 import game.Level;
-import utility.EventHandler;
 import utility.Point;
-import utility.EventHandler.EventData;
 
 public abstract class Dynamic {
 	protected int hdg;

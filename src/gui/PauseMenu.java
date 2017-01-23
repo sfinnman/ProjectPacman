@@ -3,7 +3,7 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.EscListener;
+import game.GameListener;
 import game.GameInfo;
 import game.Level;
 import utility.DrawHandler;
@@ -15,7 +15,7 @@ public class PauseMenu {
 		MenuItem resume = new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 50, true) {
 			@Override
 			void doclick() {
-				GameInfo.thinkTick();
+				GameInfo.thinkTick(10);
 				MenuStack.popMenu();
 				DrawHandler.popFrame();
 			}
@@ -27,7 +27,7 @@ public class PauseMenu {
 				DrawHandler.init();
 				EventHandler.init();
 				Level.loadMap();
-				GameInfo.thinkTick();
+				GameInfo.thinkTick(3000);
 			}
 		};
 		MenuItem main = new MenuItem("Main Menu", 50, 250, Frame.WIDTH - 100, 50, true) {

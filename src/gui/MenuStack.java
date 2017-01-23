@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import game.EscListener;
+import game.GameListener;
 import utility.EventHandler;
 
 public class MenuStack {

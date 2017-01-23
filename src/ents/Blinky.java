@@ -13,7 +13,7 @@ public class Blinky extends Ghost{
 	public Blinky(double x, double y) {
 		super(x, y, "blinky");
 		hdg = 4;
-		// TODO Auto-generated constructor stub
+		speed = 0.05;
 	}
 
 	@Override
