@@ -12,7 +12,6 @@ public class Pinky extends Ghost{
 	
 	public Pinky(double x, double y) {
 		super(x, y, "pinky");
-		speed = 0.02;
 		jailBreak();
 	}
 

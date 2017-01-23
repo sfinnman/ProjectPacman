@@ -21,6 +21,7 @@ public class GameInfo{
 	private static int dots;
 	private static int eaten;
 	private static int level;
+	private static double speed = 0.05;
 	private static Timer game_think;
 	
 	public static void init(Point pacman, Point blinky, DPoint jail_entrance, int dots){
@@ -63,6 +64,10 @@ public class GameInfo{
 		pacman_hdg = hdg;
 	}
 	
+	public static void addScore(int score){
+		GameInfo.score += score;
+	}
+	
 	public static void pacmanEat(){
 		eaten++;
 	}
@@ -93,6 +98,10 @@ public class GameInfo{
 	
 	public static int getEaten(){
 		return eaten;
+	}
+	
+	public static double getSpeed(){
+		return speed;
 	}
 	
 	public static Point calcHdg(int hdg) {

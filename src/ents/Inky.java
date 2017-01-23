@@ -17,7 +17,6 @@ public class Inky extends Ghost{
 		super(x, y, "inky");
 		hdg = 0;
 		release = 30;
-		speed = 0.02;
 		EventHandler.subscribeEvent("pacdot_eat", this);
 	}
 

@@ -13,7 +13,6 @@ public class Blinky extends Ghost{
 	public Blinky(double x, double y) {
 		super(x, y, "blinky");
 		hdg = 4;
-		speed = 0.05;
 	}
 
 	@Override
@@ -43,6 +42,7 @@ public class Blinky extends Ghost{
 	
 	@Override
 	protected void crossedBorder(){
+		super.crossedBorder();
 		GameInfo.setBlinkyPos(new Point(this.getx(), this.gety()));
 	}
 

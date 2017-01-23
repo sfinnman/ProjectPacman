@@ -16,7 +16,6 @@ public class Clyde extends Ghost{
 	public Clyde(double x, double y) {
 		super(x, y, "clyde");
 		hdg = 0;
-		speed = 0.02;
 		release = 50;
 		EventHandler.subscribeEvent("pacdot_eat", this);
 	}

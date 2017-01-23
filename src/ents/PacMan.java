@@ -25,6 +25,7 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 		EventHandler.subscribeEvent("key_arrow", this);
 		EventHandler.subscribeEvent("ghost_move", this);
 		EventHandler.subscribeEvent("game_think", this);
+		this.speed = GameInfo.getSpeed();
 	}
 
 	@Override
@@ -44,7 +45,7 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 	}
 	
 	private void onThink(){
-		go(0.05);
+		go(speed);
 	}
 
 	@Override
@@ -67,6 +68,7 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 	
 	@Override
 	protected void crossedBorder(){
+		System.out.println(this);
 		EventHandler.triggerEvent("pacman_move", new EventData(this, new Point(getx(), gety())));
 		GameInfo.setPacmanPos(new Point(this.getx(), this.gety()));
 		GameInfo.setPacmanHdg(hdg);

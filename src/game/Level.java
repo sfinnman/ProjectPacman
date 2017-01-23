@@ -15,6 +15,7 @@ import ents.PacDot;
 import ents.PacMan;
 import ents.Pinky;
 import ents.PowerPellet;
+import ents.SlowTile;
 import ents.Wall;
 import utility.ResourceLoader;
 
@@ -39,7 +40,7 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 					char c = line.charAt(x);
 					String t = String.valueOf(c);
 					Point p = new Point(x, y);
-					if (c<121) {
+					if (c<121 && c>96) {
 						new Wall(p, ResourceLoader.getImage(t));
 					} else if (c == 121) {
 						new PacDot(p, ResourceLoader.getImage(t));
@@ -49,6 +50,10 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 					} else if (c == 123) {
 						new Wall(p, ResourceLoader.getImage(t));
 						house = p;
+					} else if (c == 49) {
+						new SlowTile(p, 0.6);
+					} else if (c == 50) {
+						new SlowTile(p, 0.5);
 					}
 				}
 			}

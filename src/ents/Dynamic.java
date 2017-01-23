@@ -1,14 +1,21 @@
 package ents;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import game.GameInfo;
 import game.Level;
 import utility.Point;
 
 public abstract class Dynamic {
+	protected static boolean frightened;
+	
 	protected int hdg;
 	protected double x;
 	protected double y;
 	protected final String name;
-
+	protected double speed;
+	
 	protected Dynamic(double x, double y, String name) {
 		this.x = x;
 		this.y = y;
@@ -55,12 +62,17 @@ public abstract class Dynamic {
 			this.hdg = (this.hdg&hdgsel);
 		}
 	}
+	
+	public void speedMult(double mult){
+		this.speed *= mult;
+	}
 
 	public void go(double len) {
 		double xold = this.x;
 		double yold = this.y;
 		move(len);
 		if (borderCrossed(xold, yold)) {
+			this.speed = GameInfo.getSpeed();
 			crossedBorder();
 			this.x = Math.round(this.x*2)/2.0;
 			this.y = Math.round(this.y*2)/2.0;
@@ -89,4 +101,17 @@ public abstract class Dynamic {
 		return String.format(name + " |%d, %d| ", this.getx(), this.gety());
 	}
 
+	public static void setFrightened(){
+		Dynamic.frightened = true;
+		TimerTask task = new TimerTask(){
+			@Override
+			public void run() {
+				Dynamic.frightened = false;
+				
+			}
+		};
+		Timer timer = new Timer();
+		timer.schedule(task, 7000);
+	}
+	
 }
