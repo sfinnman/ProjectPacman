@@ -25,7 +25,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 
 	protected Ghost(double x, double y, String name) {
 		super(x, y, name);
-		speed = GameInfo.getSpeed()*0.5;
+		speed = GameInfo.getSpeed() * 0.5;
 		DrawHandler.register(this);
 		EventHandler.subscribeEvent("game_think", this);
 		EventHandler.subscribeEvent("powerpellet_eat", this);
@@ -52,29 +52,26 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 			}
 		}
 	}
-	
+
 	@Override
-	protected void crossedBorder(){
-		System.out.println(this);
+	protected void crossedBorder() {
 		EventHandler.triggerEvent("ghost_move", new EventData(this, new Point(this.x, this.y)));
 	}
 
 	@Override
 	public void onRegister(String key, EventData data) {
 		if (key.equals("game_think")) {
-			go(speed*0.95*((frightened)?0.7:1));
-			
-		} else if (key.equals("scatter") && hdgQueue.isEmpty()){
-			hdg = (hdg<<2)%15;
+			go(speed * 0.95 * ((frightened) ? 0.7 : 1));
+
+		} else if (key.equals("scatter") && hdgQueue.isEmpty() ) {
+			hdg = (hdg << 2) % 15;
 		} else if (key.equals("powerpellet_eat")) {
 			if (hdgQueue.isEmpty())
-				hdg = (hdg<<2)%15;
+				hdg = (hdg << 2) % 15;
 			speed *= 0.7;
 			setFrightened();
 		} else if (key.equals("pacman_move") && data.p.equals(new Point(this.getx(), this.gety()))) {
-			if (frightened) {
-				this.kill();
-			}
+			this.kill();
 		}
 	}
 
@@ -88,14 +85,14 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 			}
 		}
 	}
-	
+
 	@Override
 	protected int hdgDecide(int hdgsel) {
 		hdgsel -= (hdg << 2) % 15;
 		if (frightened) {
 			return randomHdg(hdgsel);
 		}
-		DPoint target = (dead)?GameInfo.jailPos():getTarget();
+		DPoint target = (dead) ? GameInfo.jailPos() : getTarget();
 		double dist = 255;
 		double compare = 0;
 		int hdg = 0;
@@ -112,30 +109,32 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		}
 		return hdg;
 	}
-	
-	protected void kill(){
-		dead = true;
-		frightened = false;
+
+	protected void kill() {
+		if (frightened) {
+			dead = true;
+			frightened = false;
+		}
 	}
-	
-	private int randomHdg(int hdgsel){
+
+	private int randomHdg(int hdgsel) {
 		Random r = new Random();
-		List<Integer> list= new ArrayList<>();
-		for(int i = 1; i<9; i*=2)
-			if ((hdgsel&i)>0)
+		List<Integer> list = new ArrayList<>();
+		for (int i = 1; i < 9; i *= 2)
+			if ((hdgsel & i) > 0)
 				list.add(i);
 		return list.get(r.nextInt(list.size()));
 	}
-	
+
 	abstract protected DPoint getTarget();
-	
-	private void setFrightened(){
+
+	private void setFrightened() {
 		frightened = true;
-		TimerTask task = new TimerTask(){
+		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
 				frightened = false;
-				
+
 			}
 		};
 		Timer timer = new Timer();

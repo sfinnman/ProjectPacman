@@ -12,6 +12,29 @@ public class GhostStateSwitcher implements Listener{
 	private int liveTime;
 	
 	public GhostStateSwitcher(){
+		restart();
+		EventHandler.subscribeEvent("game_think", this);
+		EventHandler.subscribeEvent("game_win", this);
+	}
+	
+	
+
+	@Override
+	public void onRegister(String key, EventData src) {
+		switch(key){
+		case("game_think"):
+			liveTime++;
+			if (times.get(0) - liveTime == 0) {
+				times.remove(0);
+				GameInfo.scatter();
+			}
+			break;
+		case("game_win"):
+			EventHandler.free(this);
+		}
+	}
+	
+	public void restart(){
 		liveTime = 0;
 		times = new ArrayList<>();
 		times.add(700); //Spread
@@ -20,19 +43,6 @@ public class GhostStateSwitcher implements Listener{
 		times.add(5400); //Chase
 		times.add(5800); //Spread
 		times.add(Integer.MAX_VALUE);
-		EventHandler.subscribeEvent("game_think", this);
 	}
-	
-	
-
-	@Override
-	public void onRegister(String key, EventData src) {
-		liveTime++;
-		if (times.get(0) - liveTime == 0) {
-			times.remove(0);
-			GameInfo.scatter();
-		}
-	}
-	
 	
 }

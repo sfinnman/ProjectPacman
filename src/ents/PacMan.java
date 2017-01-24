@@ -14,7 +14,7 @@ import utility.Listener;
 import utility.Point;
 
 public class PacMan extends Dynamic implements Drawable, Listener {
-	
+
 	private int nextmove;
 
 	public PacMan(double x, double y, int hdg) {
@@ -34,17 +34,17 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 		int px = (int) (x * 25) - 10;
 		int py = (int) (y * 25) - 10;
 		g2.setColor(Color.YELLOW);
-		int mouthOpen = (int)(Math.sin(Math.PI*((x + y)%1))*45);
-		int angStart = 90 - hdg*90 + ((hdg&4)>>2)*90 + mouthOpen;
-		int tots = 360 - mouthOpen*2;
+		int mouthOpen = (int) (Math.sin(Math.PI * ((x + y) % 1)) * 45);
+		int angStart = 90 - hdg * 90 + ((hdg & 4) >> 2) * 90 + mouthOpen;
+		int tots = 360 - mouthOpen * 2;
 		g2.fillArc(px, py, 45, 45, angStart, tots);
 		g2.fillArc(px + Frame.WIDTH, py, 45, 45, angStart, tots);
 		g2.fillArc(px - Frame.WIDTH, py, 45, 45, angStart, tots);
 		g2.fillArc(px, py + Frame.HEIGHT, 45, 45, angStart, tots);
 		g2.fillArc(px, py - Frame.HEIGHT, 45, 45, angStart, tots);
 	}
-	
-	private void onThink(){
+
+	private void onThink() {
 		go(speed);
 	}
 
@@ -52,22 +52,24 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 	public void onRegister(String key, EventData data) {
 		switch (key) {
 		case "key_arrow":
-				nextmove = data.p.x;
-				if (nextmove == (hdg<<2)%15){
-					hdg = data.p.x;
-				}
+			nextmove = data.p.x;
+			if (nextmove == (hdg << 2) % 15) {
+				hdg = data.p.x;
+			}
 			break;
 		case "ghost_move":
+			if (new Point(this.getx(), this.gety()).equals(data.p))
+				((Ghost)data.src).kill();
 			break;
 
 		case "game_think":
-				onThink();
+			onThink();
 			break;
 		}
 	}
-	
+
 	@Override
-	protected void crossedBorder(){
+	protected void crossedBorder() {
 		System.out.println(this);
 		EventHandler.triggerEvent("pacman_move", new EventData(this, new Point(getx(), gety())));
 		GameInfo.setPacmanPos(new Point(this.getx(), this.gety()));

@@ -17,14 +17,6 @@ public abstract class Menu implements Drawable{
 	public boolean containsItem(MenuItem item){
 		return items.contains(item);
 	}
-	
-	public void setDraw(){
-		DrawHandler.register(this);
-	}
-	
-	public void removeDraw(){
-		DrawHandler.unregister(this);
-	}
 
 	@Override
 	public void draw(Graphics g) {
@@ -34,14 +26,14 @@ public abstract class Menu implements Drawable{
 	}
 	
 	public void free(){
-		this.removeDraw();
+		DrawHandler.unregister(this);
 		for (MenuItem item : items) {
 			EventHandler.free(item);
 		}
 	}
 	
-	public void reactivate(){
-		this.setDraw();
+	public void activate(){
+		DrawHandler.register(this);
 		for (MenuItem item : items) {
 			item.subscribeEvents();
 		}

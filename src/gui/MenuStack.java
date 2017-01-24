@@ -13,11 +13,6 @@ public class MenuStack {
 
 	private MenuStack() {
 	}
-
-	public static void init() {
-		menu.push(MainMenu.instance());
-		menu.peek().setDraw();
-	}
 	
 	public static Menu currentMenu(){
 		return menu.peek();
@@ -28,7 +23,7 @@ public class MenuStack {
 			currentMenu().free();
 		}
 		MenuStack.menu.push(menu);
-		menu.setDraw();
+		menu.activate();
 	}
 
 	public static void popMenu(){
@@ -36,7 +31,7 @@ public class MenuStack {
 		menu.pop();
 		Menu lower = menu.peek();
 		if (lower != null) {
-			lower.reactivate();
+			lower.activate();
 		}
 	}
 

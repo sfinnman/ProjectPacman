@@ -2,6 +2,7 @@ package game;
 
 import javax.swing.JFrame;
 import gui.Frame;
+import gui.MainMenu;
 import gui.MenuStack;
 import utility.DrawHandler;
 import utility.EventHandler;
@@ -29,7 +30,7 @@ public class Main extends JFrame{
 		EventHandler.init();
 		ResourceLoader.init();
 		DrawHandler.init();
-		MenuStack.init();
+		MenuStack.pushMenu(MainMenu.instance());
 		new Main();
 	}
 }

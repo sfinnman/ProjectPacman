@@ -46,6 +46,7 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 						new PacDot(p, ResourceLoader.getImage(t));
 						dots++;
 					} else if (c == 122) {
+						dots++;
 						new PowerPellet(p, ResourceLoader.getImage(t));
 					} else if (c == 123) {
 						new Wall(p, ResourceLoader.getImage(t));
@@ -69,7 +70,7 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 			Point blinky = new Point(house.x + 3.5, house.y-1);
 			Point pacman = new Point(x, y);
 			DPoint jail = new DPoint(house.x + 3.5, house.y - 1);
-			GameInfo.init(pacman, blinky, jail, dots);
+			GameInfo.load(pacman, blinky, jail, dots);
 			tokens = sc.nextLine().split(";");
 			String[] Intersections = sc.nextLine().replaceAll("[\\[\\]\\s]", "").split(",");
 			for (String Intersection : Intersections) {

@@ -25,7 +25,6 @@ public abstract class MenuItem implements Listener, Drawable{
 		this.p = new Point(x, y);
 		this.size = new Point(sizex, sizey);
 		this.clickable = clickable;
-		subscribeEvents();
 	}
 	
 	public void subscribeEvents(){
@@ -42,31 +41,19 @@ public abstract class MenuItem implements Listener, Drawable{
 	
 	@Override
 	public void onRegister(String key, EventData data) {
-		if (key.equals("mouse_clicked")){
-			if (data.p.isInside(p, size)){
-				doclick();
-			}
-		}
-		if (key.equals("mouse_moved")){
+		switch(key) {
+		case ("mouse_clicked"):
+			if (data.p.isInside(p, size)) doclick();
+			break;
+		case ("mouse_moved"):
 			focus = data.p.isInside(p, size)&&clickable;
+			break;
 		}
 	}
 	
 	@Override
 	public void draw(Graphics g) {
-		if (focus) {
-			if (alpha < 235) {
-				alpha += 20;
-			} else {
-				alpha = 255;
-			}
-		} else {
-			if (alpha > 20) {
-				alpha -= 20;
-			} else {
-				alpha = 0;
-			}
-		}
+		alpha = (focus)?(alpha<235)?alpha+20:255:(alpha>20)?alpha-20:0;
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.WHITE);
 		FontMetrics fm = g2.getFontMetrics();

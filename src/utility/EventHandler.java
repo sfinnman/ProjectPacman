@@ -3,6 +3,8 @@ package utility;
 import utility.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.AbstractMap;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +17,8 @@ import game.DEBUG;
 
 public class EventHandler {
 	private static Map<String, List<Listener>> events;
+	private static Deque<AbstractMap.SimpleEntry<String, Listener>> removals;
+	private static boolean working;
 	
 	private EventHandler(){};
 	
@@ -37,29 +41,48 @@ public class EventHandler {
 		return true;
 	}
 
-	public static boolean unsubscribeEvent(String key, Listener listener){
+	public static void unsubscribeEvent(String key, Listener listener){
+		if (working) {
+			EventHandler.queueUnsubscribeEvent(key, listener); //Cannot remove entries while executing an event, leads to concurrency issues.
+			return;
+		}
 		if (!events.containsKey(key)) {
-			return false;
+			return;
 		}
 		events.get(key).remove(listener);
-		return true;
+		return;
 	}
 	
-	public static boolean triggerEvent(String key, EventData data){
-		//if (!key.equals("game_think") && !key.equals("mouse_moved")) DEBUG.print(key + " triggered!");
+	private static void queueUnsubscribeEvent(String key, Listener listener){
+		removals.push(new AbstractMap.SimpleEntry<String, Listener>(key, listener)); //Land here when we are working
+	}
+	
+	private static void flush(){ //flushes the entries to be removed!
+		while(!removals.isEmpty()){
+			AbstractMap.SimpleEntry<String, Listener> entry = removals.pop();
+			EventHandler.unsubscribeEvent(entry.getKey(), entry.getValue());
+		}
+	}
+	
+	public static synchronized boolean triggerEvent(String key, EventData data){
 		if (!events.containsKey(key)) {
 			return false;
 		}
+		working = true; // Make sure to stop all unsubscribes during execution!
 		List<Listener> hooks = events.get(key);
 		for (int i = 0; i<hooks.size(); i++){
 			hooks.get(i).onRegister(key, data);
 		}
+		working = false;
+		flush();
 		return true;
 	}
 	
-	public static void init(){
+	public static synchronized void init(){
 		System.out.println("EventHandler initializing");
 		events = new HashMap<>();
+		removals = new LinkedList<>();
+		working = false;
 		Scanner sc = null;
 		try {
 			sc = new Scanner(new File("src/config/EventHandler.cfg"));
@@ -79,9 +102,9 @@ public class EventHandler {
 	}
 	
 	public static void free(Listener listener) {
-		Set<Entry<String, List<Listener>>> ES = events.entrySet();
-		for (Entry<String, List<Listener>> Entry : ES) {
-			Entry.getValue().remove(listener); //Frees all references to this object! Do not use this concurrently with loops!
+		Set<Entry<String, List<Listener>>> entryset = events.entrySet();
+		for (Entry<String, List<Listener>> entry : entryset) {
+			EventHandler.unsubscribeEvent(entry.getKey(), listener);
 		}
 	}
 	

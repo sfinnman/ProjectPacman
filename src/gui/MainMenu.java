@@ -16,6 +16,7 @@ public class MainMenu {
 				DEBUG.print("Start Game!");
 				MenuStack.popMenu();
 				Level.loadMap();
+				GameInfo.init();
 				GameInfo.thinkTick(3000);
 			}
 		};

@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import utility.DPoint;
+import utility.DrawHandler;
 import utility.EventHandler;
 import utility.Point;
 
@@ -21,10 +22,10 @@ public class GameInfo{
 	private static int dots;
 	private static int eaten;
 	private static int level;
-	private static double speed = 0.05;
+	private static double speed = 0.1;
 	private static Timer game_think;
 	
-	public static void init(Point pacman, Point blinky, DPoint jail_entrance, int dots){
+	public static void load(Point pacman, Point blinky, DPoint jail_entrance, int dots){
 		GameInfo.pacman_pos = pacman;
 		GameInfo.pacman_hdg = 1;
 		GameInfo.ghost_scatter= true;
@@ -32,10 +33,13 @@ public class GameInfo{
 		GameInfo.jail_entrance = jail_entrance;
 		GameInfo.dots = dots;
 		GameInfo.eaten = 0;
-		GameInfo.score = 0;
-		GameInfo.pacman_lives = 3;
-		GameInfo.level = 0;
 		new GhostStateSwitcher();		
+	}
+
+	public static void init(){
+		GameInfo.score = 0;
+		GameInfo.pacman_lives = 2;
+		GameInfo.level = 1;
 	}
 	
 	public static void thinkTick(long delay){
@@ -78,8 +82,21 @@ public class GameInfo{
 	
 	public static void pacmanEat(){
 		eaten++;
+		DEBUG.print("Nom");
+		if (eaten == dots) {
+			GameInfo.win();
+		}
 	}
 	
+	private static void win() {
+		EventHandler.triggerEvent("game_win", null);
+		GameInfo.stopThink();
+		DrawHandler.init();
+		EventHandler.init();
+		Level.loadMap();
+		GameInfo.thinkTick(3000);
+	}
+
 	public static DPoint pacmanPos(){
 		return new DPoint(pacman_pos.x,pacman_pos.y);
 	}
