@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 import game.DEBUG;
 import game.GameInfo;
+import game.LevelSettings;
 import utility.DPoint;
 import utility.DrawHandler;
 import utility.Drawable;
@@ -19,18 +20,44 @@ import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;
 
-abstract class Ghost extends Dynamic{
-	protected boolean frightened;
+abstract class Ghost extends Dynamic {
 	protected boolean dead;
 	protected Queue<Integer> hdgQueue = new LinkedList<>();
 
 	protected Ghost(double x, double y, int hdg, String name) {
 		super(x, y, hdg, name);
-		speed = GameInfo.getSpeed() * 0.5;
 		EventHandler.subscribeEvent("game_think", this);
-		EventHandler.subscribeEvent("powerpellet_eat", this);
 		EventHandler.subscribeEvent("pacman_move", this);
 		EventHandler.subscribeEvent("scatter", this);
+	}
+
+	private void onthink() {
+		double speed = LevelSettings.topSpeed;
+		if (!dead) {
+			if (frightened) {
+				speed *= LevelSettings.ghostFrtMlt();
+			} else {
+				if (this.tileSpeedMod != 1) {
+					speed *= LevelSettings.ghostTnlMlt();
+				} else {
+					speed *= LevelSettings.ghostNrmMlt();
+				}
+			}
+		}
+		go(speed);
+	}
+
+	private void reverse() {
+		if (hdgQueue.isEmpty() && !dead)
+			hdg = (hdg << 2) % 15;
+	}
+
+	@Override
+	protected void onFrightened() {
+		reverse();
+		if (!dead) {
+			super.frightened = true;
+		}
 	}
 
 	abstract protected void jailBreak();
@@ -46,7 +73,6 @@ abstract class Ghost extends Dynamic{
 		}
 		if (!hdgQueue.isEmpty()) {
 			hdg = hdgQueue.poll();
-			DEBUG.print(this.toString() + " choosing hdg: " + hdg);
 			if (hdgQueue.isEmpty() && dead) {
 				dead = false;
 				jailBreak();
@@ -62,18 +88,17 @@ abstract class Ghost extends Dynamic{
 	@Override
 	public void onRegister(String key, EventData data) {
 		super.onRegister(key, data);
-		if (key.equals("game_think")) {
-			go(speed * 0.95 * ((frightened) ? 0.7 : 1));
-
-		} else if (key.equals("scatter") && hdgQueue.isEmpty() && !dead) {
-			hdg = (hdg << 2) % 15;
-		} else if (key.equals("powerpellet_eat") && !dead) {
-			if (hdgQueue.isEmpty())
-				hdg = (hdg << 2) % 15;
-			speed *= 0.7;
-			setFrightened();
-		} else if (key.equals("pacman_move") && data.p.equals(new Point(this.getx(), this.gety()))) {
-			this.kill();
+		switch (key) {
+		case ("game_think"):
+			onthink();
+			break;
+		case ("scatter"):
+			reverse();
+			break;
+		case ("pacman_move"):
+			if (data.p.equals(new Point(this.getx(), this.gety())))
+				this.kill();
+			break;
 		}
 	}
 
@@ -133,17 +158,5 @@ abstract class Ghost extends Dynamic{
 	}
 
 	abstract protected DPoint getTarget();
-
-	private void setFrightened() {
-		frightened = true;
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				frightened = false;
-			}
-		};
-		Timer timer = new Timer();
-		timer.schedule(task, 7000);
-	}
 
 }

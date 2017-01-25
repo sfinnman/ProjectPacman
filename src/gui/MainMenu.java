@@ -15,8 +15,8 @@ public class MainMenu {
 			void doclick() {
 				DEBUG.print("Start Game!");
 				MenuStack.popMenu();
-				Level.loadMap();
 				GameInfo.init();
+				Level.loadMap();
 				GameInfo.thinkTick(3000);
 			}
 		};

@@ -11,7 +11,7 @@ import utility.EventHandler.EventData;
 
 public class Clyde extends Ghost{
 	
-	private final int release;
+	private int release;
 
 	public Clyde(double x, double y) {
 		super(x, y, 0, "clyde");
@@ -77,7 +77,7 @@ public class Clyde extends Ghost{
 	@Override
 	public void onRegister(String key, EventData data){
 		super.onRegister(key, data);
-		if (key.equals("pacdot_eat") && GameInfo.getEaten()>release){
+		if (key.equals("pacdot_eat") && (--release)==0){
 			jailBreak();
 			EventHandler.unsubscribeEvent("pacdot_eat", this);
 		}

@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 
 import game.DEBUG;
 import game.GameInfo;
+import game.LevelSettings;
 import gui.Frame;
 import utility.DPoint;
 import utility.DrawHandler;
@@ -25,7 +26,6 @@ public class PacMan extends Dynamic{
 		EventHandler.subscribeEvent("key_arrow", this);
 		EventHandler.subscribeEvent("ghost_move", this);
 		EventHandler.subscribeEvent("game_think", this);
-		this.speed = GameInfo.getSpeed();
 	}
 
 	@Override
@@ -45,6 +45,12 @@ public class PacMan extends Dynamic{
 	}
 
 	private void onThink() {
+		double speed = LevelSettings.topSpeed;
+		if (frightened) {
+			speed *= LevelSettings.pacFrt()*super.tileSpeedMod;
+		} else {
+			speed *= LevelSettings.pacNrm()*super.tileSpeedMod;
+		}
 		go(speed);
 	}
 
@@ -88,6 +94,11 @@ public class PacMan extends Dynamic{
 
 	@Override
 	protected void onMidCrossed() {
+	}
+
+	@Override
+	protected void onFrightened() {
+		super.frightened = true;
 	}
 
 }

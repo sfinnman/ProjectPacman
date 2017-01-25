@@ -11,7 +11,7 @@ import utility.EventHandler.EventData;
 
 public class Inky extends Ghost{
 
-	private final int release;
+	private int release;
 	
 	public Inky(double x, double y) {
 		super(x, y, 0, "inky");
@@ -78,7 +78,7 @@ public class Inky extends Ghost{
 	@Override
 	public void onRegister(String key, EventData data){
 		super.onRegister(key, data);
-		if (key.equals("pacdot_eat") && GameInfo.getEaten()>release){
+		if (key.equals("pacdot_eat") && (--release) == 0){
 			jailBreak();
 			EventHandler.unsubscribeEvent("pacdot_eat", this);
 		}

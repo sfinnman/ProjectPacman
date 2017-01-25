@@ -43,6 +43,7 @@ public class GameListener implements Listener {
 			break;
 		case("game_lose"):
 			GameInfo.stopThink();
+			GameInfo.lose();
 			EventHandler.free(this);
 			GameInfo.thinkTick(3000);
 			EventHandler.show();

@@ -1,16 +1,18 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import utility.DPoint;
 import utility.DrawHandler;
 import utility.EventHandler;
+import utility.EventHandler.EventData;
+import utility.Listener;
 import utility.Point;
 
 public class GameInfo{
-	
-	private GameInfo(){}
 	
 	private static Point pacman_pos;
 	private static Point blinky;
@@ -21,25 +23,30 @@ public class GameInfo{
 	private static int score;
 	private static int dots;
 	private static int eaten;
-	private static int level;
-	private static double speed = 0.1;
+	private static int progress;
 	private static Timer game_think;
+	private static int fright_time;
+
+	private GameInfo(){}
 	
 	public static void load(Point pacman, Point blinky, DPoint jail_entrance, int dots){
 		GameInfo.pacman_pos = pacman;
 		GameInfo.pacman_hdg = 1;
-		GameInfo.ghost_scatter= true;
 		GameInfo.blinky = blinky;
 		GameInfo.jail_entrance = jail_entrance;
 		GameInfo.dots = dots;
 		GameInfo.eaten = 0;
-		new GhostStateSwitcher();		
+		GameInfo.fright_time = 0;
+		ghost_scatter = true;
+		progress++;
+		ScheduledTask.purgeTasks();
+		LevelSettings.loadSettings(progress);
 	}
 
 	public static void init(){
 		GameInfo.score = 0;
 		GameInfo.pacman_lives = 2;
-		GameInfo.level = 1;
+		GameInfo.progress = 0;
 	}
 	
 	public static void thinkTick(long delay){
@@ -48,6 +55,7 @@ public class GameInfo{
 			@Override
 			public void run() {
 				EventHandler.triggerEvent("game_think", null);
+				GameInfo.countFright();
 			}
 		};
 		new GameListener();
@@ -56,6 +64,24 @@ public class GameInfo{
 
 	protected static void stopThink(){
 		game_think.cancel();
+	}
+	
+	public static void fright(int time) {
+		fright_time = time;
+	}
+	
+	private static void countFright(){
+		fright_time--;
+		if (fright_time == 0) {
+			EventHandler.triggerEvent("unfrightened", null);
+		}
+	}
+	
+	public static void lose(){
+		pacman_lives--;
+		ScheduledTask.purgeTasks();
+		ghost_scatter = true;
+		LevelSettings.loadSettings(progress);
 	}
 	
 	public static void setBlinkyPos(Point p){
@@ -71,8 +97,8 @@ public class GameInfo{
 	}
 	
 	public static void scatter(){
-		EventHandler.triggerEvent("scatter", null);
 		ghost_scatter = !ghost_scatter;
+		EventHandler.triggerEvent("scatter", null);
 	}
 	
 	public static void addScore(int score){
@@ -81,14 +107,9 @@ public class GameInfo{
 	
 	public static void pacmanEat(){
 		eaten++;
-		DEBUG.print("NOM " + eaten);
 		if (eaten == dots) {
-			GameInfo.win();
+			EventHandler.triggerEvent("game_win", null);
 		}
-	}
-	
-	private static void win() {
-		EventHandler.triggerEvent("game_win", null);
 	}
 
 	public static DPoint pacmanPos(){
@@ -119,14 +140,44 @@ public class GameInfo{
 		return eaten;
 	}
 	
-	public static double getSpeed(){
-		return speed;
-	}
-	
 	public static Point calcHdg(int hdg) {
 		int x = (hdg & 1) - ((hdg & 4) >> 2);
 		int y = ((hdg & 2) >> 1) - ((hdg & 8) >> 3);
 		return new Point(x, y);
+	}
+	
+	public static class ScheduledTask implements Listener{
+		private static List<ScheduledTask> tasks = new ArrayList<>();
+		private int delay;
+		private Runnable task;
+		
+		public ScheduledTask(int delay, Runnable task){
+			this.delay = delay;
+			this.task = task;
+			EventHandler.subscribeEvent("game_think", this);
+			tasks.add(this);
+		}
+		
+		public void updateDelay(int delay){
+			this.delay = delay;
+		}
+
+		@Override
+		public void onRegister(String key, EventData src) {
+			delay--;
+			if (delay < 1){
+				task.run();
+				tasks.remove(this);
+				EventHandler.unsubscribeEvent("game_think", this);
+			}
+		}
+		
+		public static void purgeTasks(){
+			for (ScheduledTask task : tasks)
+				EventHandler.unsubscribeEvent("game_think", task);
+			tasks = new ArrayList<>();
+		}
+		
 	}
 
 }

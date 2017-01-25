@@ -4,7 +4,9 @@ import utility.DPoint;
 import utility.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -15,7 +17,7 @@ import ents.PacDot;
 import ents.PacMan;
 import ents.Pinky;
 import ents.PowerPellet;
-import ents.SlowTile;
+import ents.TunnelTile;
 import ents.Wall;
 import utility.ResourceLoader;
 
@@ -23,11 +25,14 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 	private Level(){}
 	
 	private static Map<Point, Integer> Intersections;
+	protected static List<Integer> times;
 	
 	public static void loadMap(){
 		Intersections = new HashMap<>();
+		times = new ArrayList<>();
+		
 		DEBUG.print("Loading map!");
-		File map = new File("src/maps/default.txt");
+		File map = new File("src/map/default.txt");
 		Scanner sc = null;
 		try {
 			sc = new Scanner(map);
@@ -51,10 +56,8 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 					} else if (c == 123) {
 						new Wall(p, ResourceLoader.getImage(t));
 						house = p;
-					} else if (c == 49) {
-						new SlowTile(p, 0.6);
-					} else if (c == 50) {
-						new SlowTile(p, 0.5);
+					} else if (c == 49 || c == 50) {
+						new TunnelTile(p);
 					}
 				}
 			}

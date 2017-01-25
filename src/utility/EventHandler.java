@@ -19,7 +19,7 @@ public class EventHandler {
 	private static Map<String, List<Listener>> events;
 	private static Deque<AbstractMap.SimpleEntry<String, Listener>> removals;
 	private static Deque<AbstractMap.SimpleEntry<String, Listener>> additions;
-	private static boolean working;
+	private static int workers = 0;
 	
 	private EventHandler(){};
 	
@@ -33,16 +33,14 @@ public class EventHandler {
 	}
 	
 	public static void subscribeEvent(String key, Listener listener){
-		if (working) {
+		if (workers > 0) {
 			EventHandler.queueSubscribeEvent(key, listener); //Cannot remove entries while executing an event, leads to concurrency issues.
 			return;
 		}
-		DEBUG.print(listener.toString() + " trying to register as a Listener on " + key);
 		if (!events.containsKey(key)) {
 			DEBUG.print("events didnt contain key " + key);
 			return;
 		}
-		DEBUG.print(listener.toString() + " registered as a Listener on " + key);
 		events.get(key).add(listener);
 		return;
 	}
@@ -52,7 +50,7 @@ public class EventHandler {
 	}
 
 	public static void unsubscribeEvent(String key, Listener listener){
-		if (working) {
+		if (workers > 0) {
 			EventHandler.queueUnsubscribeEvent(key, listener); //Cannot remove entries while executing an event, leads to concurrency issues.
 			return;
 		}
@@ -82,13 +80,15 @@ public class EventHandler {
 		if (!events.containsKey(key)) {
 			return false;
 		}
-		working = true; // Make sure to stop all unsubscribes during execution!
+		workers++; // Make sure to stop all unsubscribes during execution!
 		List<Listener> hooks = events.get(key);
 		for (int i = 0; i<hooks.size(); i++){
 			hooks.get(i).onRegister(key, data);
 		}
-		working = false;
-		flush();
+		workers--;
+		if (workers == 0) {
+			flush();
+		}
 		return true;
 	}
 	
@@ -97,7 +97,6 @@ public class EventHandler {
 		events = new HashMap<>();
 		removals = new LinkedList<>();
 		additions = new LinkedList<>();
-		working = false;
 		Scanner sc = null;
 		try {
 			sc = new Scanner(new File("src/config/EventHandler.cfg"));

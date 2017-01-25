@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import game.DEBUG;
 import game.GameInfo;
 import game.Level;
+import game.LevelSettings;
 import utility.EventHandler.EventData;
 import utility.DrawHandler;
 import utility.Drawable;
@@ -21,7 +22,8 @@ public abstract class Dynamic implements Listener, Drawable{
 	protected final double starty;
 	protected final int starthdg;
 	protected final String name;
-	protected double speed;
+	protected double tileSpeedMod;
+	protected boolean frightened;
 	
 	protected Dynamic(double x, double y, int hdg, String name) {
 		this.x = x;
@@ -31,8 +33,12 @@ public abstract class Dynamic implements Listener, Drawable{
 		this.starty = y;
 		this.starthdg = hdg;
 		this.name = name;
+		this.frightened = false;
+		this.tileSpeedMod = 1;
 		DrawHandler.register(this);
 		EventHandler.subscribeEvent("game_lose", this);
+		EventHandler.subscribeEvent("powerpellet_eat", this);
+		EventHandler.subscribeEvent("unfrightened", this);
 	}
 
 	public int getx() {
@@ -60,6 +66,10 @@ public abstract class Dynamic implements Listener, Drawable{
 	protected void crossedBorder(){
 	}
 	
+	protected void tileSpeedMod(double mod){
+		tileSpeedMod = mod;
+	}
+	
 	protected boolean midCrossed(double xold, double yold){
 		boolean x = (int)xold != (int)this.x;
 		boolean y = (int) yold != (int) this.y;
@@ -75,17 +85,13 @@ public abstract class Dynamic implements Listener, Drawable{
 			this.hdg = (this.hdg&hdgsel);
 		}
 	}
-	
-	public void speedMult(double mult){
-		this.speed *= mult;
-	}
 
 	public void go(double len) {
 		double xold = this.x;
 		double yold = this.y;
 		move(len);
 		if (borderCrossed(xold, yold)) {
-			this.speed = GameInfo.getSpeed();
+			tileSpeedMod = 1;
 			crossedBorder();
 			this.x = Math.round(this.x*2)/2.0;
 			this.y = Math.round(this.y*2)/2.0;
@@ -106,13 +112,22 @@ public abstract class Dynamic implements Listener, Drawable{
 	}
 	
 	public void onRegister(String key, EventData data){
-		if (key.equals("game_lose")){
-			DEBUG.print("LOOOSE");
+		switch(key){
+		case("game_lose"):
 			EventHandler.free(this);
 			DrawHandler.unregister(this);
 			respawn();
+			break;
+		case("powerpellet_eat"):
+			onFrightened();
+			break;
+		case("unfrightened"):
+			frightened = false;
+			break;
 		}
 	}
+	
+	abstract protected void onFrightened();
 
 	abstract protected void onMidCrossed();
 	
