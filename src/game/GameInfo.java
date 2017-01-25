@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import gui.MainMenu;
+import gui.MenuStack;
 import utility.DPoint;
 import utility.DrawHandler;
 import utility.EventHandler;
@@ -26,6 +28,7 @@ public class GameInfo{
 	private static int progress;
 	private static Timer game_think;
 	private static int fright_time;
+	private static int ghosts_eaten;
 
 	private GameInfo(){}
 	
@@ -74,6 +77,9 @@ public class GameInfo{
 		fright_time--;
 		if (fright_time == 0) {
 			EventHandler.triggerEvent("unfrightened", null);
+		} else if (fright_time < 0){
+			ghosts_eaten = 0;
+			fright_time = 0;
 		}
 	}
 	
@@ -111,6 +117,12 @@ public class GameInfo{
 			EventHandler.triggerEvent("game_win", null);
 		}
 	}
+	
+	public static void eatGhost(){
+		score += 200*Math.pow(2, ghosts_eaten);
+		ghosts_eaten = (ghosts_eaten+1)%4;
+		
+	}
 
 	public static DPoint pacmanPos(){
 		return new DPoint(pacman_pos.x,pacman_pos.y);
@@ -132,8 +144,16 @@ public class GameInfo{
 		return ghost_scatter;
 	}
 	
+	public static int getLevel(){
+		return progress;
+	}
+	
 	public static int getScore(){
 		return score;
+	}
+	
+	public static int getLives(){
+		return pacman_lives;
 	}
 	
 	public static int getEaten(){

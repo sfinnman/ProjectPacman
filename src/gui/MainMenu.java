@@ -17,6 +17,7 @@ public class MainMenu {
 				MenuStack.popMenu();
 				GameInfo.init();
 				Level.loadMap();
+				new GameOverlay();
 				GameInfo.thinkTick(3000);
 			}
 		};

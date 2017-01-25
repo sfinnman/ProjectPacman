@@ -1,6 +1,8 @@
 package game;
 
 import utility.EventHandler.EventData;
+import gui.GameOverlay;
+import gui.MainMenu;
 import gui.MenuStack;
 import gui.PauseMenu;
 import utility.DrawHandler;
@@ -15,6 +17,8 @@ public class GameListener implements Listener {
 		EventHandler.subscribeEvent("powerpellet_eat", this);
 		EventHandler.subscribeEvent("game_win", this);
 		EventHandler.subscribeEvent("game_lose", this);
+		EventHandler.subscribeEvent("ghost_die", this);
+		EventHandler.subscribeEvent("game_rip", this);
 	}
 	
 	@Override
@@ -38,6 +42,7 @@ public class GameListener implements Listener {
 			GameInfo.stopThink();
 			DrawHandler.init();
 			EventHandler.init();
+			new GameOverlay();
 			Level.loadMap();
 			GameInfo.thinkTick(3000);
 			break;
@@ -47,6 +52,14 @@ public class GameListener implements Listener {
 			EventHandler.free(this);
 			GameInfo.thinkTick(3000);
 			EventHandler.show();
+			break;
+		case("ghost_die"):
+			GameInfo.eatGhost();
+			break;
+		case("game_rip"):
+			EventHandler.init();
+			DrawHandler.init();
+			MenuStack.pushMenu(MainMenu.instance());
 			break;
 		}
 	} 

@@ -26,6 +26,7 @@ public class PauseMenu {
 				MenuStack.popMenu();
 				DrawHandler.init();
 				EventHandler.init();
+				new GameOverlay();
 				Level.loadMap();
 				GameInfo.thinkTick(3000);
 			}

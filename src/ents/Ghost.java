@@ -140,11 +140,21 @@ abstract class Ghost extends Dynamic {
 
 	protected void kill() {
 		if (frightened) {
+			EventHandler.triggerEvent("ghost_die", new EventData(this, new Point(this.getx(), this.gety())));
 			dead = true;
 			frightened = false;
+			DPoint target = GameInfo.jailPos();
+			Point p = GameInfo.calcHdg(hdg);
+			if (target.distance(new DPoint(x + p.x, y + p.y)) > target.distance(new DPoint(x-p.y, y-p.y))){
+				hdg = (hdg<<2)%15;
+			}
 		} else if (!dead) {
 			DEBUG.print("LOSE!");
-			EventHandler.triggerEvent("game_lose", null);
+			if (GameInfo.getLives() == 0){
+				EventHandler.triggerEvent("game_rip", null);
+			} else {
+				EventHandler.triggerEvent("game_lose", null);
+			}
 		}
 	}
 
