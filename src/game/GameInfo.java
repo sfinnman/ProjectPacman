@@ -71,8 +71,7 @@ public class GameInfo{
 	}
 	
 	public static void scatter(){
-		if (!ghost_scatter)
-			EventHandler.triggerEvent("scatter", null);
+		EventHandler.triggerEvent("scatter", null);
 		ghost_scatter = !ghost_scatter;
 	}
 	
@@ -82,7 +81,7 @@ public class GameInfo{
 	
 	public static void pacmanEat(){
 		eaten++;
-		DEBUG.print("Nom");
+		DEBUG.print("NOM " + eaten);
 		if (eaten == dots) {
 			GameInfo.win();
 		}
@@ -90,11 +89,6 @@ public class GameInfo{
 	
 	private static void win() {
 		EventHandler.triggerEvent("game_win", null);
-		GameInfo.stopThink();
-		DrawHandler.init();
-		EventHandler.init();
-		Level.loadMap();
-		GameInfo.thinkTick(3000);
 	}
 
 	public static DPoint pacmanPos(){

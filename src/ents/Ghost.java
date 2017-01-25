@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import game.DEBUG;
 import game.GameInfo;
 import utility.DPoint;
 import utility.DrawHandler;
@@ -18,15 +19,14 @@ import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;
 
-abstract class Ghost extends Dynamic implements Listener, Drawable {
+abstract class Ghost extends Dynamic{
 	protected boolean frightened;
 	protected boolean dead;
 	protected Queue<Integer> hdgQueue = new LinkedList<>();
 
-	protected Ghost(double x, double y, String name) {
-		super(x, y, name);
+	protected Ghost(double x, double y, int hdg, String name) {
+		super(x, y, hdg, name);
 		speed = GameInfo.getSpeed() * 0.5;
-		DrawHandler.register(this);
 		EventHandler.subscribeEvent("game_think", this);
 		EventHandler.subscribeEvent("powerpellet_eat", this);
 		EventHandler.subscribeEvent("pacman_move", this);
@@ -46,6 +46,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		}
 		if (!hdgQueue.isEmpty()) {
 			hdg = hdgQueue.poll();
+			DEBUG.print(this.toString() + " choosing hdg: " + hdg);
 			if (hdgQueue.isEmpty() && dead) {
 				dead = false;
 				jailBreak();
@@ -55,17 +56,18 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 
 	@Override
 	protected void crossedBorder() {
-		EventHandler.triggerEvent("ghost_move", new EventData(this, new Point(this.x, this.y)));
+		EventHandler.triggerEvent("ghost_move", new EventData(this, new Point(this.getx(), this.gety())));
 	}
 
 	@Override
 	public void onRegister(String key, EventData data) {
+		super.onRegister(key, data);
 		if (key.equals("game_think")) {
 			go(speed * 0.95 * ((frightened) ? 0.7 : 1));
 
-		} else if (key.equals("scatter") && hdgQueue.isEmpty() ) {
+		} else if (key.equals("scatter") && hdgQueue.isEmpty() && !dead) {
 			hdg = (hdg << 2) % 15;
-		} else if (key.equals("powerpellet_eat")) {
+		} else if (key.equals("powerpellet_eat") && !dead) {
 			if (hdgQueue.isEmpty())
 				hdg = (hdg << 2) % 15;
 			speed *= 0.7;
@@ -79,6 +81,7 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 	protected void onMidCrossed() {
 		if (!hdgQueue.isEmpty()) {
 			hdg = hdgQueue.poll();
+			DEBUG.print(this.toString() + " choosing hdg: " + hdg);
 			if (hdgQueue.isEmpty() && dead) {
 				dead = false;
 				jailBreak();
@@ -114,6 +117,9 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 		if (frightened) {
 			dead = true;
 			frightened = false;
+		} else if (!dead) {
+			DEBUG.print("LOSE!");
+			EventHandler.triggerEvent("game_lose", null);
 		}
 	}
 
@@ -134,7 +140,6 @@ abstract class Ghost extends Dynamic implements Listener, Drawable {
 			@Override
 			public void run() {
 				frightened = false;
-
 			}
 		};
 		Timer timer = new Timer();

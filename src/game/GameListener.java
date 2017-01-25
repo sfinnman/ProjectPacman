@@ -13,6 +13,8 @@ public class GameListener implements Listener {
 		EventHandler.subscribeEvent("esc", this);
 		EventHandler.subscribeEvent("pacdot_eat", this);
 		EventHandler.subscribeEvent("powerpellet_eat", this);
+		EventHandler.subscribeEvent("game_win", this);
+		EventHandler.subscribeEvent("game_lose", this);
 	}
 	
 	@Override
@@ -31,6 +33,19 @@ public class GameListener implements Listener {
 		case("powerpellet_eat"):
 			GameInfo.addScore(50);
 			GameInfo.pacmanEat();
+			break;
+		case("game_win"):
+			GameInfo.stopThink();
+			DrawHandler.init();
+			EventHandler.init();
+			Level.loadMap();
+			GameInfo.thinkTick(3000);
+			break;
+		case("game_lose"):
+			GameInfo.stopThink();
+			EventHandler.free(this);
+			GameInfo.thinkTick(3000);
+			EventHandler.show();
 			break;
 		}
 	} 

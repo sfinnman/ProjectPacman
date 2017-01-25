@@ -11,11 +11,10 @@ import utility.EventHandler.EventData;
 
 public class Inky extends Ghost{
 
-	int release;
+	private final int release;
 	
 	public Inky(double x, double y) {
-		super(x, y, "inky");
-		hdg = 0;
+		super(x, y, 0, "inky");
 		release = 30;
 		EventHandler.subscribeEvent("pacdot_eat", this);
 	}
@@ -56,7 +55,13 @@ public class Inky extends Ghost{
 		hdgQueue.offer(4);
 		hdgQueue.offer(4);
 		hdgQueue.offer(4);
+		hdgQueue.offer(4);
 		hdgQueue.offer(0);
+	}
+	
+	@Override
+	protected void respawn(){
+		new Inky(startx, starty);
 	}
 
 	@Override

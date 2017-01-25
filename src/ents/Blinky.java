@@ -11,8 +11,7 @@ import utility.Point;
 public class Blinky extends Ghost{
 
 	public Blinky(double x, double y) {
-		super(x, y, "blinky");
-		hdg = 4;
+		super(x, y, 4, "blinky");
 	}
 
 	@Override
@@ -43,6 +42,11 @@ public class Blinky extends Ghost{
 		hdgQueue.offer(2);
 		hdgQueue.offer(2);
 		hdgQueue.offer(0);
+	}
+	
+	@Override
+	protected void respawn(){
+		new Blinky(startx, starty);
 	}
 	
 	@Override

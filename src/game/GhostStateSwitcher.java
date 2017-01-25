@@ -15,6 +15,7 @@ public class GhostStateSwitcher implements Listener{
 		restart();
 		EventHandler.subscribeEvent("game_think", this);
 		EventHandler.subscribeEvent("game_win", this);
+		EventHandler.subscribeEvent("game_lose", this);
 	}
 	
 	
@@ -31,6 +32,11 @@ public class GhostStateSwitcher implements Listener{
 			break;
 		case("game_win"):
 			EventHandler.free(this);
+			break;
+		case("game_lose"):
+			EventHandler.free(this);
+			new GhostStateSwitcher();
+			break;
 		}
 	}
 	

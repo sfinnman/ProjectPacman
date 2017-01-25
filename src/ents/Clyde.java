@@ -11,11 +11,10 @@ import utility.EventHandler.EventData;
 
 public class Clyde extends Ghost{
 	
-	int release;
+	private final int release;
 
 	public Clyde(double x, double y) {
-		super(x, y, "clyde");
-		hdg = 0;
+		super(x, y, 0, "clyde");
 		release = 50;
 		EventHandler.subscribeEvent("pacdot_eat", this);
 	}
@@ -55,7 +54,13 @@ public class Clyde extends Ghost{
 		hdgQueue.offer(1);
 		hdgQueue.offer(1);
 		hdgQueue.offer(1);
+		hdgQueue.offer(1);
 		hdgQueue.offer(0);
+	}
+	
+	@Override
+	protected void respawn(){
+		new Clyde(startx, starty);
 	}
 
 	@Override

@@ -18,11 +18,13 @@ import game.DEBUG;
 public class EventHandler {
 	private static Map<String, List<Listener>> events;
 	private static Deque<AbstractMap.SimpleEntry<String, Listener>> removals;
+	private static Deque<AbstractMap.SimpleEntry<String, Listener>> additions;
 	private static boolean working;
 	
 	private EventHandler(){};
 	
 	public static boolean registerEvent(String key) {
+		
 		if (events.containsKey(key)) {
 			return false;
 		}
@@ -30,15 +32,23 @@ public class EventHandler {
 		return true;
 	}
 	
-	public static boolean subscribeEvent(String key, Listener listener){
+	public static void subscribeEvent(String key, Listener listener){
+		if (working) {
+			EventHandler.queueSubscribeEvent(key, listener); //Cannot remove entries while executing an event, leads to concurrency issues.
+			return;
+		}
 		DEBUG.print(listener.toString() + " trying to register as a Listener on " + key);
 		if (!events.containsKey(key)) {
 			DEBUG.print("events didnt contain key " + key);
-			return false;
+			return;
 		}
 		DEBUG.print(listener.toString() + " registered as a Listener on " + key);
 		events.get(key).add(listener);
-		return true;
+		return;
+	}
+	
+	private static void queueSubscribeEvent(String key, Listener listener){
+		additions.push(new AbstractMap.SimpleEntry<String, Listener>(key, listener)); //Land here when we are working
 	}
 
 	public static void unsubscribeEvent(String key, Listener listener){
@@ -62,6 +72,10 @@ public class EventHandler {
 			AbstractMap.SimpleEntry<String, Listener> entry = removals.pop();
 			EventHandler.unsubscribeEvent(entry.getKey(), entry.getValue());
 		}
+		while(!additions.isEmpty()){
+			AbstractMap.SimpleEntry<String, Listener> entry = additions.pop();
+			EventHandler.subscribeEvent(entry.getKey(), entry.getValue());
+		}
 	}
 	
 	public static synchronized boolean triggerEvent(String key, EventData data){
@@ -82,6 +96,7 @@ public class EventHandler {
 		System.out.println("EventHandler initializing");
 		events = new HashMap<>();
 		removals = new LinkedList<>();
+		additions = new LinkedList<>();
 		working = false;
 		Scanner sc = null;
 		try {
@@ -102,10 +117,15 @@ public class EventHandler {
 	}
 	
 	public static void free(Listener listener) {
-		Set<Entry<String, List<Listener>>> entryset = events.entrySet();
-		for (Entry<String, List<Listener>> entry : entryset) {
-			EventHandler.unsubscribeEvent(entry.getKey(), listener);
+		for (String key : events.keySet()) {
+			EventHandler.unsubscribeEvent(key, listener);
 		}
+	}
+	
+	public static void show(){
+		DEBUG.print(events);
+		DEBUG.print(removals);
+		DEBUG.print(additions);
 	}
 	
 	public static class EventData {

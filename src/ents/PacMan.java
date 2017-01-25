@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import game.DEBUG;
 import game.GameInfo;
 import gui.Frame;
+import utility.DPoint;
 import utility.DrawHandler;
 import utility.Drawable;
 import utility.EventHandler;
@@ -13,15 +15,13 @@ import utility.EventHandler.EventData;
 import utility.Listener;
 import utility.Point;
 
-public class PacMan extends Dynamic implements Drawable, Listener {
+public class PacMan extends Dynamic{
 
 	private int nextmove;
 
 	public PacMan(double x, double y, int hdg) {
-		super(x, y, "pacman");
-		super.hdg = hdg;
+		super(x, y, hdg, "pacman");
 		nextmove = hdg;
-		DrawHandler.register(this);
 		EventHandler.subscribeEvent("key_arrow", this);
 		EventHandler.subscribeEvent("ghost_move", this);
 		EventHandler.subscribeEvent("game_think", this);
@@ -50,6 +50,7 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 
 	@Override
 	public void onRegister(String key, EventData data) {
+		super.onRegister(key, data);
 		switch (key) {
 		case "key_arrow":
 			nextmove = data.p.x;
@@ -67,10 +68,14 @@ public class PacMan extends Dynamic implements Drawable, Listener {
 			break;
 		}
 	}
+	
+	@Override
+	protected void respawn(){
+		new PacMan(startx, starty, starthdg);
+	}
 
 	@Override
 	protected void crossedBorder() {
-		System.out.println(this);
 		EventHandler.triggerEvent("pacman_move", new EventData(this, new Point(getx(), gety())));
 		GameInfo.setPacmanPos(new Point(this.getx(), this.gety()));
 		GameInfo.setPacmanHdg(hdg);

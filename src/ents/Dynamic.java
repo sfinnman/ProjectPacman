@@ -3,21 +3,36 @@ package ents;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import game.DEBUG;
 import game.GameInfo;
 import game.Level;
+import utility.EventHandler.EventData;
+import utility.DrawHandler;
+import utility.Drawable;
+import utility.EventHandler;
+import utility.Listener;
 import utility.Point;
 
-public abstract class Dynamic {
+public abstract class Dynamic implements Listener, Drawable{
 	protected int hdg;
 	protected double x;
 	protected double y;
+	protected final double startx;
+	protected final double starty;
+	protected final int starthdg;
 	protected final String name;
 	protected double speed;
 	
-	protected Dynamic(double x, double y, String name) {
+	protected Dynamic(double x, double y, int hdg, String name) {
 		this.x = x;
 		this.y = y;
+		this.hdg = hdg;
+		this.startx = x;
+		this.starty = y;
+		this.starthdg = hdg;
 		this.name = name;
+		DrawHandler.register(this);
+		EventHandler.subscribeEvent("game_lose", this);
 	}
 
 	public int getx() {
@@ -89,8 +104,19 @@ public abstract class Dynamic {
 			}
 		}
 	}
+	
+	public void onRegister(String key, EventData data){
+		if (key.equals("game_lose")){
+			DEBUG.print("LOOOSE");
+			EventHandler.free(this);
+			DrawHandler.unregister(this);
+			respawn();
+		}
+	}
 
 	abstract protected void onMidCrossed();
+	
+	abstract protected void respawn();
 	
 	abstract protected int hdgDecide(int hdgsel);
 	

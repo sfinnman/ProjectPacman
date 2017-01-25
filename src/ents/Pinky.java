@@ -11,7 +11,7 @@ import utility.Point;
 public class Pinky extends Ghost{
 	
 	public Pinky(double x, double y) {
-		super(x, y, "pinky");
+		super(x, y, 0, "pinky");
 		jailBreak();
 	}
 
@@ -43,6 +43,11 @@ public class Pinky extends Ghost{
 		hdgQueue.offer(2);
 		hdgQueue.offer(2);
 		hdgQueue.offer(0);
+	}
+	
+	@Override
+	protected void respawn(){
+		new Pinky(startx, starty);
 	}
 	
 	@Override
