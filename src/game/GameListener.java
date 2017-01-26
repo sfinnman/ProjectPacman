@@ -57,6 +57,7 @@ public class GameListener implements Listener {
 			GameInfo.eatGhost();
 			break;
 		case("game_rip"):
+			GameInfo.stopThink();
 			EventHandler.init();
 			DrawHandler.init();
 			MenuStack.pushMenu(MainMenu.instance());

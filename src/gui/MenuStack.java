@@ -2,11 +2,6 @@ package gui;
 
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import game.GameListener;
-import utility.EventHandler;
 
 public class MenuStack {
 	private static Deque<Menu> menu = new LinkedList<>();

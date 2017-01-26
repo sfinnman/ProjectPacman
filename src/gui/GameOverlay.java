@@ -18,10 +18,7 @@ public class GameOverlay implements Drawable{
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.WHITE);
-		String scoreText = "Score: " + GameInfo.getScore();
-		int height = g2.getFontMetrics().getHeight();
-		int width = g2.getFontMetrics().stringWidth(scoreText);
-		g2.drawString(scoreText, 10, 35*25);
+		g2.drawString("Score: " + GameInfo.getScore(), 10, 35*25);
 		g2.drawString("Level: " + GameInfo.getLevel(), 300, 35*25);
 		g2.drawString("Lives: " + GameInfo.getLives(), 500, 35*25);
 	}

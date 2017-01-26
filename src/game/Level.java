@@ -60,26 +60,35 @@ public class Level { //Class for lookup from Pacman and Ghosts!
 						new TunnelTile(p);
 					}
 				}
-			}
+			} //All tiles loaded!
+			
 			new Blinky(house.x + 3.5, house.y-1);
 			new Pinky(house.x + 3.5, house.y+2);
 			new Inky(house.x + 1.5, house.y+2);
 			new Clyde(house.x + 5.5, house.y+2);
+			//Ghosts spawned
+			
 			String[] tokens = sc.nextLine().split(";");
 			DEBUG.print(tokens[0]);
 			double x = Double.valueOf(tokens[0]);
 			double y = Double.valueOf(tokens[1]);
 			new PacMan(x, y, Integer.valueOf(tokens[2]));
+			//Pacman spawned
+			
 			Point blinky = new Point(house.x + 3.5, house.y-1);
 			Point pacman = new Point(x, y);
 			DPoint jail = new DPoint(house.x + 3.5, house.y - 1);
 			GameInfo.load(pacman, blinky, jail, dots);
+			//GameInfo loaded
+			
 			tokens = sc.nextLine().split(";");
 			String[] Intersections = sc.nextLine().replaceAll("[\\[\\]\\s]", "").split(",");
 			for (String Intersection : Intersections) {
 				tokens = Intersection.split(";");
 				Level.Intersections.put(new Point(Integer.valueOf(tokens[0]), Integer.valueOf(tokens[1])), Integer.valueOf(tokens[2]));
 			}
+			//Intersections loaded
+			
 			DEBUG.print(Level.Intersections.toString());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

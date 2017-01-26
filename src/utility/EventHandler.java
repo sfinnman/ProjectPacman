@@ -3,22 +3,20 @@ package utility;
 import utility.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
 
 import game.DEBUG;
 
 public class EventHandler {
 	private static Map<String, List<Listener>> events;
-	private static Deque<AbstractMap.SimpleEntry<String, Listener>> removals;
-	private static Deque<AbstractMap.SimpleEntry<String, Listener>> additions;
+	private static Deque<SimpleEntry<String, Listener>> removals;
+	private static Deque<SimpleEntry<String, Listener>> additions;
 	private static int workers = 0;
 	
 	private EventHandler(){};
@@ -46,7 +44,7 @@ public class EventHandler {
 	}
 	
 	private static void queueSubscribeEvent(String key, Listener listener){
-		additions.push(new AbstractMap.SimpleEntry<String, Listener>(key, listener)); //Land here when we are working
+		additions.push(new SimpleEntry<String, Listener>(key, listener)); //Land here when we are working
 	}
 
 	public static void unsubscribeEvent(String key, Listener listener){
@@ -62,16 +60,16 @@ public class EventHandler {
 	}
 	
 	private static void queueUnsubscribeEvent(String key, Listener listener){
-		removals.push(new AbstractMap.SimpleEntry<String, Listener>(key, listener)); //Land here when we are working
+		removals.push(new SimpleEntry<String, Listener>(key, listener)); //Land here when we are working
 	}
 	
 	private static void flush(){ //flushes the entries to be removed!
 		while(!removals.isEmpty()){
-			AbstractMap.SimpleEntry<String, Listener> entry = removals.pop();
+			SimpleEntry<String, Listener> entry = removals.pop();
 			EventHandler.unsubscribeEvent(entry.getKey(), entry.getValue());
 		}
 		while(!additions.isEmpty()){
-			AbstractMap.SimpleEntry<String, Listener> entry = additions.pop();
+			SimpleEntry<String, Listener> entry = additions.pop();
 			EventHandler.subscribeEvent(entry.getKey(), entry.getValue());
 		}
 	}

@@ -40,6 +40,22 @@ public abstract class Dynamic implements Listener, Drawable{
 		EventHandler.subscribeEvent("powerpellet_eat", this);
 		EventHandler.subscribeEvent("unfrightened", this);
 	}
+	
+	public void onRegister(String key, EventData data){
+		switch(key){
+		case("game_lose"):
+			EventHandler.free(this);
+			DrawHandler.unregister(this);
+			respawn();
+			break;
+		case("powerpellet_eat"):
+			onFrightened();
+			break;
+		case("unfrightened"):
+			frightened = false;
+			break;
+		}
+	}
 
 	public int getx() {
 		return (int) (x + 0.5);
@@ -56,29 +72,23 @@ public abstract class Dynamic implements Listener, Drawable{
 		this.y = (this.y + y * len + 36)%36;
 	}
 	
-	protected boolean borderCrossed(double xold, double yold){
-		return getx() != (int) (xold + 0.5) || gety() != (int) (yold + 0.5);
-	}
-	
-	protected void onBorder(){
-	}
-	
-	protected void crossedBorder(){
-	}
-	
-	protected void tileSpeedMod(double mod){
+	protected void tileSpeedMod(double mod){ // Landed on a tile with a speedMod!
 		tileSpeedMod = mod;
 	}
 	
-	protected boolean midCrossed(double xold, double yold){
+	private boolean midCrossed(double xold, double yold){
 		boolean x = (int)xold != (int)this.x;
 		boolean y = (int) yold != (int) this.y;
 		return (x || y || hdg == 0);
 	}
 	
+	protected boolean borderCrossed(double xold, double yold){
+		return getx() != (int) (xold + 0.5) || gety() != (int) (yold + 0.5);
+	}
+	
 	protected void decideHdg(){
-		int hdgsel = Level.getIntersection(new Point(x, y));
-		int hdgwant = hdgDecide(hdgsel);
+		int hdgsel = Level.getIntersection(new Point(x, y)); //Gets which directions the current tile supports
+		int hdgwant = hdgDecide(hdgsel); //This method is required by extensions, main movement mode
 		if ((hdgwant&hdgsel)>0){
 			this.hdg = (hdgwant&hdgsel);
 		} else {
@@ -110,28 +120,16 @@ public abstract class Dynamic implements Listener, Drawable{
 			}
 		}
 	}
-	
-	public void onRegister(String key, EventData data){
-		switch(key){
-		case("game_lose"):
-			EventHandler.free(this);
-			DrawHandler.unregister(this);
-			respawn();
-			break;
-		case("powerpellet_eat"):
-			onFrightened();
-			break;
-		case("unfrightened"):
-			frightened = false;
-			break;
-		}
-	}
-	
-	abstract protected void onFrightened();
 
-	abstract protected void onMidCrossed();
-	
 	abstract protected void respawn();
+	
+	protected void onFrightened(){}
+
+	protected void onMidCrossed(){}
+	
+	protected void onBorder(){}
+	
+	protected void crossedBorder(){}
 	
 	abstract protected int hdgDecide(int hdgsel);
 	

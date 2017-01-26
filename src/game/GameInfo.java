@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import gui.MainMenu;
-import gui.MenuStack;
 import utility.DPoint;
-import utility.DrawHandler;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;
@@ -24,7 +21,6 @@ public class GameInfo{
 	private static int pacman_lives;
 	private static int score;
 	private static int dots;
-	private static int eaten;
 	private static int progress;
 	private static Timer game_think;
 	private static int fright_time;
@@ -38,7 +34,6 @@ public class GameInfo{
 		GameInfo.blinky = blinky;
 		GameInfo.jail_entrance = jail_entrance;
 		GameInfo.dots = dots;
-		GameInfo.eaten = 0;
 		GameInfo.fright_time = 0;
 		ghost_scatter = true;
 		progress++;
@@ -112,8 +107,8 @@ public class GameInfo{
 	}
 	
 	public static void pacmanEat(){
-		eaten++;
-		if (eaten == dots) {
+		dots--;
+		if (0 == dots) {
 			EventHandler.triggerEvent("game_win", null);
 		}
 	}
@@ -156,10 +151,6 @@ public class GameInfo{
 		return pacman_lives;
 	}
 	
-	public static int getEaten(){
-		return eaten;
-	}
-	
 	public static Point calcHdg(int hdg) {
 		int x = (hdg & 1) - ((hdg & 4) >> 2);
 		int y = ((hdg & 2) >> 1) - ((hdg & 8) >> 3);
@@ -176,10 +167,6 @@ public class GameInfo{
 			this.task = task;
 			EventHandler.subscribeEvent("game_think", this);
 			tasks.add(this);
-		}
-		
-		public void updateDelay(int delay){
-			this.delay = delay;
 		}
 
 		@Override

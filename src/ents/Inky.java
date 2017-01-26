@@ -1,9 +1,5 @@
 package ents;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 import game.GameInfo;
 import utility.DPoint;
 import utility.EventHandler;
@@ -18,14 +14,7 @@ public class Inky extends Ghost{
 		release = 30;
 		EventHandler.subscribeEvent("pacdot_eat", this);
 	}
-
-	@Override
-	public void draw(Graphics g) {
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setColor((frightened)?Color.BLUE:Color.CYAN);
-		g2.fillOval((int)(this.x*25), (int)(this.y*25), 25, 25);
-	}
-
+	
 	@Override
 	protected void jailBreak() {
 		hdgQueue.offer(1);

@@ -93,10 +93,6 @@ public class PacMan extends Dynamic{
 	}
 
 	@Override
-	protected void onMidCrossed() {
-	}
-
-	@Override
 	protected void onFrightened() {
 		super.frightened = true;
 	}

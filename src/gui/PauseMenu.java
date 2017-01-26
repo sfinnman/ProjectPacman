@@ -3,7 +3,6 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import game.GameListener;
 import game.GameInfo;
 import game.Level;
 import utility.DrawHandler;

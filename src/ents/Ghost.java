@@ -1,7 +1,13 @@
 package ents;
 
 import utility.Point;
+import utility.ResourceLoader;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,6 +36,23 @@ abstract class Ghost extends Dynamic {
 		EventHandler.subscribeEvent("pacman_move", this);
 		EventHandler.subscribeEvent("scatter", this);
 	}
+	
+	@Override
+	public void onRegister(String key, EventData data) { //Make sure to hook relevant events!
+		super.onRegister(key, data);
+		switch (key) {
+		case ("game_think"):
+			onthink();
+			break;
+		case ("scatter"):
+			reverse();
+			break;
+		case ("pacman_move"):
+			if (data.p.equals(new Point(this.getx(), this.gety())))
+				this.kill();
+			break;
+		}
+	}
 
 	private void onthink() {
 		double speed = LevelSettings.topSpeed;
@@ -51,6 +74,24 @@ abstract class Ghost extends Dynamic {
 		if (hdgQueue.isEmpty() && !dead)
 			hdg = (hdg << 2) % 15;
 	}
+	
+	protected void kill() {
+		if (frightened) {
+			EventHandler.triggerEvent("ghost_die", new EventData(this, new Point(this.getx(), this.gety())));
+			dead = true;
+			frightened = false;
+			DPoint target = GameInfo.jailPos();
+			int hdgsel = hdg + (hdg << 2) % 15;
+			hdg = optimalHdg(hdgsel, target);
+		} else if (!dead) {
+			DEBUG.print("LOSE!");
+			if (GameInfo.getLives() == 0) {
+				EventHandler.triggerEvent("game_rip", null);
+			} else {
+				EventHandler.triggerEvent("game_lose", null);
+			}
+		}
+	}
 
 	@Override
 	protected void onFrightened() {
@@ -60,10 +101,6 @@ abstract class Ghost extends Dynamic {
 		}
 	}
 
-	abstract protected void jailBreak();
-
-	abstract protected void jail();
-
 	@Override
 	protected void onBorder() {
 		super.onBorder();
@@ -71,13 +108,7 @@ abstract class Ghost extends Dynamic {
 			hdg = 2;
 			jail();
 		}
-		if (!hdgQueue.isEmpty()) {
-			hdg = hdgQueue.poll();
-			if (hdgQueue.isEmpty() && dead) {
-				dead = false;
-				jailBreak();
-			}
-		}
+		doHdgQueue();
 	}
 
 	@Override
@@ -86,32 +117,8 @@ abstract class Ghost extends Dynamic {
 	}
 
 	@Override
-	public void onRegister(String key, EventData data) {
-		super.onRegister(key, data);
-		switch (key) {
-		case ("game_think"):
-			onthink();
-			break;
-		case ("scatter"):
-			reverse();
-			break;
-		case ("pacman_move"):
-			if (data.p.equals(new Point(this.getx(), this.gety())))
-				this.kill();
-			break;
-		}
-	}
-
-	@Override
 	protected void onMidCrossed() {
-		if (!hdgQueue.isEmpty()) {
-			hdg = hdgQueue.poll();
-			DEBUG.print(this.toString() + " choosing hdg: " + hdg);
-			if (hdgQueue.isEmpty() && dead) {
-				dead = false;
-				jailBreak();
-			}
-		}
+		doHdgQueue();
 	}
 
 	@Override
@@ -121,14 +128,27 @@ abstract class Ghost extends Dynamic {
 			return randomHdg(hdgsel);
 		}
 		DPoint target = (dead) ? GameInfo.jailPos() : getTarget();
+		return optimalHdg(hdgsel, target);
+	}
+
+	private void doHdgQueue() {
+		if (!hdgQueue.isEmpty()) {
+			hdg = hdgQueue.poll();
+			if (hdgQueue.isEmpty() && dead) {
+				dead = false;
+				jailBreak();
+			}
+		}
+	}
+
+	private int optimalHdg(int hdgsel, DPoint target) {
 		double dist = 255;
 		double compare = 0;
 		int hdg = 0;
 		for (int i = 1; i < 9; i *= 2) {
 			if ((hdgsel & i) > 0) {
-				int x = (i & 1) - ((i & 4) >> 2);
-				int y = ((i & 2) >> 1) - ((i & 8) >> 3);
-				compare = new DPoint(this.x + x, this.y + y).distance(target);
+				Point p = GameInfo.calcHdg(i);
+				compare = new DPoint(this.x + p.x, this.y + p.y).distance(target);
 				if (compare < dist) {
 					dist = compare;
 					hdg = i;
@@ -136,26 +156,6 @@ abstract class Ghost extends Dynamic {
 			}
 		}
 		return hdg;
-	}
-
-	protected void kill() {
-		if (frightened) {
-			EventHandler.triggerEvent("ghost_die", new EventData(this, new Point(this.getx(), this.gety())));
-			dead = true;
-			frightened = false;
-			DPoint target = GameInfo.jailPos();
-			Point p = GameInfo.calcHdg(hdg);
-			if (target.distance(new DPoint(x + p.x, y + p.y)) > target.distance(new DPoint(x-p.y, y-p.y))){
-				hdg = (hdg<<2)%15;
-			}
-		} else if (!dead) {
-			DEBUG.print("LOSE!");
-			if (GameInfo.getLives() == 0){
-				EventHandler.triggerEvent("game_rip", null);
-			} else {
-				EventHandler.triggerEvent("game_lose", null);
-			}
-		}
 	}
 
 	private int randomHdg(int hdgsel) {
@@ -168,5 +168,32 @@ abstract class Ghost extends Dynamic {
 	}
 
 	abstract protected DPoint getTarget();
+
+	abstract protected void jailBreak();
+
+	abstract protected void jail();
+
+	@Override
+	public void draw(Graphics g) { // Renders ghosts!
+		int x = (int) (this.x * 25) - 10;
+		int y = (int) (this.y * 25) - 10;
+		if (!dead) {
+			BufferedImage ghost = ResourceLoader.getImage(name);
+			BufferedImage fright = ResourceLoader.getImage("frightened");
+			g.drawImage((frightened) ? fright : ghost, x, y, null);
+		}
+		if (!frightened) {
+			Graphics2D g2 = (Graphics2D) g;
+			Point hdg = GameInfo.calcHdg(this.hdg);
+			RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setRenderingHints(rh);
+			g2.setColor(Color.WHITE);
+			g2.fillOval(x + 11, y + 11, 8, 15);
+			g2.fillOval(x + 26, y + 11, 8, 15);
+			g2.setColor(Color.BLACK);
+			g2.fillOval(x + 13 + hdg.x * 2, y + 13 + hdg.y * 2, 4, 11);
+			g2.fillOval(x + 28 + hdg.x * 2, y + 13 + hdg.y * 2, 4, 11);
+		}
+	}
 
 }
