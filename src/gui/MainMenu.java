@@ -10,7 +10,18 @@ import game.Level;
 public class MainMenu {
 
 	public static Menu instance() {
-		MenuItem play = new MenuItem("Start Game", 50, 150, Frame.WIDTH - 100, 50, true) {
+		
+		MenuItem title = new MenuItem("PacMan", 50, 50, Frame.WIDTH - 100, 50, 90){
+			@Override
+			public void subscribeEvents(){ //this removes clickability!
+			}
+			
+			@Override
+			void doclick() {
+			}
+		};
+		
+		MenuItem play = new MenuItem("Start Game", 50, 150, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
 				DEBUG.print("Start Game!");
@@ -21,14 +32,14 @@ public class MainMenu {
 				GameInfo.thinkTick(3000);
 			}
 		};
-		MenuItem highscore = new MenuItem("Highscore", 50, 225, Frame.WIDTH - 100, 50, true) {
+		MenuItem highscore = new MenuItem("Highscore", 50, 250, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
 				DEBUG.print("Highscore!");
 				MenuStack.pushMenu(Highscore.instance());
 			}
 		};
-		MenuItem exit = new MenuItem("Exit Game", 50, 300, Frame.WIDTH - 100, 50, true) {
+		MenuItem exit = new MenuItem("Exit Game", 50, 350, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
 				DEBUG.print("Start Game!");
@@ -36,6 +47,7 @@ public class MainMenu {
 			}
 		};
 		List<MenuItem> items = new ArrayList<>();
+		items.add(title);
 		items.add(play);
 		items.add(highscore);
 		items.add(exit);

@@ -180,6 +180,10 @@ abstract class Ghost extends Dynamic {
 		if (!dead) {
 			BufferedImage ghost = ResourceLoader.getImage(name);
 			BufferedImage fright = ResourceLoader.getImage("frightened");
+			int time_left = GameInfo.getFrightTime();
+			if (time_left<200 && (time_left/25)%2 == 1){
+				fright = ResourceLoader.getImage("time");
+			}
 			g.drawImage((frightened) ? fright : ghost, x, y, null);
 		}
 		if (!frightened) {
@@ -188,11 +192,11 @@ abstract class Ghost extends Dynamic {
 			RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setRenderingHints(rh);
 			g2.setColor(Color.WHITE);
-			g2.fillOval(x + 11, y + 11, 8, 15);
-			g2.fillOval(x + 26, y + 11, 8, 15);
+			g2.fillOval(x + 10, y + 11, 10, 12);
+			g2.fillOval(x + 25, y + 11, 10, 12);
 			g2.setColor(Color.BLACK);
-			g2.fillOval(x + 13 + hdg.x * 2, y + 13 + hdg.y * 2, 4, 11);
-			g2.fillOval(x + 28 + hdg.x * 2, y + 13 + hdg.y * 2, 4, 11);
+			g2.fillOval(x + 12 + hdg.x * 2, y + 13 + hdg.y * 2, 6, 8);
+			g2.fillOval(x + 27 + hdg.x * 2, y + 13 + hdg.y * 2, 6, 8);
 		}
 	}
 

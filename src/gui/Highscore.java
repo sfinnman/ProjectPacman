@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import game.DEBUG;
+import utility.EventHandler;
 
 public class Highscore{
 
 	public static Menu instance(){
-		MenuItem back = new MenuItem("Back", 50, 100, Frame.WIDTH - 100, 50, true){
+		MenuItem back = new MenuItem("Back", 50, 100, Frame.WIDTH - 100, 50, 40){
 			@Override
 			void doclick() {
 				MenuStack.popMenu();
@@ -21,8 +22,12 @@ public class Highscore{
 		List<MenuItem> scores = new ArrayList<>();
 		try {
 			Scanner sc = new Scanner(f);
-			for (int i = 0; i<10 && sc.hasNextLine(); i++){
-				scores.add(new MenuItem(sc.nextLine(), 50, 175 + i*75, Frame.WIDTH - 100, 50, false){
+			for (int i = 1; i<11 && sc.hasNextLine(); i++){
+				scores.add(new MenuItem(i + ": " + sc.nextLine(), 50, 200 + i*50, Frame.WIDTH - 100, 50, 40){
+					@Override
+					public void subscribeEvents(){ //this removes clickability!
+					}
+					
 					@Override
 					void doclick() {
 					}

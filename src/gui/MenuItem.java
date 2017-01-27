@@ -10,21 +10,21 @@ import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Listener;
 import utility.Point;
+import utility.ResourceLoader;
 
 public abstract class MenuItem implements Listener, Drawable{
 	private final String text;
 	public final Point p;
 	public final Point size;
 	private boolean focus;
-	private int alpha;
-	private boolean clickable;
+	private float fsize;
 	
 	
-	public MenuItem(String text, int x, int y, int sizex, int sizey, boolean clickable){
+	public MenuItem(String text, int x, int y, int sizex, int sizey, float fontSize){
 		this.text = text;
 		this.p = new Point(x, y);
 		this.size = new Point(sizex, sizey);
-		this.clickable = clickable;
+		this.fsize = fontSize;
 	}
 	
 	public void subscribeEvents(){
@@ -46,21 +46,20 @@ public abstract class MenuItem implements Listener, Drawable{
 			if (data.p.isInside(p, size)) doclick();
 			break;
 		case ("mouse_moved"):
-			focus = data.p.isInside(p, size)&&clickable;
+			focus = data.p.isInside(p, size);
 			break;
 		}
 	}
 	
 	@Override
 	public void draw(Graphics g) {
-		alpha = (focus)?(alpha<235)?alpha+20:255:(alpha>20)?alpha-20:0;
+		float text_size = (focus)?fsize + 6:fsize;
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.WHITE);
+		g2.setFont(ResourceLoader.getFont("crackman", text_size));
 		FontMetrics fm = g2.getFontMetrics();
 		int twidth = fm.stringWidth(text);
 		int theight = fm.getHeight();
-		g2.drawString(text, p.x + size.x/2 - twidth/2 , p.y + size.y/2 + theight/2);
-		g2.setColor(new Color(255, 255, 255, alpha));
-		g2.drawRect(p.x, p.y, size.x, size.y);
+		g2.drawString(text, p.x + size.x/2 - twidth/2 , p.y + size.y/2 + theight/3);
 	}
 }

@@ -1,7 +1,12 @@
 package game;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -85,6 +90,36 @@ public class GameInfo{
 		LevelSettings.loadSettings(progress);
 	}
 	
+	public static void save(){
+		File f = new File("src/highscores/list.txt");
+		try {
+			Scanner sc = new Scanner(f);
+			List<Integer> scores = new ArrayList<>();
+			while(sc.hasNextInt()) {
+				scores.add(sc.nextInt());
+			}
+			sc.close();
+			scores.add(GameInfo.score);
+			scores.sort(new Comparator<Integer>(){
+				@Override
+				public int compare(Integer o1, Integer o2) {
+					return o2-o1;
+				}
+			});
+			FileWriter fw = new FileWriter(f);
+			StringBuilder sb = new StringBuilder();
+			for (Integer score : scores) {
+				sb.append(score);
+				sb.append(System.lineSeparator());
+			}
+			fw.write(sb.toString());
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void setBlinkyPos(Point p){
 		blinky = new Point(p.x, p.y);
 	}
@@ -141,6 +176,10 @@ public class GameInfo{
 	
 	public static int getLevel(){
 		return progress;
+	}
+	
+	public static int getFrightTime(){
+		return fright_time;
 	}
 	
 	public static int getScore(){

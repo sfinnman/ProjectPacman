@@ -19,7 +19,7 @@ public class Main extends JFrame{
 		add(new Frame());
 		setTitle("Pacman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(Frame.WIDTH + 6, Frame.HEIGHT + 20);
+        setSize(Frame.WIDTH + 6, Frame.HEIGHT + 26);
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);

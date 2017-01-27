@@ -11,7 +11,7 @@ import utility.EventHandler;
 public class PauseMenu {
 
 	public static Menu instance() {
-		MenuItem resume = new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 50, true) {
+		MenuItem resume = new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
 				GameInfo.thinkTick(10);
@@ -19,18 +19,19 @@ public class PauseMenu {
 				DrawHandler.popFrame();
 			}
 		};
-		MenuItem reset = new MenuItem("Reset Game", 50, 175, Frame.WIDTH - 100, 50, true) {
+		MenuItem reset = new MenuItem("Reset Game", 50, 200, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
 				MenuStack.popMenu();
 				DrawHandler.init();
 				EventHandler.init();
+				GameInfo.init();
 				new GameOverlay();
 				Level.loadMap();
 				GameInfo.thinkTick(3000);
 			}
 		};
-		MenuItem main = new MenuItem("Main Menu", 50, 250, Frame.WIDTH - 100, 50, true) {
+		MenuItem main = new MenuItem("Main Menu", 50, 300, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
 				MenuStack.popMenu();
