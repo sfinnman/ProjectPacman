@@ -18,6 +18,8 @@ import utility.Point;
 
 public class GameInfo{
 	
+	public static int UPDATE = 1;
+	
 	private static Point pacman_pos;
 	private static Point blinky;
 	private static int pacman_hdg;
@@ -48,7 +50,7 @@ public class GameInfo{
 
 	public static void init(){
 		GameInfo.score = 0;
-		GameInfo.pacman_lives = 2;
+		GameInfo.pacman_lives = 5;
 		GameInfo.progress = 0;
 	}
 	
@@ -62,7 +64,7 @@ public class GameInfo{
 			}
 		};
 		new GameListener();
-		game_think.scheduleAtFixedRate(task, delay, 10);
+		game_think.scheduleAtFixedRate(task, delay, UPDATE);
 	}
 
 	protected static void stopThink(){
@@ -70,7 +72,7 @@ public class GameInfo{
 	}
 	
 	public static void fright(int time) {
-		fright_time = time;
+		fright_time = (int) (time*(10.0/GameInfo.UPDATE));
 	}
 	
 	private static void countFright(){

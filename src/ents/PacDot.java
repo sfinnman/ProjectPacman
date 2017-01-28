@@ -22,8 +22,10 @@ public class PacDot extends Static implements Drawable, Listener {
 		if (key.equals("pacman_move")) {
 			if (data.p.equals(this.p)) {
 				EventHandler.triggerEvent("pacdot_eat", new EventData(this, this.p));
+				GameInfo.addScore(10);
+				GameInfo.pacmanEat();
 				PacMan pac = (PacMan)data.src;
-				pac.tileSpeedMod(0.87);
+				pac.tileSpeedMod(0.89);
 				EventHandler.unsubscribeEvent("pacman_move", this);
 				DrawHandler.unregister(this);
 			}

@@ -41,7 +41,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 			}
 		};
 		t = new Timer();
-		t.schedule(task, 25, 25);
+		t.schedule(task, 15, 15);
 	}
 
 	@Override

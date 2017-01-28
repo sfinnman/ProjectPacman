@@ -77,7 +77,7 @@ abstract class Ghost extends Dynamic {
 	
 	protected void kill() {
 		if (frightened) {
-			EventHandler.triggerEvent("ghost_die", new EventData(this, new Point(this.getx(), this.gety())));
+			GameInfo.eatGhost();
 			dead = true;
 			frightened = false;
 			DPoint target = GameInfo.jailPos();
@@ -181,7 +181,7 @@ abstract class Ghost extends Dynamic {
 			BufferedImage ghost = ResourceLoader.getImage(name);
 			BufferedImage fright = ResourceLoader.getImage("frightened");
 			int time_left = GameInfo.getFrightTime();
-			if (time_left<200 && (time_left/25)%2 == 1){
+			if (time_left<(2000/GameInfo.UPDATE) && ((time_left/250)*GameInfo.UPDATE)%2 == 1){
 				fright = ResourceLoader.getImage("time");
 			}
 			g.drawImage((frightened) ? fright : ghost, x, y, null);

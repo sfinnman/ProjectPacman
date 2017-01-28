@@ -6,7 +6,7 @@ import java.util.Scanner;
 import game.GameInfo.ScheduledTask;
 
 public class LevelSettings {
-	public static final double topSpeed = 0.11;
+	public static double topSpeed; //DO NOT EXCEED 0.5 STEPS, GAME BREAKS
 	private static double ghostNrm;
 	private static double ghostFrt;
 	private static double ghostTnl;
@@ -14,6 +14,7 @@ public class LevelSettings {
 	private static double pacFrt;
 	
 	public static void loadSettings(int progress) {
+		topSpeed = GameInfo.UPDATE/100.0;
 		Scanner sc = null;
 		File chasePatterns = new File("src/map/chasePatterns.txt");
 		File speedSettings = new File("src/map/speedSettings.txt");
@@ -39,7 +40,7 @@ public class LevelSettings {
 				if (Integer.valueOf(tokens[0]) <= progress && Integer.valueOf(tokens[1]) >= progress) {
 					int time = 0;
 					for(int i = 2; i<tokens.length; i++){
-						time += Integer.valueOf(tokens[i]);
+						time += Integer.valueOf(tokens[i])*(10.0/GameInfo.UPDATE);
 						new ScheduledTask(time, new Runnable(){
 							@Override
 							public void run() {

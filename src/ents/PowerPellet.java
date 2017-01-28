@@ -21,6 +21,8 @@ public class PowerPellet extends Static implements Listener {
 		if (key.equals("pacman_move")) {
 			if (p.equals(data.p)) {
 				EventHandler.triggerEvent("powerpellet_eat", new EventData(this, p));
+				GameInfo.addScore(50);
+				GameInfo.pacmanEat();
 				EventHandler.unsubscribeEvent("pacman_move", this);
 				GameInfo.fright(500);
 				DrawHandler.unregister(this);

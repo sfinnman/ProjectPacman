@@ -13,11 +13,8 @@ public class GameListener implements Listener {
 	
 	public GameListener(){
 		EventHandler.subscribeEvent("esc", this);
-		EventHandler.subscribeEvent("pacdot_eat", this);
-		EventHandler.subscribeEvent("powerpellet_eat", this);
 		EventHandler.subscribeEvent("game_win", this);
 		EventHandler.subscribeEvent("game_lose", this);
-		EventHandler.subscribeEvent("ghost_die", this);
 		EventHandler.subscribeEvent("game_rip", this);
 	}
 	
@@ -29,14 +26,6 @@ public class GameListener implements Listener {
 			DrawHandler.pushFrame();
 			GameInfo.stopThink();
 			MenuStack.pushMenu(PauseMenu.instance());
-			break;
-		case("pacdot_eat"):
-			GameInfo.addScore(10);
-			GameInfo.pacmanEat();
-			break;
-		case("powerpellet_eat"):
-			GameInfo.addScore(50);
-			GameInfo.pacmanEat();
 			break;
 		case("game_win"):
 			GameInfo.stopThink();
@@ -52,9 +41,6 @@ public class GameListener implements Listener {
 			EventHandler.free(this);
 			GameInfo.thinkTick(3000);
 			EventHandler.show();
-			break;
-		case("ghost_die"):
-			GameInfo.eatGhost();
 			break;
 		case("game_rip"):
 			GameInfo.stopThink();
