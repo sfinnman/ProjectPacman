@@ -14,32 +14,32 @@ import java.util.Scanner;
 import game.DEBUG;
 
 public class EventHandler {
-	private static Map<String, List<Listener>> events;
+	private static final List<String> keySet = new LinkedList<>();
+	private static Deque<Map<String, List<Listener>>> eventStack;
+	private static Deque<List<Listener>> executionStack;
 	private static Deque<SimpleEntry<String, Listener>> removals;
 	private static Deque<SimpleEntry<String, Listener>> additions;
-	private static int workers = 0;
 	
 	private EventHandler(){};
 	
-	public static boolean registerEvent(String key) {
-		
-		if (events.containsKey(key)) {
+	private static boolean registerEvent(String key) {
+		if (eventStack.peek().containsKey(key)) {
 			return false;
 		}
-		events.put(key, new LinkedList<>());
+		eventStack.peek().put(key, new LinkedList<>());
 		return true;
 	}
 	
 	public static void subscribeEvent(String key, Listener listener){
-		if (workers > 0) {
+		if (!executionStack.isEmpty()) {
 			EventHandler.queueSubscribeEvent(key, listener); //Cannot remove entries while executing an event, leads to concurrency issues.
 			return;
 		}
-		if (!events.containsKey(key)) {
-			DEBUG.print("events didnt contain key " + key);
+		if (!eventStack.peek().containsKey(key)) {
+			DEBUG.print("eventStack.peek() didnt contain key " + key);
 			return;
 		}
-		events.get(key).add(listener);
+		eventStack.peek().get(key).add(listener);
 		return;
 	}
 	
@@ -48,14 +48,14 @@ public class EventHandler {
 	}
 
 	public static void unsubscribeEvent(String key, Listener listener){
-		if (workers > 0) {
+		if (!executionStack.isEmpty()) {
 			EventHandler.queueUnsubscribeEvent(key, listener); //Cannot remove entries while executing an event, leads to concurrency issues.
 			return;
 		}
-		if (!events.containsKey(key)) {
+		if (!eventStack.peek().containsKey(key)) {
 			return;
 		}
-		events.get(key).remove(listener);
+		eventStack.peek().get(key).remove(listener);
 		return;
 	}
 	
@@ -75,52 +75,85 @@ public class EventHandler {
 	}
 	
 	public static synchronized boolean triggerEvent(String key, EventData data){
-		if (!events.containsKey(key)) {
+		if (!eventStack.peek().containsKey(key)) {
 			return false;
 		}
-		workers++; // Make sure to stop all unsubscribes during execution!
-		List<Listener> hooks = events.get(key);
-		for (int i = 0; i<hooks.size(); i++){
+		List<Listener> hooks = new LinkedList<>();
+		hooks.addAll(eventStack.peek().get(key));
+		executionStack.push(hooks);
+		for (int i = 0; i<hooks.size(); i++){ //Notice that if a view is popped it will not care really...
 			hooks.get(i).onRegister(key, data);
 		}
-		workers--;
-		if (workers == 0) {
+		executionStack.pop();
+		if (executionStack.isEmpty()) {
 			flush();
 		}
 		return true;
 	}
 	
+	public static synchronized void pushLayer(){
+		EventHandler.killCurrent();
+		eventStack.push(new HashMap<>());
+		for(String key: keySet){
+			EventHandler.registerEvent(key);
+		}
+	}
+	
+	public static synchronized void popLayer(){
+		EventHandler.killCurrent();
+		if (!eventStack.isEmpty()) {
+			eventStack.pop();
+		}
+	}
+	
 	public static synchronized void init(){
 		System.out.println("EventHandler initializing");
-		events = new HashMap<>();
+		eventStack = new LinkedList<>();
+		executionStack = new LinkedList<>();
 		removals = new LinkedList<>();
 		additions = new LinkedList<>();
-		Scanner sc = null;
-		try {
-			sc = new Scanner(new File("src/config/EventHandler.cfg"));
-			while (sc.hasNextLine()){
-				EventHandler.registerEvent(sc.nextLine());
-			}
-		} catch (FileNotFoundException e) {
-			System.out.println("EventHandler configuration file was not found! ");
-			e.printStackTrace();
-		} finally {
-			if (sc != null) {
-				sc.close();
+		if (keySet.isEmpty()){
+			Scanner sc = null;
+			try {
+				sc = new Scanner(new File("src/config/EventHandler.cfg"));
+				while (sc.hasNextLine()){
+					keySet.add(sc.nextLine());
+				}
+			} catch (FileNotFoundException e) {
+				System.out.println("EventHandler configuration file was not found! ");
+				e.printStackTrace();
+			} finally {
+				if (sc != null) {
+					sc.close();
+				}
 			}
 		}
 		System.out.println("EventHandler initialized!");
-		System.out.println(events);
+		pushLayer();
+		System.out.println(eventStack.peek());
+	}
+	
+	public synchronized static void killCurrent(){
+		for (List<Listener> hooks : executionStack){
+			hooks.clear();
+		}
+		removals.clear();
+		additions.clear();
+	}
+	
+	public synchronized static void clear(){
+		popLayer();
+		pushLayer();
 	}
 	
 	public static void free(Listener listener) {
-		for (String key : events.keySet()) {
+		for (String key : eventStack.peek().keySet()) {
 			EventHandler.unsubscribeEvent(key, listener);
 		}
 	}
 	
 	public static void show(){
-		DEBUG.print(events);
+		DEBUG.print(eventStack.peek());
 		DEBUG.print(removals);
 		DEBUG.print(additions);
 	}

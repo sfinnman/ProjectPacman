@@ -3,17 +3,14 @@ package ents;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import game.DEBUG;
 import game.GameInfo;
 import game.LevelSettings;
 import gui.Frame;
-import utility.DPoint;
-import utility.DrawHandler;
-import utility.Drawable;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
-import utility.Listener;
 import utility.Point;
 
 public class PacMan extends Dynamic{
@@ -31,8 +28,10 @@ public class PacMan extends Dynamic{
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
+		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		int px = (int) (x * 25) - 10;
 		int py = (int) (y * 25) - 10;
+		g2.setRenderingHints(rh);
 		g2.setColor(Color.YELLOW);
 		int mouthOpen = (int) (Math.sin(Math.PI * ((x + y) % 1)) * 45);
 		int angStart = 90 - hdg * 90 + ((hdg & 4) >> 2) * 90 + mouthOpen;

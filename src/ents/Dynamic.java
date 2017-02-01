@@ -1,12 +1,6 @@
 package ents;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import game.DEBUG;
-import game.GameInfo;
 import game.Level;
-import game.LevelSettings;
 import utility.EventHandler.EventData;
 import utility.DrawHandler;
 import utility.Drawable;

@@ -1,50 +1,29 @@
 package gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import game.GameInfo;
-import game.Level;
-import utility.DrawHandler;
-import utility.EventHandler;
+import utility.Game;
 
 public class PauseMenu {
 
-	public static Menu instance() {
-		MenuItem resume = new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 75, 40) {
+	public static void instance() {
+		new MenuItem("Resume Game", 50, 100, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
-				GameInfo.thinkTick(10);
-				MenuStack.popMenu();
-				DrawHandler.popFrame();
+				Game.popView();
 			}
 		};
-		MenuItem reset = new MenuItem("Reset Game", 50, 200, Frame.WIDTH - 100, 75, 40) {
+		new MenuItem("Reset Game", 50, 200, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
-				MenuStack.popMenu();
-				DrawHandler.init();
-				EventHandler.init();
-				GameInfo.init();
-				new GameOverlay();
-				Level.loadMap();
-				GameInfo.thinkTick(3000);
+				Game.popView();
+				Game.newGame();
 			}
 		};
-		MenuItem main = new MenuItem("Main Menu", 50, 300, Frame.WIDTH - 100, 75, 40) {
+		new MenuItem("Main Menu", 50, 300, Frame.WIDTH - 100, 75, 40) {
 			@Override
 			void doclick() {
-				MenuStack.popMenu();
-				DrawHandler.init();
-				EventHandler.init();
-				MenuStack.pushMenu(MainMenu.instance());
+				Game.popView();
+				Game.popView();
 			}
-		};
-		List<MenuItem> items = new ArrayList<>();
-		items.add(resume);
-		items.add(reset);
-		items.add(main);
-		return new Menu(items) {
 		};
 	}
 

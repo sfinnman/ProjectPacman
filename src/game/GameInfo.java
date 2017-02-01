@@ -7,19 +7,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import utility.DPoint;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
+import utility.Game;
 import utility.Listener;
 import utility.Point;
 
-public class GameInfo{
-	
-	public static int UPDATE = 1;
-	
+public class GameInfo{	
 	private static Point pacman_pos;
 	private static Point blinky;
 	private static int pacman_hdg;
@@ -29,7 +25,6 @@ public class GameInfo{
 	private static int score;
 	private static int dots;
 	private static int progress;
-	private static Timer game_think;
 	private static int fright_time;
 	private static int ghosts_eaten;
 
@@ -46,6 +41,7 @@ public class GameInfo{
 		progress++;
 		ScheduledTask.purgeTasks();
 		LevelSettings.loadSettings(progress);
+		new GameListener();
 	}
 
 	public static void init(){
@@ -54,28 +50,11 @@ public class GameInfo{
 		GameInfo.progress = 0;
 	}
 	
-	public static void thinkTick(long delay){
-		GameInfo.game_think = new Timer();
-		TimerTask task = new TimerTask(){
-			@Override
-			public void run() {
-				EventHandler.triggerEvent("game_think", null);
-				GameInfo.countFright();
-			}
-		};
-		new GameListener();
-		game_think.scheduleAtFixedRate(task, delay, UPDATE);
-	}
-
-	protected static void stopThink(){
-		game_think.cancel();
-	}
-	
 	public static void fright(int time) {
-		fright_time = (int) (time*(10.0/GameInfo.UPDATE));
+		fright_time = (int) (time*(10.0/Game.UPDATE));
 	}
 	
-	private static void countFright(){
+	protected static void countFright(){
 		fright_time--;
 		if (fright_time == 0) {
 			EventHandler.triggerEvent("unfrightened", null);
@@ -86,10 +65,15 @@ public class GameInfo{
 	}
 	
 	public static void lose(){
+		if (pacman_lives == 0){
+			GameInfo.save();
+			Game.popView();
+		}
 		pacman_lives--;
 		ScheduledTask.purgeTasks();
 		ghost_scatter = true;
 		LevelSettings.loadSettings(progress);
+		Game.wait(3000);
 	}
 	
 	public static void save(){

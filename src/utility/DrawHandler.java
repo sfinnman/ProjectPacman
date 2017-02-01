@@ -9,35 +9,35 @@ import java.util.List;
 
 public class DrawHandler {
 	public static Deque<List<Drawable>> frames;
-	public static List<Drawable> library;
 	
 	public static void init(){
 		frames = new LinkedList<>();
-		library = new ArrayList<>();
-		frames.push(library);
+		frames.push(new ArrayList<>());
+	}
+	
+	public static void clear(){
+		frames.peek().clear();
 	}
 	
 	public static void pushFrame(){
-		library = new ArrayList<>();
-		frames.push(library);
+		frames.push(new ArrayList<>());
 	}
 	
 	public static void popFrame(){
 		frames.pop();
-		library = frames.peek();
 	}
 	
 	public static void register(Drawable d){
-		library.add(d);
+		frames.peek().add(d);
 	}
 	
 	public static void unregister(Drawable d){
-		library.remove(d);
+		frames.peek().remove(d);
 	}
 	
 	public static void drawAll(Graphics g) {
-		for(int i = 0; i<library.size(); i++){
-			library.get(i).draw(g);
+		for(int i = 0; i<frames.peek().size(); i++){
+			frames.peek().get(i).draw(g);
 		}
 	}
 	

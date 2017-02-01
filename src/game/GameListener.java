@@ -1,11 +1,8 @@
 package game;
 
 import utility.EventHandler.EventData;
-import gui.GameOverlay;
-import gui.MainMenu;
-import gui.MenuStack;
+import utility.Game;
 import gui.PauseMenu;
-import utility.DrawHandler;
 import utility.EventHandler;
 import utility.Listener;
 
@@ -15,39 +12,24 @@ public class GameListener implements Listener {
 		EventHandler.subscribeEvent("esc", this);
 		EventHandler.subscribeEvent("game_win", this);
 		EventHandler.subscribeEvent("game_lose", this);
-		EventHandler.subscribeEvent("game_rip", this);
+		EventHandler.subscribeEvent("game_think", this);
 	}
 	
 	@Override
 	public void onRegister(String key, EventData src) {
 		switch(key){
 		case("esc"):
-			EventHandler.free(this);
-			DrawHandler.pushFrame();
-			GameInfo.stopThink();
-			MenuStack.pushMenu(PauseMenu.instance());
+			Game.pushView();
+			PauseMenu.instance();
 			break;
 		case("game_win"):
-			GameInfo.stopThink();
-			DrawHandler.init();
-			EventHandler.init();
-			new GameOverlay();
-			Level.loadMap();
-			GameInfo.thinkTick(3000);
+			Game.reloadGame();
 			break;
 		case("game_lose"):
-			GameInfo.stopThink();
 			GameInfo.lose();
-			EventHandler.free(this);
-			GameInfo.thinkTick(3000);
-			EventHandler.show();
 			break;
-		case("game_rip"):
-			GameInfo.stopThink();
-			GameInfo.save();
-			EventHandler.init();
-			DrawHandler.init();
-			MenuStack.pushMenu(MainMenu.instance());
+		case("game_think"):
+			GameInfo.countFright();
 			break;
 		}
 	} 

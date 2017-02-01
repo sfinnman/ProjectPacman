@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,8 +47,11 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 
 	@Override
 	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		DrawHandler.drawAll(g);
+		BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics gImg = img.getGraphics();
+		super.paintComponent(gImg);
+		DrawHandler.drawAll(gImg);
+		g.drawImage(img, 0, 0, null);
 	}
 
 	@Override

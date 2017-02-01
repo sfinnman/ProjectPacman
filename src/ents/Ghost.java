@@ -13,18 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import game.DEBUG;
 import game.GameInfo;
 import game.LevelSettings;
 import utility.DPoint;
-import utility.DrawHandler;
-import utility.Drawable;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
-import utility.Listener;
+import utility.Game;
 
 abstract class Ghost extends Dynamic {
 	protected boolean dead;
@@ -85,11 +81,8 @@ abstract class Ghost extends Dynamic {
 			hdg = optimalHdg(hdgsel, target);
 		} else if (!dead) {
 			DEBUG.print("LOSE!");
-			if (GameInfo.getLives() == 0) {
-				EventHandler.triggerEvent("game_rip", null);
-			} else {
-				EventHandler.triggerEvent("game_lose", null);
-			}
+			EventHandler.killCurrent(); //Make sure pacman doesnt eat whatever is in this tile. Kill all current executions and call for a game loss!
+			EventHandler.triggerEvent("game_lose", null);
 		}
 	}
 
@@ -181,7 +174,7 @@ abstract class Ghost extends Dynamic {
 			BufferedImage ghost = ResourceLoader.getImage(name);
 			BufferedImage fright = ResourceLoader.getImage("frightened");
 			int time_left = GameInfo.getFrightTime();
-			if (time_left<(2000/GameInfo.UPDATE) && ((time_left/250)*GameInfo.UPDATE)%2 == 1){
+			if (time_left<(2000/Game.UPDATE) && ((time_left/250)*Game.UPDATE)%2 == 1){
 				fright = ResourceLoader.getImage("time");
 			}
 			g.drawImage((frightened) ? fright : ghost, x, y, null);

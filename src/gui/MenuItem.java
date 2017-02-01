@@ -5,6 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import utility.DrawHandler;
 import utility.Drawable;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
@@ -25,16 +26,13 @@ public abstract class MenuItem implements Listener, Drawable{
 		this.p = new Point(x, y);
 		this.size = new Point(sizex, sizey);
 		this.fsize = fontSize;
+		subscribeEvents();
+		DrawHandler.register(this);
 	}
 	
-	public void subscribeEvents(){
+	protected void subscribeEvents(){
 		EventHandler.subscribeEvent("mouse_clicked", this);
 		EventHandler.subscribeEvent("mouse_moved", this);
-	}
-	
-	public void unsubscribeEvents(){
-		EventHandler.unsubscribeEvent("mouse_clicked", this);
-		EventHandler.unsubscribeEvent("mouse_moved", this);
 	}
 	
 	abstract void doclick();

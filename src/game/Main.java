@@ -3,10 +3,7 @@ package game;
 import javax.swing.JFrame;
 import gui.Frame;
 import gui.MainMenu;
-import gui.MenuStack;
-import utility.DrawHandler;
-import utility.EventHandler;
-import utility.ResourceLoader;
+import utility.Game;
 
 public class Main extends JFrame{
 	
@@ -27,10 +24,8 @@ public class Main extends JFrame{
 	
 	public static void main(String[] args) {
 		DEBUG.ENABLED = true;
-		EventHandler.init();
-		ResourceLoader.init();
-		DrawHandler.init();
-		MenuStack.pushMenu(MainMenu.instance());
+		Game.init();
+		MainMenu.instance();
 		new Main();
 	}
 }

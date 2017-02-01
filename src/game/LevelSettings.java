@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import game.GameInfo.ScheduledTask;
+import utility.Game;
 
 public class LevelSettings {
 	public static double topSpeed; //DO NOT EXCEED 0.5 STEPS, GAME BREAKS
@@ -14,7 +15,7 @@ public class LevelSettings {
 	private static double pacFrt;
 	
 	public static void loadSettings(int progress) {
-		topSpeed = GameInfo.UPDATE/100.0;
+		topSpeed = Game.UPDATE/100.0;
 		Scanner sc = null;
 		File chasePatterns = new File("src/map/chasePatterns.txt");
 		File speedSettings = new File("src/map/speedSettings.txt");
@@ -40,7 +41,7 @@ public class LevelSettings {
 				if (Integer.valueOf(tokens[0]) <= progress && Integer.valueOf(tokens[1]) >= progress) {
 					int time = 0;
 					for(int i = 2; i<tokens.length; i++){
-						time += Integer.valueOf(tokens[i])*(10.0/GameInfo.UPDATE);
+						time += Integer.valueOf(tokens[i])*(10.0/Game.UPDATE);
 						new ScheduledTask(time, new Runnable(){
 							@Override
 							public void run() {
