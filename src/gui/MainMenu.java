@@ -12,13 +12,13 @@ public class MainMenu {
 			public void subscribeEvents(){ //this removes clickability!
 			}
 			@Override
-			void doclick() {
+			protected void doclick() {
 			}
 		};
 		
 		new MenuItem("Start Game", 50, 150, Frame.WIDTH - 100, 75, 40) {
 			@Override
-			void doclick() {
+			protected void doclick() {
 				DEBUG.print("Start Game!");
 				Game.pushView();
 				Game.newGame();
@@ -26,7 +26,7 @@ public class MainMenu {
 		};
 		new MenuItem("Highscore", 50, 250, Frame.WIDTH - 100, 75, 40) {
 			@Override
-			void doclick() {
+			protected void doclick() {
 				DEBUG.print("Highscore!");
 				Game.pushView();
 				Highscore.instance();
@@ -34,7 +34,7 @@ public class MainMenu {
 		};
 		new MenuItem("Exit Game", 50, 350, Frame.WIDTH - 100, 75, 40) {
 			@Override
-			void doclick() {
+			protected void doclick() {
 				System.exit(0);
 			}
 		};

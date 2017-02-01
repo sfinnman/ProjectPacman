@@ -17,6 +17,7 @@ import java.util.Random;
 import game.DEBUG;
 import game.GameInfo;
 import game.LevelSettings;
+import gui.GameOverlay;
 import utility.DPoint;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
@@ -32,9 +33,10 @@ abstract class Ghost extends Dynamic {
 		EventHandler.subscribeEvent("pacman_move", this);
 		EventHandler.subscribeEvent("scatter", this);
 	}
-	
+
 	@Override
-	public void onRegister(String key, EventData data) { //Make sure to hook relevant events!
+	public void onRegister(String key, EventData data) { // Make sure to hook
+															// relevant events!
 		super.onRegister(key, data);
 		switch (key) {
 		case ("game_think"):
@@ -52,12 +54,12 @@ abstract class Ghost extends Dynamic {
 
 	private void onthink() {
 		double speed = LevelSettings.topSpeed;
-		if (!dead) {
+		if (!dead){
 			if (frightened) {
 				speed *= LevelSettings.ghostFrtMlt();
 			} else {
 				if (this.tileSpeedMod != 1) {
-					speed *= LevelSettings.ghostTnlMlt();
+					speed *= this.tileSpeedMod;
 				} else {
 					speed *= LevelSettings.ghostNrmMlt();
 				}
@@ -65,15 +67,15 @@ abstract class Ghost extends Dynamic {
 		}
 		go(speed);
 	}
-
 	private void reverse() {
 		if (hdgQueue.isEmpty() && !dead)
 			hdg = (hdg << 2) % 15;
 	}
-	
+
 	protected void kill() {
 		if (frightened) {
-			GameInfo.eatGhost();
+			int score = GameInfo.eatGhost();
+			GameOverlay.showScore(new DPoint(this.x, this.y), score);
 			dead = true;
 			frightened = false;
 			DPoint target = GameInfo.jailPos();
@@ -81,7 +83,9 @@ abstract class Ghost extends Dynamic {
 			hdg = optimalHdg(hdgsel, target);
 		} else if (!dead) {
 			DEBUG.print("LOSE!");
-			EventHandler.killCurrent(); //Make sure pacman doesnt eat whatever is in this tile. Kill all current executions and call for a game loss!
+			EventHandler.killCurrent(); // Make sure pacman doesnt eat whatever
+										// is in this tile. Kill all current
+										// executions and call for a game loss!
 			EventHandler.triggerEvent("game_lose", null);
 		}
 	}
@@ -174,7 +178,7 @@ abstract class Ghost extends Dynamic {
 			BufferedImage ghost = ResourceLoader.getImage(name);
 			BufferedImage fright = ResourceLoader.getImage("frightened");
 			int time_left = GameInfo.getFrightTime();
-			if (time_left<(2000/Game.UPDATE) && ((time_left/250)*Game.UPDATE)%2 == 1){
+			if (time_left < (2000 / Game.UPDATE) && ((time_left / 250) * Game.UPDATE) % 2 == 1) {
 				fright = ResourceLoader.getImage("time");
 			}
 			g.drawImage((frightened) ? fright : ghost, x, y, null);

@@ -12,8 +12,6 @@ import utility.Listener;
 import utility.Point;
 import utility.ResourceLoader;
 
-//In order for this to properly work we need to add layering to the EventHandler, similarly the way we did for the DrawHandler... However problems will arise if Event-subscribes have been queued and a new event layer is pushed... this means that the events in the queue will be passed to the new view, creating undefined behaviour... therefore it is important to make sure that queues are cleaned up or stored before switching to a new layer. The new layer should be empty when created and then things will start registering automatically to the new view. This requires alot of legwork for a successful implementation but will ultimately make pretty much everything alot easier. triggers have to be contained inside its own layer. e.g. timers to trigger "game_think" need to be either closed, or only register on its own layer, when its own layer is the top layer. This requires every subscribed event to know to what layer it belongs, and automatically trigger events only in that layer. 
-
 public class LevelEditor implements Drawable, Listener{
 	private char[][] map;
 	private char selection;

@@ -47,6 +47,7 @@ public class Game {
 		Level.loadMap();
 		new GameOverlay();
 		Game.wait(3000);
+		GameOverlay.gameStart();
 	}
 	
 	public static void reloadGame(){
@@ -54,6 +55,7 @@ public class Game {
 		Level.loadMap();
 		new GameOverlay();
 		Game.wait(3000);
+		GameOverlay.gameReload(GameInfo.getLevel());
 	}
 	
 	private static void think(){

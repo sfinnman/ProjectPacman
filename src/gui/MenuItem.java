@@ -35,7 +35,7 @@ public abstract class MenuItem implements Listener, Drawable{
 		EventHandler.subscribeEvent("mouse_moved", this);
 	}
 	
-	abstract void doclick();
+	abstract protected void doclick();
 	
 	@Override
 	public void onRegister(String key, EventData data) {

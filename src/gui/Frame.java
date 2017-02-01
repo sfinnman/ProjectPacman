@@ -103,7 +103,13 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
+	public void keyTyped(KeyEvent e) {
+		char c = e.getKeyChar();
+		if (c != 8){
+			EventHandler.triggerEvent("key_typed", new EventData(this, new Point(c, 0)));
+		} else {
+			EventHandler.triggerEvent("key_backspace", null);
+		}
 	}
 
 	@Override
