@@ -30,7 +30,7 @@ public class GameOver {
 
 			@Override
 			void onchange(String text) {
-				GameInfo.setPlayerName(text);
+				GameInfo.setPlayerName(text.replaceAll("[\n;]", ""));
 			}
 			
 		};

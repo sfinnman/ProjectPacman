@@ -8,7 +8,7 @@ import utility.EventHandler;
 import utility.Listener;
 import utility.Point;
 
-public abstract class Dynamic implements Listener, Drawable{
+public abstract class Dynamic implements Listener, Drawable {
 	protected int hdg;
 	protected double x;
 	protected double y;
@@ -18,7 +18,7 @@ public abstract class Dynamic implements Listener, Drawable{
 	protected final String name;
 	protected double tileSpeedMod;
 	protected boolean frightened;
-	
+
 	protected Dynamic(double x, double y, int hdg, String name) {
 		this.x = x;
 		this.y = y;
@@ -29,23 +29,23 @@ public abstract class Dynamic implements Listener, Drawable{
 		this.name = name;
 		this.frightened = false;
 		this.tileSpeedMod = 1;
-		DrawHandler.register(this);
-		EventHandler.subscribeEvent("game_lose", this);
-		EventHandler.subscribeEvent("powerpellet_eat", this);
-		EventHandler.subscribeEvent("unfrightened", this);
+		DrawHandler.instance().register(this);
+		EventHandler.instance().subscribeEvent("game_lose", this);
+		EventHandler.instance().subscribeEvent("powerpellet_eat", this);
+		EventHandler.instance().subscribeEvent("unfrightened", this);
 	}
-	
-	public void onRegister(String key, EventData data){
-		switch(key){
-		case("game_lose"):
-			EventHandler.free(this);
-			DrawHandler.unregister(this);
+
+	public void onRegister(String key, EventData data) {
+		switch (key) {
+		case ("game_lose"):
+			EventHandler.instance().free(this);
+			DrawHandler.instance().unregister(this);
 			respawn();
 			break;
-		case("powerpellet_eat"):
+		case ("powerpellet_eat"):
 			onFrightened();
 			break;
-		case("unfrightened"):
+		case ("unfrightened"):
 			frightened = false;
 			break;
 		}
@@ -58,35 +58,40 @@ public abstract class Dynamic implements Listener, Drawable{
 	public int gety() {
 		return (int) (y + 0.5);
 	}
-	
+
 	protected void move(double len) {
 		int x = (hdg & 1) - ((hdg & 4) >> 2);
 		int y = ((hdg & 2) >> 1) - ((hdg & 8) >> 3);
-		this.x = (this.x + x * len + 28)%28;
-		this.y = (this.y + y * len + 36)%36;
+		this.x = (this.x + x * len + 28) % 28;
+		this.y = (this.y + y * len + 36) % 36;
 	}
-	
-	protected void tileSpeedMod(double mod){ // Landed on a tile with a speedMod!
+
+	protected void tileSpeedMod(double mod) { // Landed on a tile with a
+												// speedMod!
 		tileSpeedMod = mod;
 	}
-	
-	private boolean midCrossed(double xold, double yold){
-		boolean x = (int)xold != (int)this.x;
+
+	private boolean midCrossed(double xold, double yold) {
+		boolean x = (int) xold != (int) this.x;
 		boolean y = (int) yold != (int) this.y;
 		return (x || y || hdg == 0);
 	}
-	
-	protected boolean borderCrossed(double xold, double yold){
+
+	protected boolean borderCrossed(double xold, double yold) {
 		return getx() != (int) (xold + 0.5) || gety() != (int) (yold + 0.5);
 	}
-	
-	protected void decideHdg(){
-		int hdgsel = Level.getIntersection(new Point(x, y)); //Gets which directions the current tile supports
-		int hdgwant = hdgDecide(hdgsel); //This method is required by extensions, main movement mode
-		if ((hdgwant&hdgsel)>0){
-			this.hdg = (hdgwant&hdgsel);
+
+	protected void decideHdg() {
+		int hdgsel = Level.getIntersection(new Point(x, y)); // Gets which
+																// directions
+																// the current
+																// tile supports
+		int hdgwant = hdgDecide(hdgsel); // This method is required by
+											// extensions, main movement mode
+		if ((hdgwant & hdgsel) > 0) {
+			this.hdg = (hdgwant & hdgsel);
 		} else {
-			this.hdg = (this.hdg&hdgsel);
+			this.hdg = (this.hdg & hdgsel);
 		}
 	}
 
@@ -97,8 +102,8 @@ public abstract class Dynamic implements Listener, Drawable{
 		if (borderCrossed(xold, yold)) {
 			tileSpeedMod = 1;
 			crossedBorder();
-			this.x = Math.round(this.x*2)/2.0;
-			this.y = Math.round(this.y*2)/2.0;
+			this.x = Math.round(this.x * 2) / 2.0;
+			this.y = Math.round(this.y * 2) / 2.0;
 			double nlen = len - Math.abs(this.x - xold + this.y - yold);
 			onBorder();
 			move(nlen);
@@ -116,20 +121,24 @@ public abstract class Dynamic implements Listener, Drawable{
 	}
 
 	abstract protected void respawn();
-	
-	protected void onFrightened(){}
 
-	protected void onMidCrossed(){}
-	
-	protected void onBorder(){}
-	
-	protected void crossedBorder(){}
-	
+	protected void onFrightened() {
+	}
+
+	protected void onMidCrossed() {
+	}
+
+	protected void onBorder() {
+	}
+
+	protected void crossedBorder() {
+	}
+
 	abstract protected int hdgDecide(int hdgsel);
-	
+
 	@Override
 	public String toString() {
 		return String.format(name + " |%d, %d| ", this.getx(), this.gety());
 	}
-	
+
 }

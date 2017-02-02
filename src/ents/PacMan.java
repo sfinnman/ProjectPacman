@@ -13,16 +13,16 @@ import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Point;
 
-public class PacMan extends Dynamic{
+public class PacMan extends Dynamic {
 
 	private int nextmove;
 
 	public PacMan(double x, double y, int hdg) {
 		super(x, y, hdg, "pacman");
 		nextmove = hdg;
-		EventHandler.subscribeEvent("key_arrow", this);
-		EventHandler.subscribeEvent("ghost_move", this);
-		EventHandler.subscribeEvent("game_think", this);
+		EventHandler.instance().subscribeEvent("key_arrow", this);
+		EventHandler.instance().subscribeEvent("ghost_move", this);
+		EventHandler.instance().subscribeEvent("game_think", this);
 	}
 
 	@Override
@@ -46,9 +46,9 @@ public class PacMan extends Dynamic{
 	private void onThink() {
 		double speed = LevelSettings.topSpeed;
 		if (frightened) {
-			speed *= LevelSettings.pacFrt()*super.tileSpeedMod;
+			speed *= LevelSettings.pacFrt() * super.tileSpeedMod;
 		} else {
-			speed *= LevelSettings.pacNrm()*super.tileSpeedMod;
+			speed *= LevelSettings.pacNrm() * super.tileSpeedMod;
 		}
 		go(speed);
 	}
@@ -65,7 +65,7 @@ public class PacMan extends Dynamic{
 			break;
 		case "ghost_move":
 			if (new Point(this.getx(), this.gety()).equals(data.p))
-				((Ghost)data.src).kill();
+				((Ghost) data.src).kill();
 			break;
 
 		case "game_think":
@@ -73,15 +73,15 @@ public class PacMan extends Dynamic{
 			break;
 		}
 	}
-	
+
 	@Override
-	protected void respawn(){
+	protected void respawn() {
 		new PacMan(startx, starty, starthdg);
 	}
 
 	@Override
 	protected void crossedBorder() {
-		EventHandler.triggerEvent("pacman_move", new EventData(this, new Point(getx(), gety())));
+		EventHandler.instance().triggerEvent("pacman_move", new EventData(this, new Point(getx(), gety())));
 		GameInfo.setPacmanPos(new Point(this.getx(), this.gety()));
 		GameInfo.setPacmanHdg(hdg);
 	}

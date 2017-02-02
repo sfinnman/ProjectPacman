@@ -27,12 +27,12 @@ public abstract class MenuItem implements Listener, Drawable{
 		this.size = new Point(sizex, sizey);
 		this.fsize = fontSize;
 		subscribeEvents();
-		DrawHandler.register(this);
+		DrawHandler.instance().register(this);
 	}
 	
 	protected void subscribeEvents(){
-		EventHandler.subscribeEvent("mouse_clicked", this);
-		EventHandler.subscribeEvent("mouse_moved", this);
+		EventHandler.instance().subscribeEvent("mouse_clicked", this);
+		EventHandler.instance().subscribeEvent("mouse_moved", this);
 	}
 	
 	abstract protected void doclick();

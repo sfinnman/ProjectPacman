@@ -8,29 +8,38 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DrawHandler {
-	private final  static Deque<List<Drawable>> frames = new LinkedList<>();
+	private static final DrawHandler self = new DrawHandler();
+	private final Deque<List<Drawable>> frames = new LinkedList<>();
 	
-	public static void clear(){
-		frames.peek().clear();
-	}
-	
-	public static void pushFrame(){
+	private DrawHandler(){
 		frames.push(new ArrayList<>());
 	}
 	
-	public static void popFrame(){
+	public static DrawHandler instance(){
+		return self;
+	}
+	
+	public void clear(){
+		frames.peek().clear();
+	}
+	
+	public void pushFrame(){
+		frames.push(new ArrayList<>());
+	}
+	
+	public void popFrame(){
 		frames.pop();
 	}
 	
-	public static void register(Drawable d){
+	public void register(Drawable d){
 		frames.peek().add(d);
 	}
 	
-	public static void unregister(Drawable d){
+	public void unregister(Drawable d){
 		frames.peek().remove(d);
 	}
 	
-	public static void drawAll(Graphics g) {
+	public void drawAll(Graphics g) {
 		for(int i = 0; i<frames.peek().size(); i++){
 			frames.peek().get(i).draw(g);
 		}

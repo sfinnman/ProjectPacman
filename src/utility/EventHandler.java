@@ -14,69 +14,93 @@ import java.util.Scanner;
 import game.DEBUG;
 
 public class EventHandler {
-	private static final List<String> keySet = new LinkedList<>();
-	private static Deque<Map<String, List<Listener>>> eventStack;
-	private static Deque<List<Listener>> executionStack;
-	private static Deque<SimpleEntry<String, Listener>> removals;
-	private static Deque<SimpleEntry<String, Listener>> additions;
+	private static final EventHandler self = new EventHandler();
+	private final List<String> keySet = new LinkedList<>();
+	private final Deque<Map<String, List<Listener>>> eventStack;
+	private final Deque<List<Listener>> executionStack;
+	private final Deque<SimpleEntry<String, Listener>> removals;
+	private final Deque<SimpleEntry<String, Listener>> additions;
 
 	private EventHandler() {
-	};
-
-	private static boolean registerEvent(String key) {
-		if (eventStack.peek().containsKey(key)) {
-			return false;
+		System.out.println("EventHandler initializing");
+		eventStack = new LinkedList<>();
+		executionStack = new LinkedList<>();
+		removals = new LinkedList<>();
+		additions = new LinkedList<>();
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new File("src/config/EventHandler.cfg"));
+			while (sc.hasNextLine()) {
+				keySet.add(sc.nextLine());
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("EventHandler configuration file was not found! ");
+			e.printStackTrace();
+		} finally {
+			if (sc != null) {
+				sc.close();
+			}
 		}
-		eventStack.peek().put(key, new LinkedList<>());
-		return true;
+		System.out.println("EventHandler initialized!");
+		pushLayer();
+		System.out.println(eventStack.peek());
+	}
+	
+	public static EventHandler instance(){
+		return self;
 	}
 
-	public static void subscribeEvent(String key, Listener listener) {
+	private void registerEvent(String key) {
+		if (eventStack.peek().containsKey(key)) {
+			return;
+		}
+		eventStack.peek().put(key, new LinkedList<>());
+	}
+
+	public void subscribeEvent(String key, Listener listener) {
 		if (!executionStack.isEmpty()) {
-			EventHandler.queueSubscribeEvent(key, listener); 
+			this.queueSubscribeEvent(key, listener);
 			return;
 		}
 		if (!eventStack.peek().containsKey(key)) {
 			return;
 		}
 		eventStack.peek().get(key).add(listener);
-		return;
 	}
 
-	private static void queueSubscribeEvent(String key, Listener listener) {
+	private void queueSubscribeEvent(String key, Listener listener) {
 		additions.push(new SimpleEntry<String, Listener>(key, listener));
 	}
 
-	public static void unsubscribeEvent(String key, Listener listener) {
+	public void unsubscribeEvent(String key, Listener listener) {
 		if (!executionStack.isEmpty()) {
-			EventHandler.queueUnsubscribeEvent(key, listener);
+			this.queueUnsubscribeEvent(key, listener);
 			return;
 		}
 		if (!eventStack.peek().containsKey(key)) {
 			return;
 		}
 		eventStack.peek().get(key).remove(listener);
-		return;
 	}
 
-	private static void queueUnsubscribeEvent(String key, Listener listener) {
+	private void queueUnsubscribeEvent(String key, Listener listener) {
 		removals.push(new SimpleEntry<String, Listener>(key, listener));
 	}
 
-	private static void flush() {
+	private void flush() {
 		while (!removals.isEmpty()) {
 			SimpleEntry<String, Listener> entry = removals.pop();
-			EventHandler.unsubscribeEvent(entry.getKey(), entry.getValue());
+			this.unsubscribeEvent(entry.getKey(), entry.getValue());
 		}
 		while (!additions.isEmpty()) {
 			SimpleEntry<String, Listener> entry = additions.pop();
-			EventHandler.subscribeEvent(entry.getKey(), entry.getValue());
+			this.subscribeEvent(entry.getKey(), entry.getValue());
 		}
 	}
 
-	public static synchronized boolean triggerEvent(String key, EventData data) {
+	public synchronized void triggerEvent(String key, EventData data) {
 		if (!eventStack.peek().containsKey(key)) {
-			return false;
+			return;
 		}
 		List<Listener> hooks = new LinkedList<>();
 		hooks.addAll(eventStack.peek().get(key));
@@ -88,25 +112,24 @@ public class EventHandler {
 		if (executionStack.isEmpty()) {
 			flush();
 		}
-		return true;
 	}
 
-	public static synchronized void pushLayer() {
-		EventHandler.killCurrent();
+	public synchronized void pushLayer() {
+		this.killCurrent();
 		eventStack.push(new HashMap<>());
 		for (String key : keySet) {
-			EventHandler.registerEvent(key);
+			this.registerEvent(key);
 		}
 	}
 
-	public static synchronized void popLayer() {
-		EventHandler.killCurrent();
+	public synchronized void popLayer() {
+		this.killCurrent();
 		if (!eventStack.isEmpty()) {
 			eventStack.pop();
 		}
 	}
 
-	public synchronized static void killCurrent() {
+	public synchronized void killCurrent() {
 		for (List<Listener> hooks : executionStack) {
 			hooks.clear();
 		}
@@ -114,48 +137,21 @@ public class EventHandler {
 		additions.clear();
 	}
 
-	public synchronized static void clear() {
+	public synchronized void clear() {
 		popLayer();
 		pushLayer();
 	}
 
-	public static void free(Listener listener) {
+	public void free(Listener listener) {
 		for (String key : eventStack.peek().keySet()) {
-			EventHandler.unsubscribeEvent(key, listener);
+			this.unsubscribeEvent(key, listener);
 		}
 	}
 
-	public static synchronized void init() {
-		System.out.println("EventHandler initializing");
-		eventStack = new LinkedList<>();
-		executionStack = new LinkedList<>();
-		removals = new LinkedList<>();
-		additions = new LinkedList<>();
-		if (keySet.isEmpty()) {
-			Scanner sc = null;
-			try {
-				sc = new Scanner(new File("src/config/EventHandler.cfg"));
-				while (sc.hasNextLine()) {
-					keySet.add(sc.nextLine());
-				}
-			} catch (FileNotFoundException e) {
-				System.out.println("EventHandler configuration file was not found! ");
-				e.printStackTrace();
-			} finally {
-				if (sc != null) {
-					sc.close();
-				}
-			}
-		}
-		System.out.println("EventHandler initialized!");
-		pushLayer();
-		System.out.println(eventStack.peek());
-	}
-
-	public static void show() {
-		DEBUG.print(eventStack.peek());
-		DEBUG.print(removals);
-		DEBUG.print(additions);
+	@Override
+	public String toString() {
+		return eventStack.peek().toString() + System.lineSeparator() + removals.toString() + System.lineSeparator()
+				+ additions.toString();
 	}
 
 	public static class EventData {

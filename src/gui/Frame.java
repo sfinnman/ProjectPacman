@@ -19,8 +19,8 @@ import utility.EventHandler;
 import utility.EventHandler.EventData;
 import utility.Point;
 
-public class Frame extends JPanel implements MouseListener, KeyListener, MouseMotionListener{
-	
+public class Frame extends JPanel implements MouseListener, KeyListener, MouseMotionListener {
+
 	/**
 	 * 
 	 */
@@ -28,17 +28,17 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 	public static final int HEIGHT = 900;
 	public static final int WIDTH = 700;
 	private Timer t;
-	
+
 	public Frame() {
 		setFocusable(true);
 		setBackground(Color.BLACK);
 		addMouseListener(this);
 		addKeyListener(this);
 		addMouseMotionListener(this);
-		TimerTask task = new TimerTask(){
+		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				repaint();				
+				repaint();
 			}
 		};
 		t = new Timer();
@@ -50,7 +50,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 		BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics gImg = img.getGraphics();
 		super.paintComponent(gImg);
-		DrawHandler.drawAll(gImg);
+		DrawHandler.instance().drawAll(gImg);
 		g.drawImage(img, 0, 0, null);
 	}
 
@@ -69,7 +69,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 	@Override
 	public void mousePressed(MouseEvent e) {
 		DEBUG.print("Mouse clicked in screen! at coord: " + e.getX() + ", " + e.getY());
-		EventHandler.triggerEvent("mouse_clicked", new EventData(this, new Point(e.getX(), e.getY())));
+		EventHandler.instance().triggerEvent("mouse_clicked", new EventData(this, new Point(e.getX(), e.getY())));
 	}
 
 	@Override
@@ -83,32 +83,32 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		switch(key){
-		case(KeyEvent.VK_UP):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(8, 0)));
-		break;
-		case(KeyEvent.VK_RIGHT):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(1, 0)));
-		break;
-		case(KeyEvent.VK_DOWN):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(2, 0)));
-		break;
-		case(KeyEvent.VK_LEFT):
-			EventHandler.triggerEvent("key_arrow", new EventData(this, new Point(4, 0)));
-		break;
-		case(KeyEvent.VK_ESCAPE):
-			EventHandler.triggerEvent("esc", null);
-		break;
+		switch (key) {
+		case (KeyEvent.VK_UP):
+			EventHandler.instance().triggerEvent("key_arrow", new EventData(this, new Point(8, 0)));
+			break;
+		case (KeyEvent.VK_RIGHT):
+			EventHandler.instance().triggerEvent("key_arrow", new EventData(this, new Point(1, 0)));
+			break;
+		case (KeyEvent.VK_DOWN):
+			EventHandler.instance().triggerEvent("key_arrow", new EventData(this, new Point(2, 0)));
+			break;
+		case (KeyEvent.VK_LEFT):
+			EventHandler.instance().triggerEvent("key_arrow", new EventData(this, new Point(4, 0)));
+			break;
+		case (KeyEvent.VK_ESCAPE):
+			EventHandler.instance().triggerEvent("esc", null);
+			break;
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		char c = e.getKeyChar();
-		if (c != 8){
-			EventHandler.triggerEvent("key_typed", new EventData(this, new Point(c, 0)));
+		if (c != 8) {
+			EventHandler.instance().triggerEvent("key_typed", new EventData(this, new Point(c, 0)));
 		} else {
-			EventHandler.triggerEvent("key_backspace", null);
+			EventHandler.instance().triggerEvent("key_backspace", null);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class Frame extends JPanel implements MouseListener, KeyListener, MouseMo
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		EventHandler.triggerEvent("mouse_moved", new EventData(this, new Point(e.getX(), e.getY())));
+		EventHandler.instance().triggerEvent("mouse_moved", new EventData(this, new Point(e.getX(), e.getY())));
 	}
 
 }

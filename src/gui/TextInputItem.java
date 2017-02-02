@@ -30,14 +30,14 @@ public abstract class TextInputItem implements Listener, Drawable {
 		this.size = new Point(sizex, sizey);
 		this.fsize = fontSize;
 		subscribeEvents();
-		DrawHandler.register(this);
+		DrawHandler.instance().register(this);
 	}
 
 	protected void subscribeEvents() {
-		EventHandler.subscribeEvent("mouse_clicked", this);
-		EventHandler.subscribeEvent("game_tick", this);
-		EventHandler.subscribeEvent("key_typed", this);
-		EventHandler.subscribeEvent("key_backspace", this);
+		EventHandler.instance().subscribeEvent("mouse_clicked", this);
+		EventHandler.instance().subscribeEvent("game_tick", this);
+		EventHandler.instance().subscribeEvent("key_typed", this);
+		EventHandler.instance().subscribeEvent("key_backspace", this);
 	}
 	
 	abstract void onchange(String text);

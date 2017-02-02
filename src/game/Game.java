@@ -12,37 +12,37 @@ public class Game {
 
 	public static final int UPDATE = 1;
 	private static int wait = 0;
-	
-	private Game(){}
-	
-	public static void pushView(){
-		EventHandler.pushLayer();
-		DrawHandler.pushFrame();
+
+	private Game() {
 	}
 
-	public static void popView(){
-		EventHandler.popLayer();
-		DrawHandler.popFrame();
+	public static void pushView() {
+		EventHandler.instance().pushLayer();
+		DrawHandler.instance().pushFrame();
 	}
-	
-	public static void init(){
-		EventHandler.init();
-		DrawHandler.pushFrame();
+
+	public static void popView() {
+		EventHandler.instance().popLayer();
+		DrawHandler.instance().popFrame();
+	}
+
+	public static void init() {
 		ResourceLoader.init();
-		new Timer().scheduleAtFixedRate(new TimerTask(){
+		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
 				Game.think();
-				EventHandler.triggerEvent("game_tick", null);
-			}}, UPDATE, UPDATE);
+				EventHandler.instance().triggerEvent("game_tick", null);
+			}
+		}, UPDATE, UPDATE);
 	}
-	
-	public static void cleanView(){
-		DrawHandler.clear();
-		EventHandler.clear();
+
+	public static void cleanView() {
+		DrawHandler.instance().clear();
+		EventHandler.instance().clear();
 	}
-	
-	public static void newGame(){
+
+	public static void newGame() {
 		Game.cleanView();
 		GameInfo.init();
 		Level.loadMap();
@@ -50,24 +50,24 @@ public class Game {
 		Game.wait(3000);
 		GameOverlay.gameStart();
 	}
-	
-	public static void reloadGame(){
+
+	public static void reloadGame() {
 		Game.cleanView();
 		Level.loadMap();
 		new GameOverlay();
 		Game.wait(3000);
 		GameOverlay.gameReload(GameInfo.getLevel());
 	}
-	
-	private static void think(){
-		if (0 == wait){
-			EventHandler.triggerEvent("game_think", null);
+
+	private static void think() {
+		if (0 == wait) {
+			EventHandler.instance().triggerEvent("game_think", null);
 		} else {
 			wait--;
 		}
 	}
-	
-	public static void wait(int ticks){
+
+	public static void wait(int ticks) {
 		wait = ticks;
 	}
 }

@@ -13,19 +13,19 @@ public class PowerPellet extends Static implements Listener {
 
 	public PowerPellet(Point p, BufferedImage img) {
 		super(p, "powerpellet", img);
-		EventHandler.subscribeEvent("pacman_move", this);
+		EventHandler.instance().subscribeEvent("pacman_move", this);
 	}
 
 	@Override
 	public void onRegister(String key, EventData data) {
 		if (key.equals("pacman_move")) {
 			if (p.equals(data.p)) {
-				EventHandler.triggerEvent("powerpellet_eat", new EventData(this, p));
+				EventHandler.instance().triggerEvent("powerpellet_eat", new EventData(this, p));
 				GameInfo.addScore(50);
 				GameInfo.pacmanEat();
-				EventHandler.unsubscribeEvent("pacman_move", this);
+				EventHandler.instance().unsubscribeEvent("pacman_move", this);
 				GameInfo.fright(500);
-				DrawHandler.unregister(this);
+				DrawHandler.instance().unregister(this);
 			}
 		}
 	}

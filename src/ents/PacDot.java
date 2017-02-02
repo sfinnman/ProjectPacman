@@ -14,20 +14,20 @@ public class PacDot extends Static implements Drawable, Listener {
 
 	public PacDot(Point p, BufferedImage img) {
 		super(p, "PacDot", img);
-		EventHandler.subscribeEvent("pacman_move", this);
+		EventHandler.instance().subscribeEvent("pacman_move", this);
 	}
 
 	@Override
 	public void onRegister(String key, EventData data) {
 		if (key.equals("pacman_move")) {
 			if (data.p.equals(this.p)) {
-				EventHandler.triggerEvent("pacdot_eat", new EventData(this, this.p));
+				EventHandler.instance().triggerEvent("pacdot_eat", new EventData(this, this.p));
 				GameInfo.addScore(10);
 				GameInfo.pacmanEat();
-				PacMan pac = (PacMan)data.src;
+				PacMan pac = (PacMan) data.src;
 				pac.tileSpeedMod(0.89);
-				EventHandler.unsubscribeEvent("pacman_move", this);
-				DrawHandler.unregister(this);
+				EventHandler.instance().unsubscribeEvent("pacman_move", this);
+				DrawHandler.instance().unregister(this);
 			}
 		}
 	}

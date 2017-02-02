@@ -17,7 +17,7 @@ import utility.ResourceLoader;
 public class GameOverlay implements Drawable {
 
 	public GameOverlay() {
-		DrawHandler.register(this);
+		DrawHandler.instance().register(this);
 	}
 
 	public static void gameStart() {
@@ -86,15 +86,15 @@ public class GameOverlay implements Drawable {
 
 		public GameMessage(int lifetime) {
 			this.lifetime = lifetime;
-			EventHandler.subscribeEvent("game_tick", this);
-			DrawHandler.register(this);
+			EventHandler.instance().subscribeEvent("game_tick", this);
+			DrawHandler.instance().register(this);
 		}
 
 		@Override
 		public void onRegister(String key, EventData src) {
 			if (lifetime == 0) {
-				EventHandler.unsubscribeEvent("game_tick", this);
-				DrawHandler.unregister(this);
+				EventHandler.instance().unsubscribeEvent("game_tick", this);
+				DrawHandler.instance().unregister(this);
 			}
 			lifetime--;
 		}

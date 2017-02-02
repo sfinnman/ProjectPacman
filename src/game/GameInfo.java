@@ -61,7 +61,7 @@ public class GameInfo {
 	protected static void countFright() {
 		fright_time--;
 		if (fright_time == 0) {
-			EventHandler.triggerEvent("unfrightened", null);
+			EventHandler.instance().triggerEvent("unfrightened", null);
 		} else if (fright_time < 0) {
 			ghosts_eaten = 0;
 			fright_time = 0;
@@ -106,7 +106,7 @@ public class GameInfo {
 			FileWriter fw = new FileWriter(f);
 			StringBuilder sb = new StringBuilder();
 			for (SimpleEntry<String, Integer> score : scores) {
-				sb.append(score.getKey() + ";"+score.getValue());
+				sb.append(score.getKey() + ";" + score.getValue());
 				sb.append(System.lineSeparator());
 			}
 			fw.write(sb.toString());
@@ -131,7 +131,7 @@ public class GameInfo {
 
 	public static void scatter() {
 		ghost_scatter = !ghost_scatter;
-		EventHandler.triggerEvent("scatter", null);
+		EventHandler.instance().triggerEvent("scatter", null);
 	}
 
 	public static void addScore(int score) {
@@ -141,7 +141,7 @@ public class GameInfo {
 	public static void pacmanEat() {
 		dots--;
 		if (0 == dots) {
-			EventHandler.triggerEvent("game_win", null);
+			EventHandler.instance().triggerEvent("game_win", null);
 		}
 	}
 
@@ -203,7 +203,7 @@ public class GameInfo {
 		public ScheduledTask(int delay, Runnable task) {
 			this.delay = delay;
 			this.task = task;
-			EventHandler.subscribeEvent("game_think", this);
+			EventHandler.instance().subscribeEvent("game_think", this);
 			tasks.add(this);
 		}
 
@@ -213,13 +213,13 @@ public class GameInfo {
 			if (delay < 1) {
 				task.run();
 				tasks.remove(this);
-				EventHandler.unsubscribeEvent("game_think", this);
+				EventHandler.instance().unsubscribeEvent("game_think", this);
 			}
 		}
 
 		public static void purgeTasks() {
 			for (ScheduledTask task : tasks)
-				EventHandler.unsubscribeEvent("game_think", task);
+				EventHandler.instance().unsubscribeEvent("game_think", task);
 			tasks = new ArrayList<>();
 		}
 	}

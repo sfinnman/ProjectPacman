@@ -4,10 +4,10 @@ import java.awt.image.BufferedImage;
 import utility.DrawHandler;
 import utility.Point;
 
-public class Wall extends Static{
-	
-	public Wall(Point p, BufferedImage img){
+public class Wall extends Static {
+
+	public Wall(Point p, BufferedImage img) {
 		super(p, "wall", img);
-		DrawHandler.register(this);
+		DrawHandler.instance().register(this);
 	}
 }

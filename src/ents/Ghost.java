@@ -29,9 +29,9 @@ abstract class Ghost extends Dynamic {
 
 	protected Ghost(double x, double y, int hdg, String name) {
 		super(x, y, hdg, name);
-		EventHandler.subscribeEvent("game_think", this);
-		EventHandler.subscribeEvent("pacman_move", this);
-		EventHandler.subscribeEvent("scatter", this);
+		EventHandler.instance().subscribeEvent("game_think", this);
+		EventHandler.instance().subscribeEvent("pacman_move", this);
+		EventHandler.instance().subscribeEvent("scatter", this);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ abstract class Ghost extends Dynamic {
 
 	private void onthink() {
 		double speed = LevelSettings.topSpeed;
-		if (!dead){
+		if (!dead) {
 			if (frightened) {
 				speed *= LevelSettings.ghostFrtMlt();
 			} else {
@@ -67,6 +67,7 @@ abstract class Ghost extends Dynamic {
 		}
 		go(speed);
 	}
+
 	private void reverse() {
 		if (hdgQueue.isEmpty() && !dead)
 			hdg = (hdg << 2) % 15;
@@ -83,10 +84,11 @@ abstract class Ghost extends Dynamic {
 			hdg = optimalHdg(hdgsel, target);
 		} else if (!dead) {
 			DEBUG.print("LOSE!");
-			EventHandler.killCurrent(); // Make sure pacman doesnt eat whatever
-										// is in this tile. Kill all current
-										// executions and call for a game loss!
-			EventHandler.triggerEvent("game_lose", null);
+			EventHandler.instance().killCurrent(); // Make sure pacman doesnt
+													// eat whatever
+			// is in this tile. Kill all current
+			// executions and call for a game loss!
+			EventHandler.instance().triggerEvent("game_lose", null);
 		}
 	}
 
@@ -110,7 +112,7 @@ abstract class Ghost extends Dynamic {
 
 	@Override
 	protected void crossedBorder() {
-		EventHandler.triggerEvent("ghost_move", new EventData(this, new Point(this.getx(), this.gety())));
+		EventHandler.instance().triggerEvent("ghost_move", new EventData(this, new Point(this.getx(), this.gety())));
 	}
 
 	@Override
