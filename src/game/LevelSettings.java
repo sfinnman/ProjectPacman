@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import game.GameInfo.ScheduledTask;
-import utility.Game;
 
 public class LevelSettings {
 	public static double topSpeed; //DO NOT EXCEED 0.5 STEPS, GAME BREAKS

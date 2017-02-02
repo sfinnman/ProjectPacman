@@ -1,11 +1,12 @@
-package utility;
+package game;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import game.GameInfo;
-import game.Level;
 import gui.GameOverlay;
+import utility.DrawHandler;
+import utility.EventHandler;
+import utility.ResourceLoader;
 
 public class Game {
 
@@ -26,7 +27,7 @@ public class Game {
 	
 	public static void init(){
 		EventHandler.init();
-		DrawHandler.init();
+		DrawHandler.pushFrame();
 		ResourceLoader.init();
 		new Timer().scheduleAtFixedRate(new TimerTask(){
 			@Override

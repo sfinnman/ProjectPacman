@@ -8,12 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DrawHandler {
-	public static Deque<List<Drawable>> frames;
-	
-	public static void init(){
-		frames = new LinkedList<>();
-		frames.push(new ArrayList<>());
-	}
+	private final  static Deque<List<Drawable>> frames = new LinkedList<>();
 	
 	public static void clear(){
 		frames.peek().clear();

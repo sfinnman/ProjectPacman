@@ -1,6 +1,6 @@
 package gui;
 
-import utility.Game;
+import game.Game;
 
 public class PauseMenu {
 

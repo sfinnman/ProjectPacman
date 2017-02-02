@@ -14,7 +14,6 @@ import gui.GameOver;
 import utility.DPoint;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
-import utility.Game;
 import utility.Listener;
 import utility.Point;
 

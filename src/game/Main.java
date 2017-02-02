@@ -3,7 +3,6 @@ package game;
 import javax.swing.JFrame;
 import gui.Frame;
 import gui.MainMenu;
-import utility.Game;
 
 public class Main extends JFrame{
 	

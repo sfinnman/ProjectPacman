@@ -15,13 +15,13 @@ import java.util.Queue;
 import java.util.Random;
 
 import game.DEBUG;
+import game.Game;
 import game.GameInfo;
 import game.LevelSettings;
 import gui.GameOverlay;
 import utility.DPoint;
 import utility.EventHandler;
 import utility.EventHandler.EventData;
-import utility.Game;
 
 abstract class Ghost extends Dynamic {
 	protected boolean dead;

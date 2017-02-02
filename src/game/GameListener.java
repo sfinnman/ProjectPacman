@@ -1,7 +1,6 @@
 package game;
 
 import utility.EventHandler.EventData;
-import utility.Game;
 import gui.PauseMenu;
 import utility.EventHandler;
 import utility.Listener;

@@ -1,12 +1,11 @@
 package gui;
 
 import game.DEBUG;
-import utility.Game;
+import game.Game;
 
 public class MainMenu {
 
 	public static void instance() {
-		
 		new MenuItem("PacMan", 50, 50, Frame.WIDTH - 100, 50, 90){
 			@Override
 			public void subscribeEvents(){ //this removes clickability!

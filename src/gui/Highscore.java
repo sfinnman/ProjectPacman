@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import game.DEBUG;
-import utility.Game;
+import game.Game;
 
 public class Highscore{
 

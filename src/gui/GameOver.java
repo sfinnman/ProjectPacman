@@ -1,7 +1,7 @@
 package gui;
 
+import game.Game;
 import game.GameInfo;
-import utility.Game;
 
 public class GameOver {
 
